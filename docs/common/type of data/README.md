@@ -115,7 +115,7 @@
 
 #### JavaScript
 
-标准类型
+基本类型
 
 + 整型：Number
 + 字符串：String
@@ -132,7 +132,7 @@
 
 #### python
 
-标准类型
+基本类型
 
 + 数字类型：**int、float、complex（复数）** 
 
@@ -149,3 +149,7 @@
 标准派生
 
 + class
+
+二次派生
+
++ 集合(collections): chainMap, counter, deque(链表), orderedDict, namedtuple
