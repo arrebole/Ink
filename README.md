@@ -4,7 +4,7 @@
 
 ##### 入门级别
 
-+ [数据类型](/docs/common/type of data/README.md )
++ [数据类型](/docs/common/type-of-data/README.md )
 + [语言特性笔记](/docs/common/characteristic/README.md )
 
 
