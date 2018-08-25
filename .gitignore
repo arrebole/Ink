@@ -1,3 +1,2 @@
-/src/**/cs/bin
-/src/**/cs/obj
+/node_modules/*
 /.vscode
