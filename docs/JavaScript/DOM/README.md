@@ -60,18 +60,17 @@ node类型是所有的元素原型,所有元素继承其方法和属性
 |                           |              |
 | ------------------------- | ------------ |
 | document.createTextNode() | 创建文本节点 |
-|                           |              |
-|                           |              |
+
 
 
 
 #### 扩展
 
-|                    |      |
-| ------------------ | ---- |
-| querSelector()     |      |
-| querySelectorAll() |      |
-| innerHTML()        |      |
-| outerHTML ()       |      |
-| scrollIntoView()   |      |
+|                    |              |
+| ------------------ | ------------ |
+| querSelector()     | 单元素选择器 |
+| querySelectorAll() | 多元素选择器 |
+| innerHTML()        |              |
+| outerHTML ()       |              |
+| scrollIntoView()   |              |
 

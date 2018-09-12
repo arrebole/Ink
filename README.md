@@ -19,6 +19,7 @@
 #####  JavaScript专区
 
 + [DOM操作](/docs/JavaScript/DOM/README.md )
++ [Canvas](/docs/JavaScript/Canvas/Canvas.md)
 
 
 
