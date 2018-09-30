@@ -1,6 +1,6 @@
 ## 算法大纲
 
-### [绪论](/introduction.md)
+### [绪论](/docs/Level-2/Algorithms/introduction.md)
 
 #### 1.1 [重要的问题类型](/introduction.md/#线型结构)
 
@@ -8,7 +8,7 @@
 
 
 
-### [算法效率分析](/efficiency.md)
+### [算法效率分析](/docs/Level-2/Algorithms/efficiency.md)
 
 #### 2.1 非递归算法的数学分析
 
@@ -16,7 +16,7 @@
 
 
 
-### [算法索引](/algorithm.md)
+### [算法索引](/docs/Level-2/Algorithms/algorithm.md)
 
 ### 3.0 暴力法
 
