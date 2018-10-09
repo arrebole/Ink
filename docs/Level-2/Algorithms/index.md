@@ -1,24 +1,46 @@
 ## 算法大纲
 
-### [绪论](/docs/Level-2/Algorithms/introduction.md)
+### # 绪论
 
-#### 1.1 [重要的问题类型](/introduction.md/#线型结构)
+#### 1.1 什么是算法
 
-#### 1.2 基本数据结构
++ [求最大公约数](/docs/Level-2/Algorithms/introduction.md)
+
+#### 1.2 重要的问题类型
+
++ 排序
++ 查找
++ 字符串处理
++ 图问题
++ 组合问题
++ 几何问题
++ 数值问题
+
+#### 1.4 基本数据结构
+
++ [线性数据结构](/docs/Level-2/Algorithms/introduction.md)
++ [图](/docs/Level-2/Algorithms/introduction.md)
++ [树](/docs/Level-2/Algorithms/introduction.md)
++ [集合和字典](/docs/Level-2/Algorithms/introduction.md)
 
 
 
-### [算法效率分析](/docs/Level-2/Algorithms/efficiency.md)
+### # 算法效率分析
 
 #### 2.1 非递归算法的数学分析
 
 #### 2.2 递归算法的数学分析
 
++ [斐波那契数列](/docs/Level-2/Algorithms/efficiency.md)
 
 
-### [算法索引](/docs/Level-2/Algorithms/algorithm.md)
+
+### # 算法索引
 
 ### 3.0 暴力法
+
++ [选择排序和冒泡排序](/docs/Level-2/Algorithms/s1_violence.md)
++ [顺序查找和蛮力字符串匹配](/docs/Level-2/Algorithms/s1_violence.md)
 
 ### 4.0 减治法
 
