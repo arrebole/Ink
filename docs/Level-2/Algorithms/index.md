@@ -29,6 +29,9 @@
 
 #### 2.1 非递归算法的数学分析
 
++ 数组中最大值
++ 数组元素唯一性
+
 #### 2.2 递归算法的数学分析
 
 + [斐波那契数列](/docs/Level-2/Algorithms/efficiency.md)
@@ -41,6 +44,8 @@
 
 + [选择排序和冒泡排序](/docs/Level-2/Algorithms/s1_violence.md)
 + [顺序查找和蛮力字符串匹配](/docs/Level-2/Algorithms/s1_violence.md)
++ [最近对和凸包问题的蛮力算法](/docs/Level-2/Algorithms/s1_violence.md)
++ 
 
 ### 4.0 减治法
 
