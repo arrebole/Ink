@@ -223,3 +223,132 @@ void BruteForceConvexPoint(double arr[][2], int len)
 }
 ```
 
+
+
+
+
+## 穷举查找
+
+#### 旅行商问题
+
+
+
+#### 背包问题
+
+
+
+#### 分配问题
+
+>暴力法-穷举查找-分配问题
+>
+>时间复杂度：T(n) = O(n*n!)
+
+```c++
+/**
+ *  通过矩阵穷举查找分配问题
+ *  暴力法-穷举查找-分配问题
+ *  以4*4为例
+ * 
+*/
+void distribution(int a[4][4])
+{
+    int length = 4;
+    int height = 4;
+    for (int i = 0; i < height; i++)
+    {
+        int one = a[i][0];
+        for (int j = 0; j < height; j++)
+        {
+            int two = a[j][1];
+            for (int k = 0; k < height; k++)
+            {
+                int tree = a[k][2];
+                for (int l = 0; l < height; l++)
+                {
+                    int four = a[l][3];
+                    int res = one + two + tree + four;
+                    printf("%d+%d+%d+%d=%d\n", one, two, tree, four, res);
+                }
+            }
+        }
+    }
+}
+```
+
+
+
+
+
+## 深度优先搜索和广度优先搜索
+
+#### 深度优先搜索
+
+>暴力法-深度优先搜索
+>
+>时间复杂度：链表法 θ( |v| + |E| ) 矩阵法 θ( |v|^2 )
+
+
+
+##### 图的表示
+
+```c++
+// 邻接链表法，表示图。
+map<string, vector<string>> graph;
+graph["A"] = {"B", "C"};
+graph["B"] = {"A", "C", "D"};
+graph["C"] = {"A", "B", "D","E"};
+graph["D"] = {"B", "C", "E","F"};
+graph["E"] = {"C", "D"};
+graph["F"] = {"D"};
+
+```
+
+
+
+##### 直接通过栈实现
+
+```c++
+/**
+ *  通过栈和邻接链表图实现 深度优先搜索
+ *  暴力法-深度优先搜索
+ *  输入图和起始点
+*/
+void stack_dfs(map<string, vector<string>> G, string s)
+{
+    // 搜索栈
+    stack<string> st;
+    // 跟踪是否已经到过
+    set<string> seen;
+
+    st.push(s);
+    seen.insert(s);
+
+    while (st.size() > 0)
+    {
+        // 从栈中取一个元素
+        string vertex = st.top();
+        st.pop();
+        // 查询取出的元素
+        vector<string> nodes = G[vertex];
+        // 遍历取出的元素
+        for (int i = 0; i < nodes.size(); i++)
+        {
+            // 判断元素是否已经查询过
+            string node = nodes[i];
+            if (seen.find(node) == seen.end())
+            {
+                // 如果没有查询过，则把该元素入栈，并标记
+                st.push(node);
+                seen.insert(node);
+            }
+            
+        }
+        cout << vertex << endl;
+    }
+}
+```
+
+
+
+##### 通过递归实现
+
