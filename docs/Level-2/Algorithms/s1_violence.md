@@ -313,7 +313,7 @@ graph["F"] = {"D"};
  *  暴力法-深度优先搜索
  *  输入图和起始点
 */
-void stack_dfs(map<string, vector<string>> G, string s)
+void dfs(map<string, vector<string>> graph, string s)
 {
     // 搜索栈
     stack<string> st;
@@ -323,13 +323,13 @@ void stack_dfs(map<string, vector<string>> G, string s)
     st.push(s);
     seen.insert(s);
 
-    while (st.size() > 0)
+    while (!st.empty())
     {
         // 从栈中取一个元素
         string vertex = st.top();
         st.pop();
         // 查询取出的元素
-        vector<string> nodes = G[vertex];
+        vector<string> nodes = graph[vertex];
         // 遍历取出的元素
         for (int i = 0; i < nodes.size(); i++)
         {
@@ -350,5 +350,53 @@ void stack_dfs(map<string, vector<string>> G, string s)
 
 
 
-##### 通过递归实现
+#### 广度优先搜索
+
+>暴力法-广度优先搜索
+>
+>时间复杂度：链表法 θ( |v| + |E| ) 矩阵法 θ( |v|^2 )
+
+
+
+##### 队列实现广度优先搜索
+
+```c++
+/**
+ *  通过队列和邻接链表图实现 深度优先搜索
+ *  暴力法-广度优先搜索
+ *  输入图和起始点
+*/
+void bfs(map<string, vector<string>> graph, string s)
+{
+    // 搜索队列
+    queue<string> qu;
+    // 跟踪是否已经到过
+    set<string> seen;
+
+    qu.push(s);
+    seen.insert(s);
+
+    while (!qu.empty())
+    {
+        // 取出队列头
+        string vertex = qu.front();
+        qu.pop();
+        // 查询取出的元素
+        vector<string> nodes = graph[vertex];
+        // 遍历取出的元素
+        for (int i = 0; i < nodes.size(); i++)
+        {
+            // 判断元素是否已经查询过
+            string node = nodes[i];
+            if (seen.find(node) == seen.end())
+            {
+                // 如果没有查询过，则把该元素推入队列，并标记
+                qu.push(node);
+                seen.insert(node);
+            }
+        }
+        cout << vertex << endl;
+    }
+}
+```
 

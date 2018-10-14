@@ -1,32 +1,22 @@
-#include <iostream>
-#include <map>
-#include <set>
-#include <vector>
-#include <string>
-#include <stack>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-/**
- *  通过栈和邻接链表图实现 深度优先搜索
- *  暴力法-深度优先搜索
- * 
-*/
-void stack_dfs(map<string, vector<string>> graph, string s)
+void bfs(map<string, vector<string>> graph, string s)
 {
-    // 搜索栈
-    stack<string> st;
+    // 搜索队列
+    queue<string> qu;
     // 跟踪是否已经到过
     set<string> seen;
 
-    st.push(s);
+    qu.push(s);
     seen.insert(s);
 
-    while (st.size() > 0)
+    while (!qu.empty())
     {
         // 从栈中取一个元素
-        string vertex = st.top();
-        st.pop();
+        string vertex = qu.front();
+        qu.pop();
         // 查询取出的元素
         vector<string> nodes = graph[vertex];
         // 遍历取出的元素
@@ -37,15 +27,13 @@ void stack_dfs(map<string, vector<string>> graph, string s)
             if (seen.find(node) == seen.end())
             {
                 // 如果没有查询过，则把该元素入栈，并标记
-                st.push(node);
+                qu.push(node);
                 seen.insert(node);
             }
         }
         cout << vertex << endl;
     }
 }
-
-
 
 int main()
 {
@@ -58,7 +46,7 @@ int main()
     graph["E"] = {"C", "D"};
     graph["F"] = {"D"};
 
-    stack_dfs(graph, "A");
+    bfs(graph, "A");
 
     return 0;
 }

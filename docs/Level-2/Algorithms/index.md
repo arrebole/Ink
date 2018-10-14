@@ -46,6 +46,7 @@
 + [顺序查找和蛮力字符串匹配](/docs/Level-2/Algorithms/s1_violence.md)
 + [最近对和凸包问题的蛮力算法](/docs/Level-2/Algorithms/s1_violence.md)
 + [穷举查找](/docs/Level-2/Algorithms/s1_violence.md)
++ [深度优先搜索和广度优先搜索](/docs/Level-2/Algorithms/s1_violence.md)
 
 
 
