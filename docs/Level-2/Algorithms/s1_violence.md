@@ -2,7 +2,7 @@
 
 ## 选择排序和冒泡排序
 
-#### 选择排序
+### 选择排序
 
 >时间复杂度：θ(n^2)  但键的交换次数为 θ(n); 
 >
@@ -34,7 +34,7 @@ void selection_sort(int arr[], int len)
 
 
 
-#### 冒泡排序
+### 冒泡排序
 
 >时间复杂度：θ(n^2)  键的交换次数为 θ(n^2);
 >
@@ -68,7 +68,7 @@ void bubble_sort(int arr[], int len)
 
 ## 顺序查找和蛮力字符串匹配
 
-#### 顺序查找
+### 顺序查找
 
 >时间复杂度：T(n) 最好Ω(1), 最差 O(n)
 >
@@ -105,7 +105,7 @@ int SequentialSearch(int arr[], int len, int key)
 
 
 
-#### 蛮力法字符串匹配
+### 蛮力法字符串匹配
 
 >时间复杂度：T(n)最差 O(mn)
 >
@@ -136,7 +136,7 @@ int BruteForceStringMatch(char t[], int t_len, char p[], int p_len)
 
 ## 最近对和凸包问题的蛮力算法
 
-#### 最近对问题
+### 最近对问题
 
 >暴力法—蛮力求最近点
 >
@@ -168,7 +168,7 @@ double BruteForceClosestPoints(int p[][2],int len)
 
 
 
-#### 凸包问题
+### 凸包问题
 
 >暴力法—求凸包点
 >
@@ -229,15 +229,15 @@ void BruteForceConvexPoint(double arr[][2], int len)
 
 ## 穷举查找
 
-#### 旅行商问题
+### 旅行商问题
 
 
 
-#### 背包问题
+### 背包问题
 
 
 
-#### 分配问题
+### 分配问题
 
 >暴力法-穷举查找-分配问题
 >
@@ -281,7 +281,7 @@ void distribution(int a[4][4])
 
 ## 深度优先搜索和广度优先搜索
 
-#### 深度优先搜索
+### 深度优先搜索
 
 >暴力法-深度优先搜索
 >
@@ -289,7 +289,7 @@ void distribution(int a[4][4])
 
 
 
-##### 图的表示
+#### 图的表示
 
 ```c++
 // 邻接链表法，表示图。
@@ -305,7 +305,7 @@ graph["F"] = {"D"};
 
 
 
-##### 直接通过栈实现
+#### 直接通过栈实现
 
 ```c++
 /**
@@ -350,7 +350,7 @@ void dfs(map<string, vector<string>> graph, string s)
 
 
 
-#### 广度优先搜索
+### 广度优先搜索
 
 >暴力法-广度优先搜索
 >
@@ -358,7 +358,7 @@ void dfs(map<string, vector<string>> graph, string s)
 
 
 
-##### 队列实现广度优先搜索
+#### 队列实现广度优先搜索
 
 ```c++
 /**
