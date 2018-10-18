@@ -98,3 +98,27 @@ void shellSort(int a[], const int len)
 }
 ```
 
+
+
+## 拓扑排序
+
+>架构1：基于减治法、源删除算法。
+>
+>架构2：基于暴力法-DFS,输出DFS的逆序
+>
+>性能：T(n) = O(n+e)
+
+
+
+##### 图的表示
+
+```c++
+    map<string, vector<string>> graph;
+    graph["a"] = {"b","c"};
+    graph["b"] = {"e","g"};
+    graph["c"] = {"f"};
+    graph["d"] = {"a", "b", "g", "f","c"};
+    graph["e"] = {};
+    graph["f"] = {};
+```
+

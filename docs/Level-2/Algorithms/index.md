@@ -52,6 +52,16 @@
 
 ### 4.0 减治法
 
++ [直接插入排序](/docs/Level-2/Algorithms/s2_Reduction.md)
++ [希尔排序](/docs/Level-2/Algorithms/s2_Reduction.md)
++ [拓扑排序](/docs/Level-2/Algorithms/s2_Reduction.md)
+
++ [生成组合对象算法](/docs/Level-2/Algorithms/s2_Reduction.md)
++ [减常因子算法](/docs/Level-2/Algorithms/s2_Reduction.md)
++ [减可变规模算法](/docs/Level-2/Algorithms/s2_Reduction.md)
+
+
+
 ### 5.0 分治法
 
 ### 6.0 变治法
