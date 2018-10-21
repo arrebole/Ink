@@ -122,3 +122,34 @@ void shellSort(int a[], const int len)
     graph["f"] = {};
 ```
 
+
+
+
+
+## 生成组合对象的算法
+
+
+
+### 生成排序
+
+>输入n，生成1 - n 的所有序列组合。
+>
+>架构：减治法-生成排序  n(n-1)! = n!
+
+
+
+#### JohnsonTrotter
+
+
+
+
+
+#### LexicographicPermute
+
+
+
+### 生成子集
+
+>
+>
+>
