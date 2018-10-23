@@ -65,4 +65,5 @@ void johnsonTrotter(int n)
                 a[i].flag = (a[i].flag ? false : true);
         }
     }
+    delete[] a;
 }
