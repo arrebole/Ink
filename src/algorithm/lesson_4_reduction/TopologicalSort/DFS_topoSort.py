@@ -1,6 +1,7 @@
 import random
 
 # 基于dfs的拓扑排序
+# graph 为 map 结构 邻接链表法表示图
 def DFS_topoSort(graph):
 
     # 结果栈
@@ -47,3 +48,15 @@ def DFS_topoSort(graph):
     print("dfs 拓扑结果")
     while (result_Stack):
         print(result_Stack.pop(), end=" ")
+
+def main():
+    c = dict()
+    c["c1"] = ["c3"]
+    c["c2"] = ["c3"]
+    c["c3"] = ["c4","c5"]
+    c["c4"] = ["c5"]
+    c["c5"] = []
+    DFS_topoSort(c)
+
+if __name__ == '__main__':
+    main()
