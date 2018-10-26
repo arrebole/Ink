@@ -1,4 +1,4 @@
-from topoSort import Rrduction_topoSort, DFS_topoSort
+import Kahn_topoSort, DFS_topoSort
 
 
 def main():
@@ -10,7 +10,16 @@ def main():
     graph["E"] = []
     graph["F"] = []
     graph["G"] = ["F", "E"]
-    Rrduction_topoSort(graph)
+    Kahn_topoSort.Kahn_topoSort(graph)
+    print("...")
+    
+    c = dict()
+    c["c1"] = ["c3"]
+    c["c2"] = ["c3"]
+    c["c3"] = ["c4","c5"]
+    c["c4"] = ["c5"]
+    c["c5"] = []
+    DFS_topoSort.DFS_topoSort(c)
 
 if __name__ == '__main__':
     main()

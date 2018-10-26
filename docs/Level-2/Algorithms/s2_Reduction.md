@@ -102,29 +102,119 @@ void shellSort(int a[], const int len)
 
 ## 拓扑排序
 
->架构1：基于减治法、源删除算法。
+>架构：1、基于减治法、源删除Kahn算法。2、基于暴力法-DFS,输出DFS的逆序
 >
->架构2：基于暴力法-DFS,输出DFS的逆序
+>区别：Kahn算法是从每个**入度为0**的顶点出发。基于dfs 是对每个**出度为0**的顶点进行dfs
 >
 >性能：T(n) = O(n+e)
+>
+>应用：有向图的排序
 
 
 
 ##### 图的表示
 
-```c++
-    map<string, vector<string>> graph;
-    graph["a"] = {"b","c"};
-    graph["b"] = {"e","g"};
-    graph["c"] = {"f"};
-    graph["d"] = {"a", "b", "g", "f","c"};
-    graph["e"] = {};
-    graph["f"] = {};
+```python
+    graph = dict()
+    graph["A"] = ["C", "B"]
+    graph["B"] = ["G", "E"]
+    graph["C"] = ["F"]
+    graph["D"] = ["A", "B", "C", "G", "F"]
+    graph["E"] = []
+    graph["F"] = []
+    graph["G"] = ["F", "E"]
 ```
 
 
 
+#### 减治法直接实现拓扑排序
 
+```python
+# 减治法——减源拓扑排序
+# 不断删除入度为0的点
+# Kahn算法是从每个入度为0的顶点出发
+def Kahn_topoSort(graph):
+    # 记录顶点的输入边数
+    nodes = dict()
+    # 初始化 顶点统计入nodes
+    for key in graph.keys():
+        nodes[key] = 0
+    # 统计边 输入边统计入nodes
+    for _, value_list in graph.items():
+        for vertex in value_list:
+            nodes[vertex] += 1
+    # 减源
+    # 如果不空循环删减
+    while (nodes):
+        for key in list(nodes.keys()):
+            # 从字典中删除入度为0的点并输出
+            # 并将这个点的输出点 -1
+            if nodes[key] == 0:
+                # 从统计字典中删除点
+                del nodes[key]
+                # 减少关联点的入度
+                reduceList = graph[key]
+                for i in reduceList:
+                    nodes[i] -= 1
+                # 输出这个被删除的点
+                print(key)
+
+```
+
+
+
+#### 基于深度优先搜索实现拓扑排序
+
+```python
+import random
+
+# 基于dfs的拓扑排序
+def DFS_topoSort(graph):
+    # 结果栈
+    result_Stack = list()
+    # 图上的顶点不为空时，随机找点进行dfs
+    while (graph):
+        # vertex 为取出的顶点
+        # 随机一个字典中的key，第二个参数为限制个数
+        vertex = random.sample(graph.keys(), 1)[0]
+        # 创建dfs栈，跟踪set，
+        # 并把随机顶点放入栈中
+        stack = list()
+        seen = set()
+        stack.append(vertex)
+        seen.add(vertex)
+        # 标记深元素
+        deep = ""
+        # 当栈不空时继续搜索
+        while (len(stack) > 0):
+            # 从栈中取元素
+            v = stack.pop()
+            nodes = graph[v]
+            # 如果出度为0 则标记为最深点
+            if (len(nodes) == 0):
+                deep = v
+                continue
+            for node in nodes:
+                # 如果没见过 就标记并入栈
+                if node not in seen:
+                    stack.append(node)
+                    seen.add(node)
+
+        # 删除最深的元素
+        graph.pop(deep)
+        for key, value in graph.items():
+            for item in value:
+                if item == deep:
+                    graph[key].remove(deep)
+        # 最深的元素入结果栈
+        result_Stack.append(deep)
+    
+    # 输出
+    print("dfs 拓扑结果")
+    while (result_Stack):
+        print(result_Stack.pop(), end=" ")
+
+```
 
 ## 生成组合对象的算法
 
