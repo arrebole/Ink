@@ -508,3 +508,81 @@ int main()
 
 ## 减常因子算法
 
+
+
+### 折半查找
+
+>架构：减治法-减常因子-折半查找
+>
+>应用：有序数组的查找
+>
+>性能：C<sub>avg</sub>( n ) = log<sub>2</sub>n
+
+```c++
+// @params：一个有序数组和它的长度，需要查找的key
+// @retrun: key的index
+int binarySearch(int a[], int len, int k)
+{
+    int l = 0, r = len - 1;
+    int m;
+    while (l <= r)
+    {
+        m = ((l + r) / 2);
+        if (k == a[m])
+        {
+            return m;
+        }
+        else if (k < a[m])
+        {
+            r = m - 1;
+        }
+        else
+        {
+            l = m + 1;
+        }
+    }
+    return -1;
+}
+```
+
+
+
+#### 俄式乘法
+
+>架构：减治法-减常因子-俄式乘法
+>
+>性能：极高，机器底层的基础操作。
+
+
+
+```c++
+/**
+ *  减治法-减常因子-俄式乘法
+ *  n * m = n/2 * 2m
+ *  n * m = (n-1)/2 * 2m + m 
+*/
+int RussianPeasant(int n, int m)
+{
+    int sum = 0;
+    while (n > 0)
+    {
+        if (n % 2 == 0)
+        {
+            // n * m = n/2 * 2m
+            n /= 2;
+            m *= 2;
+        }
+        else
+        {
+            //n * m = (n-1)/2 * 2m + m
+            // m为奇数时，先把 m 存放 sum 中
+            // 当 m = 1 时 (n-1)/2 * 2m 被加入sum中
+            sum += m;
+            n = (n - 1) / 2;
+            m *= 2;
+        }
+    }
+    return sum;
+}
+```
+
