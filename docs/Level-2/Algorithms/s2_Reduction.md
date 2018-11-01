@@ -510,7 +510,7 @@ int main()
 
 
 
-### 折半查找
+#### 折半查找
 
 >架构：减治法-减常因子-折半查找
 >
@@ -549,7 +549,7 @@ int binarySearch(int a[], int len, int k)
 
 #### 俄式乘法
 
->架构：减治法-减常因子-俄式乘法
+>架构：减治法-减常因子-俄式乘法，位操作
 >
 >性能：极高，机器底层的基础操作。
 
@@ -569,8 +569,8 @@ int RussianPeasant(int n, int m)
         if (n % 2 == 0)
         {
             // n * m = n/2 * 2m
-            n /= 2;
-            m *= 2;
+            n = n >> 1;
+            m = n << 1;
         }
         else
         {
@@ -578,11 +578,133 @@ int RussianPeasant(int n, int m)
             // m为奇数时，先把 m 存放 sum 中
             // 当 m = 1 时 (n-1)/2 * 2m 被加入sum中
             sum += m;
-            n = (n - 1) / 2;
-            m *= 2;
+            n = (n - 1) >> 1;
+            m = m << 1;
         }
     }
     return sum;
 }
 ```
 
+
+
+#### 约瑟夫斯问题
+
+>J（ 2k ）= 2J( k ) -  1;
+>
+>J ( 2k + 1 ) = 2J( k ) + 1;
+
+
+
+
+
+## 减可变规模算法
+
+### 计算中值和选择问题
+
+>划分问题：将大于a的划分在右侧，小于a的划分在左侧
+>
+>选择问题：寻找数列第k个最小元素的问题。
+
+
+
+#### Lomuto 减治划分
+
+```c++
+/**
+ *  lomuto划分：求数列中值
+ *  架构：减治法-减可变规模-lomuto划分
+ *  @params l,r,需要规划的开始端和结束端
+*/
+int lomutoPartition(int a[], int l,int r)
+{
+    int p = a[0];
+    int s = l;
+    for (int i = l + 1; i <= r; i++)
+    {
+        // 如果比p小则扩大s段
+        if (a[i] < p)
+        {
+            s++;
+            int t = a[s];
+            a[s] = a[i];
+            a[i] = t;
+        }
+    }
+    return s;
+}
+```
+
+
+
+#### 快速选择
+
+>架构：反复调用Lomuto划分找到数组中第n小的数
+>
+>性能：C<sub>worst</sub> = Θ( n<sup>2</sup> )
+
+```c++
+#include "lomutoPartition.h"
+/**
+ * 快速选择是一种从无序列表找到第k小元素的选择算法。
+ * 具有很好的平均时间复杂度，然而最坏时间复杂度则不理想.
+ * 性能： 从O(n log n)至O(n)，不过最坏情况仍然是O(n2)。
+*/
+int quickSelect(int a[], int len, int k)
+{
+    int l = 0, r = len - 1;
+
+    int partitionIdx = lomutoPartition(a, l, r);
+
+    while (l <= r)
+    {
+        //索引从0开始，需要-1
+        if ((k - 1) == partitionIdx)
+        {
+            break;
+        }
+        else if ((k - 1) < partitionIdx)
+        {
+            r = partitionIdx - 1;
+        }
+        else
+        {
+            l = partitionIdx + 1;
+        }
+
+        partitionIdx = lomutoPartition(a, l, r);
+    }
+    return a[partitionIdx];
+}
+```
+
+
+
+```c++
+int main()
+{
+    int a[] = {1, 3, 4, 7, 9, 2, 0, 4, 5};
+    printf("min 3th of a: %d", quickSelect(a, 9, 3));
+    return 0;
+}
+```
+
+
+
+### 插值查找
+
+>
+>
+>
+
+### 二叉查找树的查找和插入
+
+>
+>
+>
+
+### 拈游戏
+
+>
+>
+>

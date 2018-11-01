@@ -15,8 +15,8 @@ int RussianPeasant(int n, int m)
         if (n % 2 == 0)
         {
             // n * m = n/2 * 2m
-            n /= 2;
-            m *= 2;
+            n = n >> 1;
+            m = n << 1;
         }
         else
         {
@@ -24,8 +24,8 @@ int RussianPeasant(int n, int m)
             // 先把 m 存放 sum 中
             // 当 m = 1 时 (n-1)/2 * 2m 被加入sum中
             sum += m;
-            n = (n - 1) / 2;
-            m *= 2;
+            n = (n - 1) >> 1;
+            m = m << 1;
         }
     }
     return sum;
