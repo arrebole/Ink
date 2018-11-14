@@ -610,29 +610,26 @@ int RussianPeasant(int n, int m)
 
 #### Lomuto 减治划分
 
-```c++
-/**
- *  lomuto划分：求数列中值
- *  架构：减治法-减可变规模-lomuto划分
- *  @params l,r,需要规划的开始端和结束端
-*/
-int lomutoPartition(int a[], int l,int r)
-{
-    int p = a[0];
-    int s = l;
-    for (int i = l + 1; i <= r; i++)
-    {
-        // 如果比p小则扩大s段
-        if (a[i] < p)
-        {
-            s++;
-            int t = a[s];
-            a[s] = a[i];
-            a[i] = t;
-        }
-    }
-    return s;
-}
+```python
+#
+#   lomuto划分：求数列中值
+#   架构：减治法-减可变规模-lomuto划分
+#   @params l,r,需要规划的开始端和结束端
+#
+
+def lomutoPartition(a: list) -> int:
+    l = 0
+    r = len(a) - 1
+
+    p = a[l]
+    s = l
+    for i in range(l, r + 1):
+        if a[i] < p:
+            s += 1
+            a[s], a[i] = a[i], a[s]
+    a[l], a[s] = a[s], a[l]
+    return s
+
 ```
 
 
@@ -643,50 +640,33 @@ int lomutoPartition(int a[], int l,int r)
 >
 >性能：C<sub>worst</sub> = Θ( n<sup>2</sup> )
 
-```c++
-#include "lomutoPartition.h"
-/**
- * 快速选择是一种从无序列表找到第k小元素的选择算法。
- * 具有很好的平均时间复杂度，然而最坏时间复杂度则不理想.
- * 性能： 从O(n log n)至O(n)，不过最坏情况仍然是O(n2)。
-*/
-int quickSelect(int a[], int len, int k)
-{
-    int l = 0, r = len - 1;
+```python
+#
+#   快速选择是一种从无序列表找到第k小元素的选择算法。
+#   具有很好的平均时间复杂度，然而最坏时间复杂度则不理想.
+#   性能： 从O(n log n)至O(n)，不过最坏情况仍然是O(n2)。
+#
+def quickSelect(a: list, k: int) -> int:
+    l = 0
+    r = len(a)
+    s = lomutoPartition(a)
+    if s == (l + k - 1):
+        return a[s]
+    elif s > (l + k - 1):
+        return quickSelect(a[l:s], k)
+    else:
+        return quickSelect(a[s+1:r], l+k-1-s)
 
-    int partitionIdx = lomutoPartition(a, l, r);
-
-    while (l <= r)
-    {
-        //索引从0开始，需要-1
-        if ((k - 1) == partitionIdx)
-        {
-            break;
-        }
-        else if ((k - 1) < partitionIdx)
-        {
-            r = partitionIdx - 1;
-        }
-        else
-        {
-            l = partitionIdx + 1;
-        }
-
-        partitionIdx = lomutoPartition(a, l, r);
-    }
-    return a[partitionIdx];
-}
 ```
 
 
 
 ```c++
-int main()
-{
-    int a[] = {1, 3, 4, 7, 9, 2, 0, 4, 5};
-    printf("min 3th of a: %d", quickSelect(a, 9, 3));
-    return 0;
-}
+def main():
+    a = [0, 27, 3, 6, 2, 1, 7, 8]
+    index = quickSelect(a, 5)
+    print(index)
+
 ```
 
 
@@ -898,6 +878,21 @@ int BST_tree::search(int key)
 
 ### 拈游戏
 
+>重点：异或操作，nim和
 >
->
->
+
+```c++
+// 输入：东西的总数和单次获取的限制数量
+// 输出：先手的胜负，true 是胜利
+bool nim(int total, int limit)
+{
+    int flag;
+    int remain = total % limit;
+    flag = limit ^ remain;
+
+    if (flag == 0)
+        return false;
+    return true;
+}
+```
+
