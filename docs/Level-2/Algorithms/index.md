@@ -64,6 +64,10 @@
 
 ### 5.0 分治法
 
++ [合并排序](/docs/Level-2/Algorithms/s3_DivideAndConquer.md)
+
+
+
 ### 6.0 变治法
 
 ### 7.0 动态规划
