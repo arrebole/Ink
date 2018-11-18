@@ -49,7 +49,7 @@ bool uniqueElements(int arr[],int sinze)
 
 #### 斐波那契数列
 
-##### 低效算法
+##### 递归版本
 
 ```c++
 int Fib(int n)
@@ -63,18 +63,21 @@ int Fib(int n)
 
 
 
-##### 高效算法
+##### 迭代算法
 
 ```c++
-int Fib(int n)
+long long Fib(long long N)
 {
-    int f[n] = {0};
-    f[0] = 0,f[1] = 1;
-    for(int i = 2;i<n;i++)
+    long long first = 1;
+    long long second = 1;
+    long long ret = 0;
+    for (int i = 3; i <= N; ++i)
     {
-        f[i] = f[i-1] + f[i-2];
+        ret = first + second;
+        first = second;
+        second = ret;
     }
-    return f[n];
+    return second;
 }
 ```
 
