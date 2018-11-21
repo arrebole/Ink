@@ -71,11 +71,21 @@
   + [二叉查找树的查找与插入](/docs/Level-2/Algorithms/s2_Reduction.md)
   + [NIM游戏](/docs/Level-2/Algorithms/s2_Reduction.md)
 
+
+
 ### 5.0 分治法
 
 + [合并排序](/docs/Level-2/Algorithms/s3_DivideAndConquer.md)
 
++ [快速排序](/docs/Level-2/Algorithms/s3_DivideAndConquer.md)
 
++ [二叉树遍历及其相关特性](/docs/Level-2/Algorithms/s3_DivideAndConquer.md)
+
+  + [二叉树的高度](/docs/Level-2/Algorithms/s3_DivideAndConquer.md)
+
+  + [二叉树的遍历](/docs/Level-2/Algorithms/s3_DivideAndConquer.md)
+
+     
 
 ### 6.0 变治法
 

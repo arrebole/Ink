@@ -175,3 +175,101 @@ int HoarePartition(int a[], int lo, int hi)
 }
 ```
 
+
+
+## 二叉树遍历及其相关特性
+
+#### 计算二叉树的高度
+
+>架构：分治法-二叉树高度搜索
+>
+>性能： C(n) = 2n+1
+
+```c++
+struct node
+{
+    char data;
+    node *left;
+    node *right;
+    node(char ch) : data(ch)
+    {
+        this->left = nullptr;
+        this->right = nullptr;
+    };
+};
+
+int treeHeight(node *t)
+{
+    if (t == nullptr)
+        return -1;
+    else
+        return max(height(t->left), height(t->right)) + 1;
+}
+
+int max(int a, int b)
+{
+    if (a > b)
+        return a;
+    return b;
+}
+```
+
+
+
+#### 二叉树的遍历
+
+>架构：分治法-二叉树遍历
+>
+>性能： C(n) = 2n+1
+
+##### 前序遍历
+
+```c++
+// 入栈时输出
+void preOrderTraversal(node *root)
+{
+    if (root != nullptr)
+    {
+        printf("%c\n", root->data);
+        preOrderTraversal(root->left);
+        preOrderTraversal(root->right);
+    }
+}
+```
+
+
+
+##### 中序遍历
+
+```c++
+// 中序遍历
+// 用于二叉树排序
+void inOrderTraversal(node *root)
+{
+    if (root != nullptr)
+    {
+        inOrderTraversal(root->left);
+        printf("%c\n", root->data);
+        inOrderTraversal(root->right);
+    }
+}
+```
+
+
+
+##### 后序遍历
+
+```c++
+// 后序遍历
+// 出栈时输出
+void postOrderTraversal(node *root)
+{
+    if (root != nullptr)
+    {
+        postOrderTraversal(root->left);
+        postOrderTraversal(root->right);
+        printf("%c\n", root->data);
+    }
+}
+```
+
