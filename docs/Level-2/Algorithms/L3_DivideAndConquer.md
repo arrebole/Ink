@@ -6,7 +6,7 @@
 >
 >性能：C( n ) = n long<sub>2</sub>n; 需要额外内存空间
 
-#### 合并排序-自上而下
+### 合并排序-自上而下
 
 ```c++
 /**
@@ -76,7 +76,7 @@ void merge(int a[], int l, int m, int r)
 
 
 
-#### 合并排序-自下而上
+### 合并排序-自下而上
 
 ```c++
 /**
@@ -179,7 +179,7 @@ int HoarePartition(int a[], int lo, int hi)
 
 ## 二叉树遍历及其相关特性
 
-#### 计算二叉树的高度
+### 计算二叉树的高度
 
 >架构：分治法-二叉树高度搜索
 >
@@ -216,13 +216,13 @@ int max(int a, int b)
 
 
 
-#### 二叉树的遍历
+### 二叉树的遍历
 
 >架构：分治法-二叉树遍历
 >
 >性能： C(n) = 2n+1
 
-##### 前序遍历
+#### 前序遍历
 
 ```c++
 // 入栈时输出
@@ -239,7 +239,7 @@ void preOrderTraversal(node *root)
 
 
 
-##### 中序遍历
+#### 中序遍历
 
 ```c++
 // 中序遍历
@@ -257,7 +257,7 @@ void inOrderTraversal(node *root)
 
 
 
-##### 后序遍历
+#### 后序遍历
 
 ```c++
 // 后序遍历
@@ -273,3 +273,86 @@ void postOrderTraversal(node *root)
 }
 ```
 
+
+
+## 大整数乘法和Strassen矩阵乘法
+
+### karatsuba 大整数乘法
+
+>思想：将大数分解为幂指数相加的形式
+>
+>架构：分治法-大整数相乘
+>
+>性能：A( n ) ∈ Θ ( n<sup>long<sub>2</sub>3</sup>)
+
+```python
+
+# Solve problem: 降低大数相乘的时间复杂度
+# Thought： 将大数分解为幂指数相加的形式
+# Architecture： 分治法-karatsuba乘法
+# performance： n**(long2 3)
+# @params {int,int} 需要相乘的两个大数
+# @return int 相乘的结果
+def karatsuba(num1: int, num2: int)->int:
+
+    # 递归终止条件
+    if (num1 < 10) or (num2 < 10):
+        return num1 * num2
+
+    # 计算拆分长度
+    num1Str = str(num1)
+    num2Str = str(num2)
+
+    maxLength = max(len(num1Str), len(num2Str))
+    splitPosition = int(maxLength / 2)
+
+    # 拆分为 high1, low1, high2, low2
+    high1, low1, high2, low2 = 0, 0, 0, 0
+    if len(num1Str[: -splitPosition]) < 1:
+        high1 = 0
+        low1 = int(num1Str[-splitPosition:])
+    else:
+        high1 = int(num1Str[:-splitPosition])
+        low1 = int(num1Str[-splitPosition:])
+
+    if len(num2Str[: -splitPosition]) < 1:
+        high2 = 0
+        low2 = int(num2Str[-splitPosition:])
+    else:
+        high2 = int(num2Str[:-splitPosition])
+        low2 = int(num2Str[-splitPosition:])
+
+    # 计算z2, z0, z1, 此处的乘法使用递归
+    z0 = karatsuba(low1, low2)
+    z1 = karatsuba((low1 + high1), (low2 + high2))
+    z2 = karatsuba(high1, high2)
+
+    return (z2 * 10 ** (2 * splitPosition)) + ((z1 - z2 - z0)*10**(splitPosition)) + z0
+
+```
+
+
+
+### Strassen矩阵乘法
+
+>
+>
+>
+
+
+
+##  用分治法解最近对问题和凸包问题
+
+### 最近对问题
+
+>
+>
+>
+
+
+
+### 凸包问题
+
+>
+>
+>

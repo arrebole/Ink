@@ -42,52 +42,62 @@
 
 ### 3.0 暴力法
 
-+ [选择排序和冒泡排序](/docs/Level-2/Algorithms/s1_Violence.md)
-+ [顺序查找和蛮力字符串匹配](/docs/Level-2/Algorithms/s1_Violence.md)
-+ [最近对和凸包问题的蛮力算法](/docs/Level-2/Algorithms/s1_Violence.md)
-+ [穷举查找](/docs/Level-2/Algorithms/s1_Violence.md)
-   + [旅行商问题](/docs/Level-2/Algorithms/s1_Violence.md)
-   + [背包问题](/docs/Level-2/Algorithms/s1_Violence.md)
-   + [分配问题](/docs/Level-2/Algorithms/s1_Violence.md)
-+ [深度优先搜索和广度优先搜索](/docs/Level-2/Algorithms/s1_Violence.md)
++ [选择排序和冒泡排序](/docs/Level-2/Algorithms/L1_Violence.md)
++ [顺序查找和蛮力字符串匹配](/docs/Level-2/Algorithms/L1_Violence.md)
++ [最近对和凸包问题的蛮力算法](/docs/Level-2/Algorithms/L1_Violence.md)
++ [穷举查找](/docs/Level-2/Algorithms/L1_Violence.md)
+   + [旅行商问题](/docs/Level-2/Algorithms/L1_Violence.md)
+   + [背包问题](/docs/Level-2/Algorithms/L1_Violence.md)
+   + [分配问题](/docs/Level-2/Algorithms/L1_Violence.md)
++ [深度优先搜索和广度优先搜索](/docs/Level-2/Algorithms/L1_Violence.md)
 
 
 
 ### 4.0 减治法
 
-+ [直接插入排序](/docs/Level-2/Algorithms/s2_Reduction.md)
-+ [希尔排序](/docs/Level-2/Algorithms/s2_Reduction.md)
-+ [拓扑排序](/docs/Level-2/Algorithms/s2_Reduction.md)
-+ [生成组合对象算法](/docs/Level-2/Algorithms/s2_Reduction.md)
-  + [生成排列](/docs/Level-2/Algorithms/s2_Reduction.md)
-  + [生成子集](/docs/Level-2/Algorithms/s2_Reduction.md)
-+ [减常因子算法](/docs/Level-2/Algorithms/s2_Reduction.md)
-  + [折半查找](/docs/Level-2/Algorithms/s2_Reduction.md)
-  + [俄式乘法](/docs/Level-2/Algorithms/s2_Reduction.md)
-  + [约瑟夫斯问题](/docs/Level-2/Algorithms/s2_Reduction.md)
-+ [减可变规模算法](/docs/Level-2/Algorithms/s2_Reduction.md)
-  + [计算中值和选择](/docs/Level-2/Algorithms/s2_Reduction.md)
-  + [插值查找](/docs/Level-2/Algorithms/s2_Reduction.md)
-  + [二叉查找树的查找与插入](/docs/Level-2/Algorithms/s2_Reduction.md)
-  + [NIM游戏](/docs/Level-2/Algorithms/s2_Reduction.md)
++ [直接插入排序](/docs/Level-2/Algorithms/L2_Reduction.md)
++ [希尔排序](/docs/Level-2/Algorithms/L2_Reduction.md)
++ [拓扑排序](/docs/Level-2/Algorithms/L2_Reduction.md)
++ [生成组合对象算法](/docs/Level-2/Algorithms/L2_Reduction.md)
+  + [生成排列](/docs/Level-2/Algorithms/L2_Reduction.md)
+  + [生成子集](/docs/Level-2/Algorithms/L2_Reduction.md)
++ [减常因子算法](/docs/Level-2/Algorithms/L2_Reduction.md)
+  + [折半查找](/docs/Level-2/Algorithms/L2_Reduction.md)
+  + [俄式乘法](/docs/Level-2/Algorithms/L2_Reduction.md)
+  + [约瑟夫斯问题](/docs/Level-2/Algorithms/L2_Reduction.md)
++ [减可变规模算法](/docs/Level-2/Algorithms/L2_Reduction.md)
+  + [计算中值和选择](/docs/Level-2/Algorithms/L2_Reduction.md)
+  + [插值查找](/docs/Level-2/Algorithms/L2_Reduction.md)
+  + [二叉查找树的查找与插入](/docs/Level-2/Algorithms/L2_Reduction.md)
+  + [NIM游戏](/docs/Level-2/Algorithms/L2_Reduction.md)
 
 
 
 ### 5.0 分治法
 
-+ [合并排序](/docs/Level-2/Algorithms/s3_DivideAndConquer.md)
++ [合并排序](/docs/Level-2/Algorithms/L3_DivideAndConquer.md)
 
-+ [快速排序](/docs/Level-2/Algorithms/s3_DivideAndConquer.md)
++ [快速排序](/docs/Level-2/Algorithms/L3_DivideAndConquer.md)
 
-+ [二叉树遍历及其相关特性](/docs/Level-2/Algorithms/s3_DivideAndConquer.md)
++ [二叉树遍历及其相关特性](/docs/Level-2/Algorithms/L3_DivideAndConquer.md)
+  + [二叉树的高度](/docs/Level-2/Algorithms/L3_DivideAndConquer.md)
+  + [二叉树的遍历](/docs/Level-2/Algorithms/L3_DivideAndConquer.md)
 
-  + [二叉树的高度](/docs/Level-2/Algorithms/s3_DivideAndConquer.md)
++ [karatsuba大整数乘法和Strassen矩阵乘法](/docs/Level-2/Algorithms/L3_DivideAndConquer.md)
 
-  + [二叉树的遍历](/docs/Level-2/Algorithms/s3_DivideAndConquer.md)
++ [用分治法解最近对问题和凸包问题](/docs/Level-2/Algorithms/L3_DivideAndConquer.md)
 
-     
+
 
 ### 6.0 变治法
+
++ 预排序
+  + [检验数组元素唯一性](/docs/Level-2/Algorithms/L4_Change.md)
+  + [模式计算](/docs/Level-2/Algorithms/L4_Change.md)
+
++ [高斯消去法](/docs/Level-2/Algorithms/L4_Change.md)
+
+
 
 ### 7.0 动态规划
 
