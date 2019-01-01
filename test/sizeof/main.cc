@@ -1,11 +1,17 @@
 #include <stdio.h>
-#include <Windows.h>
 
-int glob = -1;
+char glob = -1;
+int g2 = 12;
 
 int main()
 {
-    MessageBoxA(0, 0, 0, 0);
-    printf("%p\n %d\n", &glob, glob);
+    int a = 0;
+    
+    int *b = new int[1200];
+    
+    printf("glob: %p\n", &g2);
+    printf("b: %p\n", b);
+    printf("a: %p\n", &a);
+    
     return 0;
 }

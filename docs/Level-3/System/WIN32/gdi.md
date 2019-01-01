@@ -1,7 +1,7 @@
 ## GDI
 
 #### 绘制矩形
-```
+```c++
 void drawRectangle()
 {
     // 1.设备对象的句柄 (null表示桌面)
