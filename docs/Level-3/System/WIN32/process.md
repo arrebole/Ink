@@ -2,7 +2,7 @@
 
 ### 进程的内存情况
 
-![](/media/process.jpg)
+![](/docs/assets/img/process.jpg)
 
 
 

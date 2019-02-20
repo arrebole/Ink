@@ -1,6 +1,7 @@
 *.exe
-
-*.pyc
+*.pyc/
+*.dll
+*.so
 
 **/__pycache__/*
 
