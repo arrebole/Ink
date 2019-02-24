@@ -2031,3 +2031,216 @@ def karatsuba(num1: int, num2: int)->int:
 > 
 >
 > 
+
+
+
+
+
+# 6.0 变治法
+
+## 6.1 预排序
+
+>思想：有序列表更容易求解。
+
+### 检测数组中元素的唯一性
+
+```javascript
+/**
+ * @description 预排序检测数组唯一性
+ * @param {array} a 
+ * @returns {boolean}
+ */
+function PresortElementUniqueness(a) {
+    let t = a.concat();
+    mergeSort(t);
+    for (let i = 0; i <= t.length - 2; i++) {
+        if (t[i] == t[i + 1]) return false;
+    }
+    return true;
+}
+
+/**
+ * @description 分治法-自下而上的归并排序
+ * @param {array} a 
+ */
+function mergeSort(a) {
+    let n = a.length;
+    let aux = new Array(n);
+
+    let min = (m, n) => m > n ? n : m;
+
+    let merge = (a, lo, mid, hi) => {
+        let i = lo, j = mid + 1;
+        for (let k = lo; k <= hi; k++) {
+            aux[k] = a[k];
+        }
+        for (let k = lo; k <= hi; k++) {
+            if (i > mid)                a[k] = aux[j++];
+            else if (j > hi)            a[k] = aux[i++];
+            else if (aux[j] < aux[i])   a[k] = aux[j++];
+            else                        a[k] = aux[i++];
+        }
+    }
+
+    for (let sz = 1; sz < n; sz += sz) {
+        for (let lo = 0; lo < n - sz; lo += sz + sz) {
+            merge(a, lo, lo + sz - 1, min(lo + sz + sz - 1, n - 1));
+        }
+    }
+}
+```
+
+测试
+
+```javascript
+function main() {
+    let a = [3, 5, 6, 7, 8, 2, 8, 34, 6, 23, 12, 24, 6, 37, 7];
+    console.log(PresortElementUniqueness(a));
+}
+```
+
+
+
+### 模式计算
+
+```javascript
+
+/**
+ * @description 预排序检测数组频率出现最多的元素
+ * @param {array} a 
+ * @returns {boolean}
+ */
+function PresortMode(a) {
+    let t = a.concat();
+    mergeSort(t);
+    let i = 0, modefrequency = 0, modevalue = null;
+    while (i <= t.length - 1) {
+        let runlength = 1, runvalue = t[i];
+        while (i + runvalue <= t.length - 1 && t[i + runlength] == runvalue) {
+            runlength++;
+        }
+        if (runlength > modefrequency) {
+            modefrequency = runlength;
+            modevalue = runvalue;
+        }
+        i += runlength;
+    }
+    return modevalue;
+}
+
+/**
+ * @description 分治法-自下而上的归并排序
+ * @param {array} a 
+ */
+function mergeSort(a) {
+    let n = a.length;
+    let aux = new Array(n);
+
+    let min = (m, n) => m > n ? n : m;
+
+    let merge = (a, lo, mid, hi) => {
+        let i = lo, j = mid + 1;
+        for (let k = lo; k <= hi; k++) {
+            aux[k] = a[k];
+        }
+        for (let k = lo; k <= hi; k++) {
+            if (i > mid) a[k] = aux[j++];
+            else if (j > hi) a[k] = aux[i++];
+            else if (aux[j] < aux[i]) a[k] = aux[j++];
+            else a[k] = aux[i++];
+        }
+    }
+
+    for (let sz = 1; sz < n; sz += sz) {
+        for (let lo = 0; lo < n - sz; lo += sz + sz) {
+            merge(a, lo, lo + sz - 1, min(lo + sz + sz - 1, n - 1));
+        }
+    }
+}
+```
+
+测试
+
+```javascript
+function main() {
+    let a = [1, 1, 8, 5, 5, 6, 8, 8, 34, 6, 7, 5, 8, 6, 2, 5, 9, 10, 5];
+    console.log(PresortMode(a));
+}
+```
+
+
+
+### 查找问题
+
+>架构:	先排序再进行折半查找。
+>
+>性能: 	T<sub>sort</sub>( n ) + T<sub>search</sub> = Θ(n log n) + Θ(long n)
+>
+> 如果我们要在同一个列表中进行多次查找，在排序上花费一些时间是值得的。
+
+```javascript
+
+/**
+ * @description 变治法-预排序查找
+ * @param {array} a  
+ * @param {int} key 
+ */
+function PresortSearch(a, key) {
+    let t = a.concat();
+    let l = 0, r = t.length - 1, m = 0;
+    mergeSort(t);
+    while (l <= r) {
+        m = parseInt((l + r) / 2);
+        if (t[m] == key) {
+            return m;
+        }
+        if (key < a[m]) {
+            r = m - 1;
+        } else {
+            l = m + 1;
+        }
+    }
+    return -1;
+}
+
+
+/**
+ * @description 分治法-自下而上的归并排序
+ * @param {array} a 
+ */
+function mergeSort(a) {
+    let n = a.length;
+    let aux = new Array(n);
+
+    let min = (m, n) => m > n ? n : m;
+
+    let merge = (a, lo, mid, hi) => {
+        let i = lo, j = mid + 1;
+        for (let k = lo; k <= hi; k++) {
+            aux[k] = a[k];
+        }
+        for (let k = lo; k <= hi; k++) {
+            if (i > mid) a[k] = aux[j++];
+            else if (j > hi) a[k] = aux[i++];
+            else if (aux[j] < aux[i]) a[k] = aux[j++];
+            else a[k] = aux[i++];
+        }
+    }
+
+    for (let sz = 1; sz < n; sz += sz) {
+        for (let lo = 0; lo < n - sz; lo += sz + sz) {
+            merge(a, lo, lo + sz - 1, min(lo + sz + sz - 1, n - 1));
+        }
+    }
+}
+
+```
+
+测试
+```javascript
+function main() {
+    let a = [3, 5, 7, 1, 9, 2, 3, 5, 7, 8, 9, 9, 0, 3, 12, 1, 14, 20, 17, 10]
+    console.log(PresortSearch(a, 8));
+}
+```
+
