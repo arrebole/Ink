@@ -1,15 +1,12 @@
-#include <vector>
 #include "closestPair.h"
 
-using namespace std;
-
 int main() {
-  // 求最近点的距离
-  vector<point> P = {{1,3},{1,9},{1.5,5},{2,7},{5,7},{5.5,9},{6,6},{8,1}};
-  vector<point> Q = {{8,1},{1,3},{1.5,5},{6,6},{2.7},{5,7},{1,9},{5.5,9}};
-  
-  double closestDistance = efficientClosestPair(P, Q);
+  int n = 20;
 
-  printf("this closestdistance is: %lf", closestDistance);
+  CloestPair* cp = new CloestPair();
+  Point a[] = {{1, 3}, {2, 7}, {1, 8}, {6, 0}};
+  double dis = cp->solveCloestPair(a, 4);
+  delete cp;
+  printf("min dist: %lf\n", dis);
   return 0;
 }
