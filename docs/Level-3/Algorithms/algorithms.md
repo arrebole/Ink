@@ -43,13 +43,21 @@
 ### 3.0 暴力法
 
 + [选择排序和冒泡排序]()
+   + 选择排序
+   + 冒泡排序
 + [顺序查找和蛮力字符串匹配]()
+   + 顺序查准
+   + 蛮力字符串匹配
 + [最近对和凸包问题的蛮力算法]()
+   + 最近对问题
+   + 凸包问题
 + [穷举查找]()
-   + [旅行商问题]()
-   + [背包问题]()
-   + [分配问题]()
+   + 旅行商问题
+   + 背包问题
+   + 分配问题
 + [深度优先搜索和广度优先搜索]()
+   + 深度优先搜索
+   + 广度优先搜索
 
 
 
@@ -59,46 +67,51 @@
 + [希尔排序]()
 + [拓扑排序]()
 + [生成组合对象算法]()
-  + [生成排列]()
-  + [生成子集]()
+  + 生成排列
+  + 生成子集
 + [减常因子算法]()
-  + [折半查找]()
-  + [俄式乘法]()
-  + [约瑟夫斯问题]()
+  + 折半查找
+  + 俄式乘法
+  + 约瑟夫斯问题
 + [减可变规模算法]()
-  + [计算中值和选择]()
-  + [插值查找]()
-  + [二叉查找树的查找与插入]()
-  + [NIM游戏]()
+  + 计算中值和选择
+  + 插值查找
+  + 二叉查找树的查找与插入
+  + NIM游戏
 
 
 
 ### 5.0 分治法
 
 + [合并排序]()
-
 + [快速排序]()
-
 + [二叉树遍历及其相关特性]()
-  + [二叉树的高度]()
-  + [二叉树的遍历]()
-
+  + 二叉树的高度
+  + 二叉树的遍历
 + [karatsuba大整数乘法和Strassen矩阵乘法]()
-
+  + 大整数乘法
+  + strassen矩阵乘法
 + [用分治法解最近对问题和凸包问题]()
+  + 最近对问题
+  + 凸包问题
 
 
 
 ### 6.0 变治法
 
-+ 预排序
-  + [检验数组元素唯一性]()
-  + [模式计算]()
-  + [查找问题]()
-
++ [预排序]()
+  + 检验数组元素唯一性
+  + 模式计算
+  + 查找问题
 + [高斯消去法]()
+  + 部分选主元法
+  + LU分解
+  + 计算矩阵的逆
+  + 计算矩阵的行列式
 
-
++ [平衡查找树]()
+  + AVL 树
+  + 2-3 树
 
 ### 7.0 动态规划
 
@@ -120,7 +133,7 @@
 
 ## 1.1 什么是算法
 
-### 求最大公约数
+### 1.1.1 求最大公约数
 
 > 1、求最大公约数：【减治法-减可变规模】欧几里得算法，
 >
@@ -245,15 +258,94 @@ int *sieve(int n)
 
 ## 1.3 基本数据结构
 
-#### 线性数据结构
+### 1.3.1 线性数据结构
 
 > 1、数组和链表
 >
 > 2、列表、栈、队列。（都能通过数组或链表实现）
 
+#### 循环队列
+
+```c++
+class CircularQueue {
+ private:
+  int* data;
+  int length;
+  int capacity;
+  int headIndex;
+  int tailIndex;
+
+ public:
+  /** Initialize your data structure here. Set the size of the queue to be k.
+   */
+  CircularQueue(int k) {
+    data = new int[k]();
+    length = 0;
+    capacity = k;
+    headIndex = 0;
+    tailIndex = -1;
+  }
+  ~CircularQueue() { delete[] data; }
+
+  /** Checks whether the circular queue is empty or not. */
+  bool isEmpty() { return length <= 0; }
+
+  /** Checks whether the circular queue is full or not. */
+  bool isFull() { return length >= capacity; }
+
+  /** Insert an element into the circular queue. Return true if the operation
+   * is successful. */
+  bool enQueue(int value) {
+    if (!isFull()) {
+      tailIndex = (tailIndex + 1) % capacity;
+      data[tailIndex] = value;
+      length++;
+      return true;
+    }
+
+    return false;
+  }
+
+  /** Delete an element from the circular queue. Return true if the operation
+   * is successful. */
+  bool deQueue() {
+    if (!isEmpty()) {
+      headIndex = (headIndex + 1) % capacity;
+      length--;
+      return true;
+    }
+    return false;
+  }
+
+  /** Get the front item from the queue. */
+  int Front() {
+    if (isEmpty()) return -1;
+    return data[headIndex];
+  }
+
+  /** Get the last item from the queue. */
+  int Rear() {
+    if (isEmpty()) return -1;
+    return data[tailIndex];
+  }
+};
+```
 
 
-#### 图
+
+
+
+### 1.3.2 树
+
+> 1、树是图的一种特殊形式、无环图。
+>
+> 2、是否有顶点：有根树、无根树。
+>
+> 3、是否有序：有序树、无序树。
+
+
+
+### 1.3.3 图
 
 > 1、表示法：邻接矩阵、临界链表。
 >
@@ -264,14 +356,6 @@ int *sieve(int n)
 > 4、根据是否有回路：连接图、无环图。
 
 
-
-#### 树
-
-> 1、树是图的一种特殊形式、无环图。
->
-> 2、是否有顶点：有根树、无根树。
->
-> 3、是否有序：有序树、无序树。
 
 
 
@@ -2437,3 +2521,39 @@ function main() {
 }
 ```
 
+
+
+## 6.2 高斯消去法
+
+### 部分选主元法
+
+```python
+def betterForwardElimination(matrix:list,vector:list)->list:
+    lenth = len(matrix)
+    for i in range(lenth):
+        matrix[i].append(vector[i])
+    for i in range(lenth):
+        pivotrow = i
+        for j in range(i+1,lenth):
+            if abs(matrix[j][i])>abs(matrix[pivotrow][i]):
+                pivotrow = j
+        for k in range(i,lenth+1):
+            matrix[i][k],matrix[pivotrow][k] = matrix[pivotrow][k],matrix[i][k]
+        for j in range(i+1,lenth):
+            t = matrix[j][i]/matrix[i,i]
+            for k in range(i,lenth+1):
+                matrix[j][k] = matrix[j][k] - matrix[i][k]*t
+    return []
+```
+
+
+
+### LU分解
+
+
+
+### 计算矩阵的逆
+
+
+
+### 计算矩阵的行列式
