@@ -4,11 +4,7 @@
 
 ###  1.0 绪论
 
-#### 1.1 什么是算法
-
-+ [求最大公约数]()
-
-#### 1.2 重要的问题类型
+#### 1.1 重要的问题类型
 
 + 排序
 + 查找
@@ -18,12 +14,14 @@
 + 几何问题
 + 数值问题
 
-#### 1.3 基本数据结构
+#### 1.2 数据结构
 
-+ [线性数据结构]()
-+ [图]()
-+ [树]()
-+ [集合和字典]()
++ 线性数据结构
+  + [循环队列]()
+  + [栈]()
++ 树
++ 图
++ 集合和字典
 
 
 
@@ -112,6 +110,7 @@
 + [平衡查找树]()
   + AVL 树
   + 2-3 树
+  + 红黑树
 
 ### 7.0 动态规划
 
@@ -131,120 +130,7 @@
 
 # 1.0 绪论
 
-## 1.1 什么是算法
-
-### 1.1.1 求最大公约数
-
-> 1、求最大公约数：【减治法-减可变规模】欧几里得算法，
->
-> 2、求最大公约数:  【暴力法-顺序查找】连续整数检测法 。
-
-
-
-#### 欧几里得算法
-
-```c++
-// 欧几里得算法(辗转相除法)
-// 减治法—减可变规模
-// gcd(m,n) = gcd(n,m mod n)
-// 退出条件: n = 0
-// gcd(60,24) = gcd(24,12) = gcd(12,0) = 12
-int Euclid_gcd(int m, int n)
-{
-    int r;
-    while (n != 0)
-    {
-        r = m % n;
-        m = n;
-        n = r;
-    }
-
-    return m;
-}
-```
-
-
-
-#### 欧几里得算法递归版
-
-```c++
-int Euclid_gcd(int m, int n)
-{
-    if(n==0)
-        return m;
-    int r = m % n;
-    return Euclid_gcd(n,r);
-}
-```
-
-
-
-#### 连续整数检测法
-
-```c++
-// 暴力法———不断减小查找
-int Exhaustive_gcd(int m, int n)
-{
-    int result;
-
-    // 1、取t = min{m,n}
-    int t;
-    (m > n) ? t = n : t = m;
-
-    while (true)
-    {
-        // 2、如果t能被 m,n 整除则t为最大公约数
-        if (m % t == 0)
-        {
-            if (n % t == 0)
-            {
-                result = t;
-                break;
-            }
-        }
-        // 3、t反复减小一
-        t--;
-    }
-    return result;
-}
-```
-
-
-
-### 求素数
-
-> 1、埃拉托色尼筛选法 ，求范围内的质数，可以实现因式分解。
-
-
-
-#### 埃拉托色尼筛选法
-
-```c++
-int *sieve(int n)
-{
-    //...
-    // 筛选倍数关系
-    for (int p = 2; p <= (int)sqrt(n); p++)
-    {
-        // 跳过重复筛选
-        if (intList[p] != 0)
-        {
-            int j = p * p;
-            while (j <= n)
-            {
-             	// 非素数index对应的value变为0
-                intList[j] = 0; 
-                j = j + p;
-            }
-        }
-    }
-    // ...
-}
-```
-
-
-
-## 1.2 重要的问题类型
+## 1.1 重要的问题类型
 
 - 排序
 - 查找
@@ -256,7 +142,7 @@ int *sieve(int n)
 
 
 
-## 1.3 基本数据结构
+## 1.2 数据结构
 
 ### 1.3.1 线性数据结构
 
@@ -264,7 +150,7 @@ int *sieve(int n)
 >
 > 2、列表、栈、队列。（都能通过数组或链表实现）
 
-#### 循环队列
+#### 循环队列(queue)
 
 ```c++
 class CircularQueue {
@@ -332,6 +218,74 @@ class CircularQueue {
 ```
 
 
+
+#### 栈(stack)
+
+```c++
+class Stack {
+ private:
+  int* data;
+  int capacity;
+  int size;
+  int topPointer;
+
+  bool isEmpty() {
+    if (size > 0) {
+      return false;
+    }
+    return true;
+  }
+
+  bool isFull() {
+    if (size >= capacity) {
+      return true;
+    }
+    return false;
+  }
+
+  void expansion() {
+    int newCapacity = (capacity + 1) * 2;
+    int* newArray = new int[newCapacity]();
+    for (int i = 0; i < size; i++) {
+      newArray[i] = data[i];
+    }
+    if (data != nullptr) delete[] data;
+    data = newArray;
+    capacity = newCapacity;
+  }
+
+ public:
+  Stack() {
+    data = nullptr;
+    capacity = 0;
+    size = 0;
+    topPointer = -1;
+  }
+  ~Stack() { delete[] data; }
+
+  void push(int x) {
+    if (isFull()) {
+      expansion();
+    }
+    size++;
+    data[++topPointer] = x;
+  }
+
+  bool pop() {
+    if (!isEmpty()) {
+      size--;
+      topPointer--;
+      return true;
+    }
+    return false;
+  }
+
+  int top() {
+    if (isEmpty()) return 0;
+    return data[topPointer];
+  }
+};
+```
 
 
 
@@ -405,6 +359,31 @@ bool uniqueElements(int arr[],int sinze)
 ```
 
 
+
+#### 埃拉托色尼筛选法
+
+```c++
+int *sieve(int n)
+{
+    //...
+    // 筛选倍数关系
+    for (int p = 2; p <= (int)sqrt(n); p++)
+    {
+        // 跳过重复筛选
+        if (intList[p] != 0)
+        {
+            int j = p * p;
+            while (j <= n)
+            {
+             	// 非素数index对应的value变为0
+                intList[j] = 0; 
+                j = j + p;
+            }
+        }
+    }
+    // ...
+}
+```
 
 
 
@@ -2557,3 +2536,10 @@ def betterForwardElimination(matrix:list,vector:list)->list:
 
 
 ### 计算矩阵的行列式
+
+
+
+
+
+## 6.3 平衡查找树
+

@@ -4,5 +4,5 @@
 *.so
 
 **/__pycache__/*
-
-./test/*
+/test/*
+/temp/
