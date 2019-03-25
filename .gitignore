@@ -4,5 +4,6 @@
 *.so
 
 **/__pycache__/*
-/test/*
-/temp/
+test/*
+temp/*
+.vscode/*

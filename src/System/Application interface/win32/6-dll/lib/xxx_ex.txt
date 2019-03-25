@@ -1,0 +1,42 @@
+dumpbin /exports Library.dll >xxx_ex.txt
+
+Microsoft (R) COFF/PE Dumper Version 14.16.27027.1
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file Library.dll
+
+File Type: DLL
+
+  Section contains the following exports for Library.dll
+
+    00000000 characteristics
+    5C935505 time date stamp Thu Mar 21 17:10:29 2019
+        0.00 version
+           1 ordinal base
+           1 number of functions
+           1 number of names
+
+    ordinal hint RVA      name
+
+          1    0 000013B0 add
+
+  Summary
+
+        1000 .CRT
+        1000 .bss
+        1000 .data
+        1000 .debug_abbrev
+        1000 .debug_aranges
+        1000 .debug_frame
+        2000 .debug_info
+        1000 .debug_line
+        1000 .debug_str
+        1000 .edata
+        1000 .idata
+        1000 .pdata
+        1000 .rdata
+        1000 .reloc
+        2000 .text
+        1000 .tls
+        1000 .xdata

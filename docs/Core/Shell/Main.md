@@ -30,13 +30,16 @@ gcc -fPIC -shared -o a.so a.c
 ```shell
 # 动态链接（1）
 gcc main.c ./name.so
+
 # 动态链接（2）
-# -L+路径 -l:名称
-gcc main.c -L. -l:name.so
+# -L+链接的文件目录 -l:链接库名称 -rpath+运行时加载链接库的路径
+gcc main.c -L . -l:name.so -rpath=.
+```
 
-
+```shell
 # 静态链接(1)
 gcc main.c ./name.lib
+
 # 静态链接(2)
 # 默认 .lib 结尾
 gcc main.c -L. -lname

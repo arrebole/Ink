@@ -6,12 +6,13 @@
 
 ### Brute-Forc
 
-+ [Breadth-first search]()
++ [Breadth-first Search]()
   + [岛屿的个数]()
   + [打开转盘锁]()
   + [完全平方数]()
-
-
++ [Depth-first Search]()
+  + [岛屿的个数]()
+  + [目标和]()
 
 
 
@@ -251,5 +252,131 @@ class Solution:
                         newQueue.add(i-j)
             bfsQueue = newQueue
         return count
+```
+
+
+
+
+
+### Depth-first Search
+
+#### 1.0 岛屿的个数
+
+>[原题链接](https://leetcode-cn.com/explore/learn/card/queue-stack/217/queue-and-bfs/872/)
+>
+>算法： 暴力法-深度优先搜索，栈。
+
+```javascript
+/**
+ * @param {character[][]} grid
+ * @return {number}
+ */
+function numIslands(grid) {
+    const MAX_ROW = grid.length
+    if (MAX_ROW <= 0) return 0;
+    const MAX_COL = grid[0].length;
+    const ISLAND = "1"
+    let count = 0;
+
+    for (let i = 0; i < MAX_ROW; i++) {
+        for (let j = 0; j < MAX_COL; j++) {
+            if (grid[i][j] == ISLAND) {
+                dfsTravelIsLands(grid, [i, j])
+                count++;
+            }
+        }
+    }
+    return count;
+};
+
+/**
+ * @param {character[][]} grid
+ * @param {number[]} entrance
+ */
+function dfsTravelIsLands(grid, entrance) {
+    const SEA = "0";
+    let [i, j] = entrance;
+    if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] == "1") {
+        grid[i][j] = SEA;
+        dfsTravelIsLands(grid, [i + 1, j]);
+        dfsTravelIsLands(grid, [i - 1, j]);
+        dfsTravelIsLands(grid, [i, j + 1]);
+        dfsTravelIsLands(grid, [i, j - 1]);
+    }
+    return;
+}
+```
+
+
+
+
+
+#### 2.0 目标和
+
+>[原题链接](https://leetcode-cn.com/explore/learn/card/queue-stack/219/stack-and-dfs/883/)
+>
+>算法： 暴力法-深度优先搜索，栈。
+
+```java
+class Solution {
+    private int[] nums;
+    private int target;
+    private int waysCount;
+
+    public int findTargetSumWays(int[] nums, int target) {
+        this.nums = nums;
+        this.target = target;
+        this.waysCount = 0;
+        dfsFindWays(0, 0);
+        return this.waysCount;
+    }
+
+    private void dfsFindWays(int sum, int level) {
+        if (level >= nums.length) {
+            if (sum == target) {
+                waysCount++;
+            }
+            return;
+        }
+        dfsFindWays(sum + nums[level], level + 1);
+        dfsFindWays(sum - nums[level], level + 1);
+    }
+}
+```
+
+
+
+#### 3.0 克隆图
+
+>[原题链接](https://leetcode-cn.com/explore/learn/card/queue-stack/219/stack-and-dfs/884/)
+>
+>算法：暴力法-深度优先搜索
+
+```c++
+
+class Solution {
+ public:
+  Node* cloneGraph(Node* node) { return this->clone(node); }
+
+ private:
+  unordered_map<int, Node*> seen;
+  Node* clone(Node* node) {
+    if (node == nullptr) return node;
+    if (seen.count(node->val)) return seen[node->val];
+
+    Node* newNode = createNode(node);
+    int size = node->neighbors.size();
+    for (int i = 0; i < size; i++) {
+      newNode->neighbors.push_back(clone(node->neighbors[i]));
+    }
+    return newNode;
+  }
+  Node* createNode(Node* node) {
+    Node* newNode = new Node();
+    newNode->val = node->val;
+    seen[node->val] = newNode;
+    return newNode;
+  }
+};
 ```
 
