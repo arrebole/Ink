@@ -146,146 +146,16 @@
 
 ### 1.3.1 线性数据结构
 
-> 1、数组和链表
->
-> 2、列表、栈、队列。（都能通过数组或链表实现）
+> 链表实现的扩容修改性能开销低，数组实现查询性能高
 
-#### 循环队列(queue)
+##### 线性数据结构
 
-```c++
-class CircularQueue {
- private:
-  int* data;
-  int length;
-  int capacity;
-  int headIndex;
-  int tailIndex;
-
- public:
-  /** Initialize your data structure here. Set the size of the queue to be k.
-   */
-  CircularQueue(int k) {
-    data = new int[k]();
-    length = 0;
-    capacity = k;
-    headIndex = 0;
-    tailIndex = -1;
-  }
-  ~CircularQueue() { delete[] data; }
-
-  /** Checks whether the circular queue is empty or not. */
-  bool isEmpty() { return length <= 0; }
-
-  /** Checks whether the circular queue is full or not. */
-  bool isFull() { return length >= capacity; }
-
-  /** Insert an element into the circular queue. Return true if the operation
-   * is successful. */
-  bool enQueue(int value) {
-    if (!isFull()) {
-      tailIndex = (tailIndex + 1) % capacity;
-      data[tailIndex] = value;
-      length++;
-      return true;
-    }
-
-    return false;
-  }
-
-  /** Delete an element from the circular queue. Return true if the operation
-   * is successful. */
-  bool deQueue() {
-    if (!isEmpty()) {
-      headIndex = (headIndex + 1) % capacity;
-      length--;
-      return true;
-    }
-    return false;
-  }
-
-  /** Get the front item from the queue. */
-  int Front() {
-    if (isEmpty()) return -1;
-    return data[headIndex];
-  }
-
-  /** Get the last item from the queue. */
-  int Rear() {
-    if (isEmpty()) return -1;
-    return data[tailIndex];
-  }
-};
-```
-
-
-
-#### 栈(stack)
-
-```c++
-class Stack {
- private:
-  int* data;
-  int capacity;
-  int size;
-  int topPointer;
-
-  bool isEmpty() {
-    if (size > 0) {
-      return false;
-    }
-    return true;
-  }
-
-  bool isFull() {
-    if (size >= capacity) {
-      return true;
-    }
-    return false;
-  }
-
-  void expansion() {
-    int newCapacity = (capacity + 1) * 2;
-    int* newArray = new int[newCapacity]();
-    for (int i = 0; i < size; i++) {
-      newArray[i] = data[i];
-    }
-    if (data != nullptr) delete[] data;
-    data = newArray;
-    capacity = newCapacity;
-  }
-
- public:
-  Stack() {
-    data = nullptr;
-    capacity = 0;
-    size = 0;
-    topPointer = -1;
-  }
-  ~Stack() { delete[] data; }
-
-  void push(int x) {
-    if (isFull()) {
-      expansion();
-    }
-    size++;
-    data[++topPointer] = x;
-  }
-
-  bool pop() {
-    if (!isEmpty()) {
-      size--;
-      topPointer--;
-      return true;
-    }
-    return false;
-  }
-
-  int top() {
-    if (isEmpty()) return 0;
-    return data[topPointer];
-  }
-};
-```
++ **Array**/**List**
+  + Stack
+  + Queue
+    + Queue 基本FIFO队列
+    + LifoQueue LIFO队列
+    + PriorityQueue 优先级队列
 
 
 
