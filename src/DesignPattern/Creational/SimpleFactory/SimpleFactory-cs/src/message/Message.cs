@@ -1,14 +1,15 @@
 
-namespace Message
+
+namespace message
 {
     public interface IMessage
     {
-        void call();
+        void code();
     }
 
     public class Error : IMessage
     {
-        void IMessage.call()
+        public void code()
         {
             System.Console.WriteLine("error");
         }
@@ -16,7 +17,7 @@ namespace Message
 
     public class Success : IMessage
     {
-        void IMessage.call()
+        public void code()
         {
             System.Console.WriteLine("success");
         }
@@ -28,21 +29,26 @@ namespace Message
         error,
     }
 
-    // 简单工厂模式
+    // 设计模式：简单工厂模式
+    // 算法：——
+    // 复杂度：——
     public class MessageFactory
     {
 
         public static IMessage createMessage(MessageTypes arg)
         {
-
+            IMessage message = null;
             switch (arg)
             {
                 case MessageTypes.success:
-                    return new Success();
+                    message = new Success();
+                    break;
+                
                 case MessageTypes.error:
-                    return new Error();
+                    message =  new Error();
+                    break;
             }
-            return null;
+            return message;
         }
     }
 

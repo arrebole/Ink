@@ -1,64 +1,56 @@
-# 设计模式
+# Design Patterns
 
 > 口号： **高内聚，低耦合**
+>
+> 目的：为了**重用代码**、让代码更容易被他人理解、保证代码可靠性
 
 
-
-遵循原则：
-
-Single Responsibility Principle    	单一职责原则
-
-Liskov Substitution Principle             里氏代换原则
-
-Dependence Inversion Principle 	 依赖倒转原则
-
-Interface Segregation Principle 	  接口隔离原则
-
-Demeter Principle 				    迪米特法则，又称最少知道原则
-
-Open Close Principle 			     开闭原则
-
-
-
-## Directory
-
-### Creational
-
-+ [Simple Factory 简单工厂](#@SimpleFactory)
-
-+ [Abstract Factory 抽象工厂](#@AbstractFactory)
-+ [Builder 生成器]()
-+ [Factory Method 工厂方法]()
-+ [Prototype 原型]()
-+ [Singleton 单件]()
-
-### Structural
-
-+ [Adapter 适配器]()
-+ [Bridge 桥接]()
-+ [Composite 组成]()
-+ [Decorator 装饰]()
-+ [Facade 外观]()
-+ [Flyweight 享元]()
-+ [Proxy 代理]() 
-
-### Behavioral
-
-+ [Chain Of Responsibil Ity 责任链]()
-+ [Command 命令]()
-+ [Interpreter 解释器]()
-+ [Iterator 迭代器]()
-+ [Mediator 中介者]()
-+ [Memento 备忘录]()
-+ [Observer 观察者]()
-+ [State 状态]()
-+ [Strategy 策略]()
-+ [Template Method 模板方法]()
-+ [Visitor 访问者]()
 
 
 
 ## Creational
+
++ [Simple Factory ](#SimpleFactory)
++ [Abstract Factory](#AbstractFactory)
++ [Builder]()
++ [Factory Method]()
++ [Prototype]()
++ [Singleton]()
+
+
+
+## Behavioral
+
++ [Bridge]()
++ [Composite]()
++ [Decorator]()
++ [Facade]()
++ [Flyweight]()
++ [Proxy]() 
+
+
+
+## Structural
+
++ [Chain Of Responsibil Ity]()
++ [Command]()
++ [Interpreter]()
++ [Iterator]()
++ [Mediator]()
++ [Memento]()
++ [Observer]()
++ [State]()
++ [Strategy]()
++ [Template Method]()
++ [Visitor]()
+
+
+
+
+
+
+
+# Creational design patterns
 
 > 定义： 创建型模式**抽象了实例化过程**，帮助系统独立于如何创建对象、组合和表示那些对象。
 >
@@ -68,19 +60,29 @@ Open Close Principle 			     开闭原则
 
 
 
-### @SimpleFactory
+## SimpleFactory
 
-#### 1）模式定义
+### 1）模式意图
 
-简单工厂模式(Simple Factory Pattern)：又称为静态工厂方法(Static Factory Method)模式，它属于类创建型模式。
-
-**在简单工厂模式中，可以根据参数的不同返回不同类的实例。**
-
-简单工厂模式专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类。
++ **在简单工厂模式中，可以根据参数的不同返回不同类的实例。**
 
 
 
-#### 2）模式结构
+### 2）模式适用
+
++ 创建统一接口的对象
+
+
+
+### 2） 模式效果
+
++ 简单工厂模式又称为静态工厂方法(Static Factory Method)模式，它属于类创建型模式。
+
++ 简单工厂模式专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类。
+
+
+
+### 3）模式结构
 
 - `Factory`：工厂角色负责实现创建所有实例的内部逻辑
 
@@ -88,13 +90,15 @@ Open Close Principle 			     开闭原则
 
 - `ConcreteProduct`：具体产品角色是创建目标，所有创建的对象都充当这个角色的某个具体类的实例。
 
+  
+
     
 
 ![](../../assets/img/DesignPattern.Creational.SimpleFactory.png)
 
 
 
-#### 3）[代码实现](/src/DesignPattern/Creational/SimpleFactory)
+### 4）[代码实现](/src/DesignPattern/Creational/SimpleFactory)
 
 ```c++
 // 抽象的产品(Product)接口
@@ -120,26 +124,29 @@ class IBMComputer : public Computer {
 
 
 ```c++
-// 模式：简单工厂模式
+// 生产的类型
+enum ComputerTypes {
+  apple,
+  ibm,
+};
+
+// 模式：SimpleFactory;
 // 算法：——
 // 复杂度：——
-class SimpleFactory {
+class ComputerFactory {
  public:
-  enum types {
-    apple,
-    ibm,
-  };
-
-  static Computer* createComputer(types t) {
-    switch (t) {
-      case types::apple:
-        return new AppleComputer();
+  static Computer* createComputer(ComputerTypes T) {
+    Computer* computer = nullptr;
+    switch (T) {
+      case ComputerTypes::apple:
+        computer = new AppleComputer();
         break;
 
-      case types::ibm:
-        return new IBMComputer();
+      case ComputerTypes::ibm:
+        computer = new IBMComputer();
         break;
     }
+    return computer;
   }
 };
 ```
@@ -147,11 +154,14 @@ class SimpleFactory {
 测试
 
 ```c++
+// Computer.test.cc
 int main() {
-  Computer* p1 = SimpleFactory::createComputer(SimpleFactory::types::apple);
-  Computer* p2 = SimpleFactory::createComputer(SimpleFactory::types::ibm);
-  p1->use();
-  p2->use();
+  Computer* appleComputer = ComputerFactory::createComputer(ComputerTypes::apple);
+  Computer* ibmComputer = ComputerFactory::createComputer(ComputerTypes::ibm);
+  
+  appleComputer->use();
+  ibmComputer->use();
+  
   return 0;
 }
 ```
@@ -162,11 +172,166 @@ int main() {
 
 
 
-### @AbstractFactory
 
-#### 1）模式定义
 
-#### 2）模式结构
 
-#### 3）代码实现
 
+## AbstractFactory
+
+### 1）模式意图
+
++ 提供一个创建一系列相关或互相依赖对象的接口，而无需指定它们的具体的类
+
+
+
+### 2）模式适用
+
++ **一个系统要由多个产品系列中的一个来配置时**
++ 一个系统要独立于它的产品的创建、组合和表示时
++ 当你要强调**一系列相关的产品对象**的设计以便进行**联合**适用时
++ 当你提供一个产品类库，而只想显示它们的接口而不是实现时
+
+
+
+### 3）模式效果
+
++ 它分离了具体的类
++ 它使得易于交换产品系列
++ 它有利于产品的一致性
++ 难以支持新种类的产品
+
+
+
+### 4）模式结构
+
++ `AbstractFactory` 创建抽象产品的操作接口
++ `ConcreteFactory` 实现具体产品对象的操作
++ `AbstractProduct` 一类产品对象的接口
++ `ConcreteProduct` 定义一个将被相应的具体工厂创建的产品对象
++ `Client` 仅使用`AbstractFactory`和`AbstractProduct`类声明的接口
+
+
+
+![](../../assets/img/DesignPattern.Creational.AbstractFactory.png)
+
+
+
+
+
+### 5）[代码实现]((/src/DesignPattern/Creational/AbstractFactory))
+
+```c++
+// 按钮接口
+class Button {
+ public:
+  virtual void drawButton() = 0;
+  virtual ~Button(){};
+};
+
+// 菜单接口
+class Menu {
+ public:
+  virtual void drawMenu() = 0;
+  virtual ~Menu(){};
+};
+```
+
+
+
+```c++
+// 具体的产品系列 linux
+class LinuxButton : public Button {
+ public:
+  virtual void drawButton() { printf("LinuxButton\n"); }
+};
+
+class LinuxMenu : public Menu {
+ public:
+  virtual void drawMenu() { printf("LinuxMenu"); }
+};
+
+// 具体的产品系列 windows
+class WindowsButton : public Button {
+ public:
+  virtual void drawButton() { printf("WindowsButton\n"); }
+};
+
+class WindowsMenu : public Menu {
+ public:
+  virtual void drawMenu() { printf("WindowsMenu"); }
+};
+```
+
+
+
+```c++
+// 工厂接口
+class Factory {
+ public:
+  virtual Button *createButton() = 0;
+  virtual Menu *createMenu() = 0;
+  virtual ~Factory(){};
+};
+
+// 具体的工厂1
+class LinuxFactory : public Factory {
+ public:
+  Button *createButton() { return new LinuxButton(); }
+  Menu *createMenu() { return new LinuxMenu(); }
+};
+
+// 具体的工厂2
+class WindowsFactory : public Factory {
+ public:
+  Button *createButton() { return new WindowsButton(); }
+  Menu *createMenu() { return new WindowsMenu(); }
+};
+```
+
+
+
+```c++
+// 设计模式：抽象工厂
+// 算法：——
+// 复杂度：——
+class Client {
+ private:
+  Factory *factory = nullptr;
+  Button *button = nullptr;
+  Menu *menu = nullptr;
+
+ public:
+  Client(Factory *f) {
+    factory = f;
+    button = factory->createButton();
+    menu = factory->createMenu();
+  }
+
+  void draw() {
+    button->drawButton();
+    menu->drawMenu();
+  }
+
+  ~Client() {
+    if (factory != nullptr) delete factory;
+    if (button != nullptr) delete button;
+    if (menu != nullptr) delete menu;
+  }
+};
+```
+
+测试
+
+```c++
+int main() {
+  Client *c = new Client(new LinuxFactory());
+  c->draw();
+  
+  delete c;
+  return 0;
+}
+```
+
+
+
+#### [更多代码]((/src/DesignPattern/Creational/AbstractFactory))

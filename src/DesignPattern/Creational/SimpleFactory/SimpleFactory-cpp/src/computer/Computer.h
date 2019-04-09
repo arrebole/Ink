@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 
 // 抽象的产品(Product)接口
@@ -15,6 +16,7 @@ class IBMComputer : public Computer {
   virtual void use() { printf("use IBMComputer\n"); }
 };
 
+// 生产的类型
 enum ComputerTypes {
   apple,
   ibm,
@@ -23,25 +25,19 @@ enum ComputerTypes {
 // 模式：简单工厂模式
 // 算法：——
 // 复杂度：——
-class SimpleFactory {
+class ComputerFactory {
  public:
-  static Computer* createComputer(ComputerTypes t) {
-    switch (t) {
+  static Computer* createComputer(ComputerTypes T) {
+    Computer* computer = nullptr;
+    switch (T) {
       case ComputerTypes::apple:
-        return new AppleComputer();
+        computer = new AppleComputer();
         break;
 
       case ComputerTypes::ibm:
-        return new IBMComputer();
+        computer = new IBMComputer();
         break;
     }
+    return computer;
   }
 };
-
-int main() {
-  Computer* p1 = SimpleFactory::createComputer(ComputerTypes::apple);
-  Computer* p2 = SimpleFactory::createComputer(ComputerTypes::ibm);
-  p1->use();
-  p2->use();
-  return 0;
-}

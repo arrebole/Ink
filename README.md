@@ -4,11 +4,11 @@
 ### Core
 + [Shell](/docs/Core/Shell/Main.md)
 
-+ [算法](/docs/Core/Algorithms/Main.md)
++ [Algorithms](/docs/Core/Algorithms/Main.md)
 
-+ [操作系统](/docs/Core/System/Main.md)
++ [System](/docs/Core/System/Main.md)
 
-+ [设计模式](/docs/Core/DesignPattern/Main.md)
++ [DesignPattern](/docs/Core/DesignPattern/Main.md)
 
 ### Network
 
