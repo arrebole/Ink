@@ -1,6 +1,5 @@
 #pragma one
 #include <stdio.h>
-
 // 按钮接口
 class Button {
  public:
@@ -40,6 +39,9 @@ class WindowsMenu : public Menu {
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // 工厂接口
+// 设计模式：抽象工厂
+// 算法：——
+// 复杂度：——
 class Factory {
  public:
   virtual Button *createButton() = 0;
@@ -59,34 +61,4 @@ class WindowsFactory : public Factory {
  public:
   Button *createButton() { return new WindowsButton(); }
   Menu *createMenu() { return new WindowsMenu(); }
-};
-
-//++++++++++++++++++++++++++++++++++++++
-
-// 设计模式：抽象工厂
-// 算法：——
-// 复杂度：——
-class Client {
- private:
-  Factory *factory = nullptr;
-  Button *button = nullptr;
-  Menu *menu = nullptr;
-
- public:
-  Client(Factory *f) {
-    factory = f;
-    button = factory->createButton();
-    menu = factory->createMenu();
-  }
-
-  void draw() {
-    button->drawButton();
-    menu->drawMenu();
-  }
-
-  ~Client() {
-    if (factory != nullptr) delete factory;
-    if (button != nullptr) delete button;
-    if (menu != nullptr) delete menu;
-  }
 };

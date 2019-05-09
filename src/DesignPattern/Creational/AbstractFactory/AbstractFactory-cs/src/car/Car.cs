@@ -1,31 +1,32 @@
 namespace Car
 {
-    interface IWheel
+    public interface IWheel
     {
         void scroll();
     }
 
-    interface IHorn
+    public interface IHorn
     {
         void didi();
     }
 
-    interface ICarFactory
+    public interface ICarFactory
     {
         IWheel createWheel();
         IHorn createHorn();
     }
 
 
-    class FerrariWheel : IWheel
+    public class FerrariWheel : IWheel
     {
         public void scroll()
         {
             System.Console.WriteLine("FerrariWheel");
         }
+
     }
 
-    class FerrariHorn : IHorn
+    internal class FerrariHorn : IHorn
     {
         public void didi()
         {
@@ -33,7 +34,7 @@ namespace Car
         }
     }
 
-    class BugattiWheel : IWheel
+    internal class BugattiWheel : IWheel
     {
         public void scroll()
         {
@@ -41,7 +42,7 @@ namespace Car
         }
     }
 
-    class BugattiHorn : IHorn
+    internal class BugattiHorn : IHorn
     {
         public void didi()
         {
@@ -49,7 +50,7 @@ namespace Car
         }
     }
 
-    class FerrariFactory : ICarFactory
+    public class FerrariFactory : ICarFactory
     {
         public IWheel createWheel()
         {
@@ -61,7 +62,7 @@ namespace Car
         }
     }
 
-    class BugattiFactory : ICarFactory
+    public class BugattiFactory : ICarFactory
     {
         public IWheel createWheel()
         {
@@ -71,39 +72,6 @@ namespace Car
         {
             return new BugattiHorn();
         }
-    }
-
-    public enum CarTypes
-    {
-        Bugatti,
-        Ferrari,
-    }
-    public class Client
-    {
-        private IWheel wheel;
-        private IHorn horn;
-        public Client(CarTypes t)
-        {
-            ICarFactory factory = null;
-            switch (t)
-            {
-                case CarTypes.Bugatti:
-                    factory = new BugattiFactory();
-                    break;
-                case CarTypes.Ferrari:
-                    factory = new FerrariFactory();
-                    break;
-            }
-            this.wheel = factory.createWheel();
-            this.horn = factory.createHorn();
-        }
-
-        public void run()
-        {
-            wheel.scroll();
-            horn.didi();
-        }
-
     }
 
 }

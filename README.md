@@ -2,7 +2,6 @@
 > 开坑时间: 2018-7-14;
 
 ### Core
-+ [Shell](/docs/Core/Shell/Main.md)
 
 + [Algorithms](/docs/Core/Algorithms/Main.md)
 
@@ -10,6 +9,14 @@
 
 + [DesignPattern](/docs/Core/DesignPattern/Main.md)
 
++ [Refactoring]()
+
+
+### Extra
+
++ [Shell Command](/docs/Core/Shell/Main.md)
+
 ### Network
 
 ### Binary
+
