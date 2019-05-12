@@ -6,8 +6,6 @@
 
 
 
-
-
 ## 目录
 
 ### Creational
@@ -126,26 +124,26 @@
 
 ## SimpleFactory
 
-### 1）模式意图
+### Ⅰ模式意图
 
 - **在简单工厂模式中，可以根据参数的不同返回不同类的实例。**
 
 
 
-### 2）模式适用
+### Ⅱ 模式适用
 
 - 创建统一接口的对象
 
 
 
-### 2） 模式效果
+### Ⅲ 模式效果
 
 - 简单工厂模式又称为静态工厂方法(Static Factory Method)模式，它属于类创建型模式。
 - 简单工厂模式专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类。
 
 
 
-### 3）模式结构
+### Ⅳ 模式结构
 
 - `Factory`：工厂角色负责实现创建所有实例的内部逻辑
 - `Product`：抽象产品角色是所创建的所有对象的父类，负责描述所有实例所共有的公共接口
@@ -155,7 +153,11 @@
 
 ![](../../assets/img/DesignPattern.Creational.SimpleFactory.png)
 
-### 4）[代码实现]()
+### Ⅴ模式实现
+
+
+
+#### 参数化(c++)
 
 ```c++
 // 抽象的产品(Product)接口
@@ -165,11 +167,11 @@ class Computer {
 };
 // 具体的产品(ConcreteProduct)
 class AppleComputer : public Computer {
-  virtual void use() { printf("use AppleComputer\n"); }
+  virtual void use() { printf("use AppleComputer\n"; }
 };
 
 class IBMComputer : public Computer {
-  virtual void use() { printf("use IBMComputer\n"); }
+  virtual void use() { printf("use IBMComputer\n"; }
 };
 // 生产的类型
 enum ComputerTypes {
@@ -222,13 +224,13 @@ int main() {
 
 ## FactoryMethod
 
-### 1) 模式意图
+### Ⅰ模式意图
 
 + 定义一个用于创建对象的接口，让子类决定实例化哪一个类，factoryMethod使**一个类的实例化延迟到子类**。
 
 
 
-### 2) 模式适用
+### Ⅱ 模式适用
 
 + 当一个类不知道它所必须创建的对象的类的时候
 + 当一个类希望有它的子类来指定它所创建的对象的时候
@@ -236,7 +238,7 @@ int main() {
 
 
 
-### 3) 模式效果
+### Ⅲ 模式效果
 
 + Factory Method 模式解决**单个对象**的需求变化，缺点：**要求创建方法参数相同**
 + Factory Method 隔离类对象的使用者和具体类型之间的耦合关系，面对变化的具体类型，紧耦合关系（new）会让程序变脆弱。
@@ -249,7 +251,7 @@ int main() {
 
 
 
-### 4) 模式结构
+### Ⅳ 模式结构
 
 + `Product`：定义工厂方法所创建的对象的接口
 + `ConcreteProduct`： 实现Product的接口
@@ -262,7 +264,7 @@ int main() {
 
 
 
-### 5) 模式实现
+### Ⅴ 模式实现
 
 + 两种不同的情况
 
@@ -350,7 +352,7 @@ int main() {
 
 
 
-### 6) 相关模式
+### Ⅵ 相关模式
 
 + abstract factory 经常用工厂方法来实现。
 
@@ -369,13 +371,13 @@ int main() {
 
 ## AbstractFactory
 
-### 1) 模式意图
+### Ⅰ 模式意图
 
 + 提供一个创建一系列相关或互相依赖对象的接口，而无需指定它们的具体的类
 
 
 
-### 2) 模式适用
+### Ⅱ 模式适用
 
 + **一个系统要由多个产品系列中的一个来配置时**
 + 一个系统要独立于它的产品的创建、组合和表示时
@@ -384,7 +386,7 @@ int main() {
 
 
 
-### 3) 模式效果
+### Ⅲ 模式效果
 
 + 它分离了具体的类
 + 它使得易于交换产品系列
@@ -393,7 +395,7 @@ int main() {
 
 
 
-### 4) 模式结构
+### Ⅳ 模式结构
 
 + `AbstractFactory`: 创建抽象产品的操作接口
 + `ConcreteFactory`: 实现具体产品对象的操作
@@ -409,7 +411,7 @@ int main() {
 
 
 
-### 5) [模式实现]((/src/DesignPattern/Creational/AbstractFactory))
+### Ⅴ 模式实现
 
 + 1、工厂作为单件
 
@@ -457,7 +459,7 @@ class Factory {
 // 具体的产品系列 linux
 class LinuxButton : public Button {
  public:
-  virtual void drawButton() { printf("LinuxButton\n"); }
+  virtual void drawButton() { printf("LinuxButton\n"; }
 };
 
 class LinuxMenu : public Menu {
@@ -612,11 +614,11 @@ function main() {
 
 
 
-[更多代码]((/src/DesignPattern/Creational/AbstractFactory))
+[更多代码](/src/DesignPattern/Creational/AbstractFactory)
 
 
 
-### 6) 相关模式
+### Ⅵ 相关模式
 
 + `AbstractFactory`类通常常用工厂方法实现，但它们也可以用`Prototype`实现
 
@@ -630,20 +632,20 @@ function main() {
 
 ## Builder
 
-### 1) 模式意图
+### Ⅰ 模式意图
 
 + 将一个复杂对象的**构建与它的表示分离**，使得**同样的构建过程可以创建不同的表示**。
 
 
 
-### 2) 模式适用
+### Ⅱ 模式适用
 
 + 当创建复杂对象的算法应该**独立于该对象的组成部分**以及的装配方式时
 + 当构建过程必须允许被构造的对象有不同的表示时。
 
 
 
-### 3) 模式效果
+### Ⅲ 模式效果
 
 + 它使你可以改变一个产品的内部表示，需要**改变时只需要一个新的生成器**
 + 它将构造代码和表示代码分离
@@ -651,7 +653,7 @@ function main() {
 
 
 
-### 4) 模式结构
+### Ⅳ 模式结构
 
 + `Builder`: 为创建一个Product对象的各个部件指定抽象接口
 
@@ -667,7 +669,7 @@ function main() {
 
 
 
-### 5) 模式实现
+### Ⅴ 模式实现
 
 + 装配和构造函数
 
@@ -780,7 +782,7 @@ int main() {
 
 [更多代码](/src/DesignPattern/Creational/Builder)
 
-### 6) 相关模式
+### Ⅵ 相关模式
 
 + 与 `Abstract Factory`目的相同，用于创建复杂对象
 
@@ -796,7 +798,7 @@ int main() {
 
 ## Prototype
 
-### 1) 模式意图
+### Ⅰ 模式意图
 
 + 用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象。
 
@@ -823,7 +825,7 @@ int main() {
 
 
 
-### 4) 模式结构
+### Ⅳ 模式结构
 
 + `Prototype`: 声明一个克隆自身的接口
 + `ConcretePrototype`: 实现一个克隆自身的操作
@@ -835,7 +837,7 @@ int main() {
 
 
 
-### 5) 模式实现
+### Ⅴ 模式实现
 
 + 使用一个原型管理器
 + 实现克隆操作
@@ -846,14 +848,49 @@ int main() {
 #### 标准版
 
 ```c++
-
+// Prototype 接口
+class IImage {
+ public:
+  IImage() {}
+  virtual int getData() = 0;
+  virtual ~IImage() {}
+  virtual IImage* Clone() = 0;
+};
 ```
 
+```c++
+// 具体的原型类
+class ConcreteImage : public IImage {
+ private:
+  int data;
 
+ public:
+  ConcreteImage(int data) { 
+      this->data = data; 
+  }
+  // 拷贝构造函数,进行数据复制
+  ConcreteImage(const ConcreteImage& p) { 
+      this->data = p.data; 
+  }
+  virtual int getData() { 
+      return this->data; 
+  }
+  virtual IImage* Clone() { 
+      return new ConcreteImage(*this); 
+  }
+};
+```
 
+```c++
+int main() {
+  IImage* img = new ConcreteImage(17);
+  IImage* imgClone = img->Clone();
 
-
-
+  printf("%d\n", img->getData());
+  printf("%d\n", imgClone->getData());
+  return 0;
+}
+```
 
 
 
@@ -879,20 +916,20 @@ int main() {
 
 ## Singleton
 
-### 1) 模式意图
+### Ⅰ 模式意图
 
 + 保证一个类仅有一个实例，并提供一个访问它的全局访问点。
 
 
 
-### 2) 模式适用
+### Ⅱ 模式适用
 
 + 当类只能有一个实例而且客户可以从一个众所周知的访问点访问它时。
 + 当这个唯一实例应该是通过子类化可扩展的，并且客户应该无需更改代码就能使用一个扩展的实例时。
 
 
 
-### 3) 模式效果
+### Ⅲ 模式效果
 
 + 对唯一实例的受控访问
 + 缩小命名空间
@@ -902,7 +939,7 @@ int main() {
 
 
 
-### 4) 模式结构
+### Ⅳ 模式结构
 
 + `Singleton`: 定义一个Instance操作，允许客户访问它的唯一实例。
 
@@ -912,7 +949,7 @@ int main() {
 
 
 
-### 5) 模式实现
+### Ⅴ 模式实现
 
 + 保证一个唯一的实例
 
@@ -922,7 +959,7 @@ int main() {
 
 
 
-#### 标准版
+#### 懒汉式-线程不安全(c++)
 
 ```c++
 class Singleton {
@@ -930,27 +967,27 @@ class Singleton {
   Singleton(){};
   Singleton(const Singleton& other);
 
-  static Singleton* _instance;
+  static Singleton* uniqueInstance;
   char _data[4] = {'x', 'x', 'x', '\0'};
 
  public:
   char* data() { return _data; };
   // 线程不安全的单例模式
   static Singleton* Instance() {
-    if (_instance == nullptr) {
-      _instance = new Singleton();
+    if (uniqueInstance == nullptr) {
+      uniqueInstance = new Singleton();
     }
-    return _instance;
+    return uniqueInstance;
   }
 };
 
-Singleton* Singleton::_instance = nullptr;
+Singleton* Singleton::uniqueInstance = nullptr;
 ```
 
 ```c++
-int main() {
+int main(）{
   Singleton* sing = Singleton::Instance();
-  printf("%s", sing->data());
+  printf("%s", sing->data();
   return 0;
 }
 ```
@@ -959,6 +996,6 @@ int main() {
 
 
 
-### 6) 相关模式
+### Ⅵ 相关模式
 
 + 很多模式可以使用Singleton模式实现，Abstract Factory，Builder、Prototype。

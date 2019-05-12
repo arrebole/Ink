@@ -1,6 +1,8 @@
 package main
 
-import "./widget"
+import (
+	"./widget"
+)
 
 // 抽象工厂客户端
 // 仅使用由 AbstractFactory 和 AbstractProduct类声明的接口
