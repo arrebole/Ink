@@ -10,8 +10,7 @@
 
 ### Creational
 
-+ [SimpleFactory](#SimpleFactory)
-
+- [SimpleFactory](#SimpleFactory)
 - [Factory Method](#FactoryMethod)
 - [Abstract Factory](#AbstractFactory)
 - [Builder](#Builder)
@@ -20,7 +19,9 @@
 
 
 
-### Behavioral
+### Structural
+
++ [Adapter](#Adapter)
 
 - [Bridge](#Bridge)
 - [Composite](#Composite)
@@ -31,7 +32,7 @@
 
 
 
-### Structural
+### Behavioral
 
 - [Chain Of Responsibil Ity](#ChainOfResponsibilIty)
 - [Command](#Command)
@@ -999,3 +1000,293 @@ int main(）{
 ### Ⅵ 相关模式
 
 + 很多模式可以使用Singleton模式实现，Abstract Factory，Builder、Prototype。
+
+
+
+
+
+
+
+# Structural design patterns
+
+> 定义：结构型模式涉及到如何组合类和对象以获得更大的结构。结构型模式不是对接口和实现进行组合，而是描述了如何对一些对象进行组合，从而实现新功能的一种方法。
+
+
+
+## Adapter
+
+### Ⅰ 模式意图
+
++ 将一个类的接口转换成客户希望的另一个接口，Adapter模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作 。
+
+
+
+### Ⅱ 模式适用
+
++ 你想使用一个已经存在的类，而它的接口不符合你的需求。
++ 你想创建一个可以复用的类，该类可以与其它不相关的类或不可预见的类协同工作。
+
+
+
+### Ⅲ 模式效果
+
++ 允许一个adapter与多个adaptee，即adaptee本身以及它的所有子类、组合类同时工作。
++ 使得重定义adapter的行为比较困难。
+
+
+
+### Ⅳ 模式结构
+
++ `Target` 定义Client使用的与特定领域相关的接口。
++ `Clinet` 与符合Target接口的对象协同。
++ `Adaptee` 定义一个已经存在的接口，这个接口需要适配。
++ `Adapter` 对Adaptee的接口与Target接口进行适配
+
+
+
+![](../../assets/img/DesignPattern.Creational.Adapter.png)
+
+
+
+### Ⅴ 模式实现
+
+```c++
+// 转换的目标接口
+class ITarget {
+ public:
+  virtual int request() = 0;
+  virtual ~ITarget(){};
+};
+```
+
+```c++
+// 需要转换的对象类接口
+class IAdaptee {
+ public:
+  virtual int SpecificRequest() = 0;
+  virtual ~IAdaptee(){};
+};
+```
+
+```c++
+// 需要转换的具体类
+class Asaptee : public IAdaptee {
+ private:
+  int data = 12;
+
+ public:
+  virtual int SpecificRequest() { 
+      return this->data; 
+  }
+};
+```
+
+```c++
+// 进行转换的适配器
+class Adapter : public ITarget {
+ private:
+  IAdaptee* pAdaptee;
+    
+ public:
+  Adapter(IAdaptee* adaptee) { 
+      this->pAdaptee = adaptee; 
+  }
+  virtual int request() { 
+      return pAdaptee->SpecificRequest() + 100; 
+  }
+};
+```
+
+
+
+
+
+### Ⅵ 相关模式
+
++ Bridge目的是将接口部分和实现分离，从而对它们可以较为简单相对独立的加以变化。而Adapter则改变一个已有对象的接口。
++ Decorator 支持递归组合，增强了其它对象的功能而同时又不改变它的接口。
++ Proxy 在不改变它的接口的条件下，为另一个对象定义了一个代理。
+
+
+
+
+
+## Bridge
+
+### Ⅰ模式意图
+
++ 将抽象部分与它的实现部分分离，使他们都可以独立地变化。
++ 摆脱继承机制的不灵活，对不同维度的部分进行独立的修改、扩充和重用。
+
+
+
+### Ⅱ 模式适用
+
++ 你不希望在抽象和它的实现部分之间有一个固定的绑定关系。
++ 类的抽象以及它的实现都应该可以通过生成子类的方法加以扩充。
++ 对一个抽象的实现部分的修改应对客户不产生影响。
++ 你想在多个对象间共享实现，但同时要求客户并不知道这一点。
+
+
+
+### Ⅲ 模式效果
+
++ 分离接口及其实现部分
++ 提高可扩充性
++ 实现细节对客户的透明
+
+
+
+### Ⅳ 模式结构
+
++ `Abstraction` 定义抽象类的接口；维护一个指向Implementor类型对象的指针
++ `RefinedAbstraction` 扩充由Abstraction定义的接口
++ `Implementor` 定义实现类的接口，并不一定要与Abstraction接口一致
++ `ConcreteImplementor` 实现Implementor接口并定义它的具体实现
+
+
+
+![](../../assets/img/DesignPattern.Creational.Bridge.png)
+
+
+
+### Ⅴ 模式实现
+
+#### 仅有一个Implementor(cc)
+
+当仅有一个实现时，没有必要创建一个抽象的Implementor类；
+
+```c++
+// 抽象类
+class Abstraction {
+ protected:
+  // 维护一个指向Implementor类型对象的指针
+  Implementor* implementor;
+
+ public:
+  virtual int OperatorA() = 0;
+  virtual int OperatorB() = 0;
+  virtual ~Abstraction(){};
+};
+```
+
+```c++
+// 实现Implementor接口并定义它的具体实现
+// 当仅有一个实现时，没有必要创建一个抽象的Implementor类；
+class Implementor {
+ public:
+  int getColor() { return 0x12; }
+  int getShap() { return 0x14; }
+};
+```
+
+```c++
+// 扩充由Abstraction定义的接口
+class RefinedAbstraction : public Abstraction {
+ public:
+  RefinedAbstraction(Implementor* implementor) {
+    this->implementor = implementor;
+  }
+  virtual int OperatorA() {
+    int color = implementor->getColor();
+    return color;
+  }
+  virtual int OperatorB() {
+    int shap = implementor->getShap();
+    return shap;
+  }
+  ~RefinedAbstraction() {
+    if (implementor != nullptr) {
+      delete implementor;
+    }
+  }
+};
+```
+
+```c++
+// 利用简单工厂创建
+class AbstractionFactory {
+ public:
+  static Abstraction* createAbstraction() {
+    return new RefinedAbstraction(new Implementor());
+  }
+};
+
+int main() {
+  Abstraction* Abstraction = AbstractionFactory::createAbstraction();
+  printf("%d\n", Abstraction->OperatorA());
+  printf("%d\n", Abstraction->OperatorB());
+  return 0;
+}
+```
+
+
+
+#### 创建正确Implementor(ts)
+
+```typescript
+interface Implementor {
+    basePrice(): number
+    name(): string
+}
+
+abstract class Abstraction {
+    protected impl: Implementor;
+    abstract getStd(): string;
+    abstract getPro(): string;
+}
+
+class RefinedAbstraction extends Abstraction {
+    constructor(implementor: Implementor) {
+        super()
+        this.impl = implementor;
+    }
+    public getStd(): string {
+        return `${this.impl.name()} std: ${this.impl.basePrice() * 5}`
+    }
+    public getPro(): string {
+        return `${this.impl.name()} pro: ${this.impl.basePrice() * 10}`
+    }
+}
+
+// 具体的实现类
+class ConcreteImplementorWin implements Implementor {
+    public basePrice(): number {
+        return 10
+    }
+
+    public name(): string {
+        return "win"
+    }
+}
+
+class ConcreteImplementorLinux implements Implementor {
+    public basePrice(): number {
+        return 5
+    }
+
+    public name(): string {
+        return "Linux"
+    }
+}
+
+export function NewBridgeLinux():Abstraction{
+    return new RefinedAbstraction(new ConcreteImplementorLinux());
+}
+
+export function NewBridgeWin():Abstraction{
+    return new RefinedAbstraction(new ConcreteImplementorWin());
+}
+```
+
+
+
+### Ⅵ 模式相关
+
++ Abstract Factory 模式可以用来创建和配置一个特定的Bridge模式。
++ Adapter 模式用来帮助无关的类协调工作，它通常在系统设计完成后才被使用。然而Bridge模式则是在系统开始时就被使用，它使得抽象接口和实现部分可以独立的改变。
+
+
+
+## Composite
+
