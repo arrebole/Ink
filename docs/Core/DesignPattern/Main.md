@@ -629,8 +629,6 @@ function main() {
 
 
 
-
-
 ## Builder
 
 ### Ⅰ 模式意图
@@ -1044,7 +1042,7 @@ int main(）{
 
 
 
-![](../../assets/img/DesignPattern.Creational.Adapter.png)
+![](../../assets/img/DesignPattern.Structural.Adapter.png)
 
 
 
@@ -1146,7 +1144,7 @@ class Adapter : public ITarget {
 
 
 
-![](../../assets/img/DesignPattern.Creational.Bridge.png)
+![](../../assets/img/DesignPattern.Structural.Bridge.png)
 
 
 
@@ -1279,14 +1277,146 @@ export function NewBridgeWin():Abstraction{
 }
 ```
 
-
+[更多代码](/src/DesignPattern/Structural/Component/)
 
 ### Ⅵ 模式相关
 
-+ Abstract Factory 模式可以用来创建和配置一个特定的Bridge模式。
-+ Adapter 模式用来帮助无关的类协调工作，它通常在系统设计完成后才被使用。然而Bridge模式则是在系统开始时就被使用，它使得抽象接口和实现部分可以独立的改变。
++ `Abstract Factory` 模式可以用来创建和配置一个特定的`Bridge`模式。
++ `Adapter` 模式用来帮助无关的类协调工作，它通常在系统设计完成后才被使用。然而`Bridge`模式则是在系统开始时就被使用，它使得抽象接口和实现部分可以独立的改变。
 
 
 
 ## Composite
+
+### Ⅰ模式意图
+
++ 将对象组合成树形结构以表示“部分-整体”的层次结构。`Conposite`使得用户对单个对象和组合对象的使用具有一致性。
++ `Conposite` 模式的关键是一个抽象类，它既可以表示图元，又可以代表图元的容器。
+
+
+
+### Ⅱ 模式适用
+
++ 你想表示对象的部分—整体层次结构。
++ 你希望用户忽略组合对象与单个对象的不同，用户将统一地使用组合结构中的所有对象。
+
+
+
+### Ⅲ 模式效果
+
++ 定义了包含基本对象和组合对象的类层次结构。
++ 简化客户代码
++ 使得更容易增加新类型的组件
++ 使你的设计变得更加一般化
+
+
+
+### Ⅳ 模式结构
+
++ `Component` 为组合的对象声明接口，在适合的情况下，实现所有类共有接口的省却行为，声明一个接口用于访问和管理Component的子组件，（回溯访问父组件）
++ `Leaf` 在组合中表示叶节点对象，叶节点没有子节点；在组合中定义图元对象的行为；
++ `Composite` 定义有子部分的那些部分的行为；储存子部分；在Component接口中实现与子部分有关的操作；
++ `Client` 通过Component接口操作组合部分的对象
+
+
+
+![](../../assets/img/DesignPattern.Structural.Composite.png)
+
+
+
+### Ⅴ 模式实现
+
++ 显示的父部件引用
++ 共享组件
++ 最大化Component接口
++ 声明管理子部分的操作
+
++ Component是否应该实现一个Component列表
++ 子部分排序
++ 使用高速缓冲存贮改善性能
++ 应该由谁删除Component
++ 存贮组件最好用哪一种数据结构（数据结构的选择取决于效率）
+
+
+
+```typescript
+export abstract class Component {
+    protected data: number;
+    abstract Print();
+    abstract Increase();
+    abstract Add(compl:Component);
+}
+
+export class Composite extends Component {
+    private Components: Array<Component>;
+    constructor(n: number) {
+        super()
+        this.data = n;
+        this.Components = new Array<Component>();
+    }
+    public Add(compl:Component){
+        this.Components.push(compl);
+    }
+    public Print() {
+        console.log("Composite %d",this.data);
+        for (const iterator of this.Components) {
+            iterator.Print();
+        }
+    }
+    public Increase() {
+        this.data++;
+        for (const iterator of this.Components) {
+            iterator.Increase();
+        }
+    }
+}
+
+export class Leaf extends Component{
+    constructor(n:number){
+        super()
+        this.data = n;
+    }
+    public Add(compl:Component){
+        throw "叶子类无法添加子类";
+    }
+    public Increase(){
+        this.data++;
+    }
+    public Print(){
+        console.log("Leaf %d",this.data);
+    }
+}
+```
+
+```typescript
+const root: Component = new Composite(0);
+root.Add(new Leaf(1))
+root.Add(new Leaf(2))
+let compl = () => {
+    let p = new Composite(12);
+    p.Add(new Leaf(19));
+    p.Add(new Leaf(67));
+    return p;
+}
+root.Add(compl());
+
+root.Print();
+root.Increase();
+root.Print();
+```
+
+
+
+### Ⅵ 模式相关
+
++ 通常部件——父部件连接用于Responsibility of Chain模式
+
++ Decorator 模式经常与Composite模式一起使用。当装饰和组合一起使用时，它们通常有一个公共的父类。因此装饰必须支持具有Add、Remove和GetChild操作的Component接口
++ Flyweight让你共享组件，但不能引用他们的父部件
++ Itertor可用于遍历Composite
++ Visitor将本来应该分布在Composite和Leaf类中的操作和行为局部化；
+
+
+
+## Decorator
 

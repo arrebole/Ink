@@ -1,5 +1,5 @@
-#   黑客旅程
-> 开坑时间: 2018-7-14;
+# 路漫漫其修远兮，吾将上下而求索。
+> 平衡 ↔ 混沌（熵增）
 
 ### Core
 
@@ -9,7 +9,7 @@
 
 + [DesignPattern](/docs/Core/DesignPattern/Main.md)
 
-+ [Refactoring]()
++ [Refactoring](/docs/Core/Refactoring/Main.md)
 
 
 ### Extra
