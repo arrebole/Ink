@@ -1420,3 +1420,173 @@ root.Print();
 
 ## Decorator
 
+### Ⅰ 模式意图
+
++ 动态地给一个对象**添加一些额外的职责**，就增加功能来说，Decorator模式相比生成子类更为灵活。
+
+
+
+### Ⅱ 模式适用
+
++ 在不影响其它对象的情况下，以动态、透明的方式给单个对象添加职责；
++ 处理那些可以撤销的职责；
++ 当不能采用生成子类的方法进行扩充时。
+
+
+
+### Ⅲ 模式效果
+
++ 比静态继承更灵活
++ 避免在层次结构高层的类有太多的特性；
++ Decorator与它的Component不一样；
++ 有许多小对象；
+
+
+
+### Ⅳ 模式结构
+
++ `Component` 定义一个对象接口，可以给这些对象动态地添加职责；
++ `ConcreteComponent` 定义一个对象，可以给这个对象添加一些职责；
++ `Decorator` 维持一个指向Component对象的指针，并定义一个与Component接口一致的接口；
++ `ConcreteDecorator` 向组件添加职责；
+
+
+
+![](../../assets/img/DesignPattern.Structural.Decorator.png)
+
+
+
+### Ⅴ 模式实现
+
+```c++
+class Component {
+ public:
+  virtual ~Component(){};
+  virtual int Count() = 0;
+};
+
+// 具体的执行对象
+class ConcreteComponent : public Component {
+ public:
+  virtual int Count() {
+    std::cout << "std 10" << std::endl;
+    return 10;
+  }
+};
+
+// 装饰器类
+class Decoretor : public Component {
+ public:
+  Decoretor(Component* component) : _component(component){};
+  virtual ~Decoretor(){};
+  virtual int Count() { 
+    return this->_component->Count(); 
+  };
+
+ protected:
+  Component* _component;
+};
+
+// 具体的类
+class ConcreteDecoratorA : public Decoretor {
+ public:
+  ConcreteDecoratorA(Component* component) : Decoretor(component){};
+  virtual int Count() {
+    std::cout << "add price 5" << std::endl;
+    return 5 + Decoretor::Count();
+  };
+};
+
+// 具体的类
+class ConcreteDecoratorB : public Decoretor {
+ public:
+  ConcreteDecoratorB(Component* component) : Decoretor(component){};
+  virtual int Count() {
+    std::cout << "add price 8" << std::endl;
+    return 8 + Decoretor::Count();
+  };
+};
+```
+
+```c++
+int main() {
+  Component* s1 = new ConcreteComponent();
+  // 使用上层层包裹
+  Component* dec = new ConcreteDecoratorA(s1);
+  Component* dec2 = new ConcreteDecoratorB(dec);
+
+  std::cout << dec2->Count() << std::endl;
+
+  delete s1;
+  delete dec;
+  delete dec2;
+}
+```
+
+
+
+
+
+### Ⅵ 相关模式
+
++ Adapter模式：Decorator模式不同于Adapter模式，因为装饰仅改变对象的职责而不改变它的接口，而适配器将给对象一个全新的接口；
++ Composite模式：可以将装饰器视为一个退化的，仅有一个组件的组合。然而，装饰仅给对象添加一些额外的职责——它的目的不在于对象聚合；
++ Strategy模式：用一个装饰器你可以改变对象的外表；而Strategy模式使得你可以改变对象的内核。这是改变对象的两种途径；
+
+
+
+
+
+
+
+## Facade
+
+### Ⅰ 模式意图
+
+### Ⅱ 模式适用
+
+### Ⅲ 模式效果
+
+### Ⅳ 模式结构
+
+### Ⅴ 模式实现
+
+### Ⅵ 相关模式
+
+
+
+
+
+
+
+## Flyweight
+
+### Ⅰ 模式意图
+
+### Ⅱ 模式适用
+
+### Ⅲ 模式效果
+
+### Ⅳ 模式结构
+
+### Ⅴ 模式实现
+
+### Ⅵ 相关模式
+
+
+
+
+
+## Proxy
+
+### Ⅰ 模式意图
+
+### Ⅱ 模式适用
+
+### Ⅲ 模式效果
+
+### Ⅳ 模式结构
+
+### Ⅴ 模式实现
+
+### Ⅵ 相关模式
