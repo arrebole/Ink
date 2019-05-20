@@ -113,7 +113,7 @@
 
 
 
-# Creational design patterns
+# Creational 
 
 > 定义： 创建型模式**抽象了实例化过程**（绕开new），帮助系统独立于如何创建对象、组合和表示那些对象。
 >
@@ -152,7 +152,7 @@
 
 
 
-![](../../assets/img/DesignPattern.Creational.SimpleFactory.png)
+![](../../../images/DesignPattern/DesignPattern.Creational.SimpleFactory.png)
 
 ### Ⅴ模式实现
 
@@ -168,11 +168,15 @@ class Computer {
 };
 // 具体的产品(ConcreteProduct)
 class AppleComputer : public Computer {
-  virtual void use() { printf("use AppleComputer\n"; }
+  virtual void use() { 
+      printf("use AppleComputer\n"; 
+  }
 };
 
 class IBMComputer : public Computer {
-  virtual void use() { printf("use IBMComputer\n"; }
+  virtual void use() { 
+      printf("use IBMComputer\n"; 
+  }
 };
 // 生产的类型
 enum ComputerTypes {
@@ -261,7 +265,9 @@ int main() {
 
 
 
-![](../../assets/img/DesignPattern.Creational.FactoryMethod.png)
+![](../../../images/DesignPattern/DesignPattern.Creational.FactoryMethod.png)
+
+> + Creator依赖于它的子类来定义工厂方法，所以它返回一个适当的ConcreteProduct实例
 
 
 
@@ -269,15 +275,15 @@ int main() {
 
 + 两种不同的情况
 
-  > 1、creator类是一个抽象类并且不提供它所声明的工厂方法的实现
-  >
-  > 2、creator是一个具体的类并且为工厂方法提供一个缺省的实现。
+  + creator类是一个抽象类并且不提供它所声明的工厂方法的实现
+  
+  + creator是一个具体的类并且为工厂方法提供一个缺省的实现。
 
 + 参数化工厂方法
 
 + 特定语言的变化和问题
 
-  > lazy initialization
+  + lazy initialization
 
 + 使用模板以避免创建子类
 
@@ -305,25 +311,33 @@ class ICreator {
 // 具体的产品：地球
 class Earth : public IPlanet {
  public:
-  virtual void rotation() { printf("Earth rotation\n"); }
+  virtual void rotation() { 
+      printf("Earth rotation\n"); 
+  }
 };
 
 // 具体的产品：火星
 class Mars : public IPlanet {
  public:
-  virtual void rotation() { printf("Mars rotation\n"); }
+  virtual void rotation() { 
+      printf("Mars rotation\n"); 
+  }
 };
 
 // 具体的工厂方法
 class EarthCreator : public ICreator {
  public:
-  virtual IPlanet* createPlanet() { return new Earth(); };
+  virtual IPlanet* createPlanet() { 
+      return new Earth(); 
+  };
 };
 
 // 具体的工厂方法
 class MarsCreator : public ICreator {
  public:
-  virtual IPlanet* createPlanet() { return new Mars(); }
+  virtual IPlanet* createPlanet() { 
+      return new Mars(); 
+  }
 };
 ```
 
@@ -406,9 +420,10 @@ int main() {
 
 
 
-![](../../assets/img/DesignPattern.Creational.AbstractFactory.png)
+![](../../../images/DesignPattern/DesignPattern.Creational.AbstractFactory.png)
 
-
+> + 通常在运行时刻创建一个ConcreteFactory类的实例。这一具体的工厂创建具有特定实现的产品对象。为创建不同的产品对象，客户应使用不同的具体工厂。
+> + AbstractFactory将产品对象的创建延迟到它的ConcreteFactory子类
 
 
 
@@ -416,17 +431,17 @@ int main() {
 
 + 1、工厂作为单件
 
-  > 一个应用中一般每个产品系列只需一个ConcreteFactory的实例，因此工厂通常最好实现为一个Singleton
+  + 一个应用中一般每个产品系列只需一个ConcreteFactory的实例，因此工厂通常最好实现为一个Singleton
 
 + 2、创建产品
 
-  > \+ abstractfactory仅申明一个创建产品的接口，真正创建产品是由ConcreteProduct子类实现的，最通常的一个方法是为每个产品定义一个工厂方法。
-  >
-  > \+ 如果有多个可能的产品系列，具体的工厂也可以使用Prototype模式来实现
+  +  abstractfactory仅申明一个创建产品的接口，真正创建产品是由ConcreteProduct子类实现的，最通常的一个方法是为每个产品定义一个工厂方法。
+  
+  +  如果有多个可能的产品系列，具体的工厂也可以使用Prototype模式来实现
 
 + 定义可扩展的工厂
 
-  > \+ 参数化
+  +  参数化
 
 
 
@@ -664,7 +679,12 @@ function main() {
 
 
 
-![](../../assets/img/DesignPattern.Creational.Builder.png)
+![](../../../images/DesignPattern/DesignPattern.Creational.Builder.png)
+
+> + 客户创建Director对象，并用它所想要的Builder对象进行配置
+> + 一旦产品部件被生成，导向器就会通知生成器
+> + 生成器处理导向器的请求，并将部件添加到该产品中
+> + 客户从生成器中检索产品
 
 
 
@@ -699,10 +719,13 @@ class PizzaBuilder {
 
  public:
   // 返回对象
-  Pizza* getResult() { return pizza; }
+  Pizza* getResult() { 
+      return pizza; 
+  }
   // 创建对象
-  void createNewPizzaProduct() { pizza = new Pizza(); }
-
+  void createNewPizzaProduct() { 
+      pizza = new Pizza(); 
+  }
   virtual void buildDough() = 0;
   virtual void buildSauce() = 0;
   virtual void buildTopping() = 0;
@@ -717,16 +740,28 @@ class PizzaBuilder {
 /* "ConcreteBuilder" */
 class HawaiianPizzaBuilder : public PizzaBuilder {
  public:
-  void buildDough() { pizza->dough = "cross"; }
-  void buildSauce() { pizza->sauce = "mild"; }
-  void buildTopping() { pizza->topping = "ham+pineapple"; }
+  void buildDough() { 
+      pizza->dough = "cross"; 
+  }
+  void buildSauce() { 
+      pizza->sauce = "mild"; 
+  }
+  void buildTopping() { 
+      pizza->topping = "ham+pineapple"; 
+  }
 };
 
 class SpicyPizzaBuilder : public PizzaBuilder {
  public:
-  void buildDough() { pizza->dough = "pan baked"; }
-  void buildSauce() { pizza->sauce = "hot"; }
-  void buildTopping() { pizza->topping = "pepperoni+salami"; }
+  void buildDough() { 
+      pizza->dough = "pan baked"; 
+  }
+  void buildSauce() { 
+      pizza->sauce = "hot"; 
+  }
+  void buildTopping() { 
+      pizza->topping = "pepperoni+salami"; 
+  }
 };
 
 ```
@@ -740,9 +775,13 @@ class Director {
   PizzaBuilder* pizzaBuilder;
 
  public:
-  void setPizzaBuilder(PizzaBuilder* pb) { pizzaBuilder = pb; }
+  void setPizzaBuilder(PizzaBuilder* pb) { 
+      pizzaBuilder = pb; 
+  }
 
-  Pizza* getPizza() { return pizzaBuilder->getResult(); }
+  Pizza* getPizza() { 
+      return pizzaBuilder->getResult(); 
+  }
 
   void constructPizza() {
     pizzaBuilder->createNewPizzaProduct();
@@ -832,9 +871,9 @@ int main() {
 
 
 
-![](../../assets/img/DesignPattern.Creational.Prototype.png)
+![](../../../images/DesignPattern/DesignPattern.Creational.Prototype.png)
 
-
+> + 客户请求一个原型克隆自身。
 
 ### Ⅴ 模式实现
 
@@ -944,17 +983,17 @@ int main() {
 
   
 
-![](../../assets/img/DesignPattern.Creational.Singleton.png)
+![](../../../images/DesignPattern/DesignPattern.Creational.Singleton.png)
 
-
+> + 客户只能通过Singleton的Instance操作访问一个Singleton的实例。
 
 ### Ⅴ 模式实现
 
 + 保证一个唯一的实例
 
-+ 创建Singleton类的子类
++ 创建Singleton类的子类 
 
-  > \+ 单件注册表
+  + 组件注册表
 
 
 
@@ -1001,11 +1040,7 @@ int main(）{
 
 
 
-
-
-
-
-# Structural design patterns
+# Structural 
 
 > 定义：结构型模式涉及到如何组合类和对象以获得更大的结构。结构型模式不是对接口和实现进行组合，而是描述了如何对一些对象进行组合，从而实现新功能的一种方法。
 
@@ -1042,9 +1077,11 @@ int main(）{
 
 
 
-![](../../assets/img/DesignPattern.Structural.Adapter.png)
+![](../../../images/DesignPattern/DesignPattern.Structural.Adapter.png)
 
 
+
+> + Clinet在Adpter实例上调用一些操作。接着适配器调用Adaptee的操作实现这个请求。
 
 ### Ⅴ 模式实现
 
@@ -1144,7 +1181,9 @@ class Adapter : public ITarget {
 
 
 
-![](../../assets/img/DesignPattern.Structural.Bridge.png)
+![](../../../images/DesignPattern/DesignPattern.Structural.Bridge.png)
+
+> Abstraction将Client的请求转发给它的Implementor对象。
 
 
 
@@ -1320,7 +1359,9 @@ export function NewBridgeWin():Abstraction{
 
 
 
-![](../../assets/img/DesignPattern.Structural.Composite.png)
+![](../../../images/DesignPattern/DesignPattern.Structural.Composite.png)
+
+> + 用户使用Component类接口与组合结构中的对象进行交互。如果接收者是一个叶节点，则直接处理请求。如果接收者是Composite，它通常将请求发送给它的子部件，在转发请求之前与/或之后可能执行一些辅助操作。
 
 
 
@@ -1418,6 +1459,10 @@ root.Print();
 
 
 
+
+
+
+
 ## Decorator
 
 ### Ⅰ 模式意图
@@ -1452,9 +1497,9 @@ root.Print();
 
 
 
-![](../../assets/img/DesignPattern.Structural.Decorator.png)
+![](../../../images/DesignPattern/DesignPattern.Structural.Decorator.png)
 
-
+> + Decorator 将请求转发给它的Component对象，并有可能在转发请求前后执行一些附加操作。
 
 ### Ⅴ 模式实现
 
@@ -1543,17 +1588,92 @@ int main() {
 
 ### Ⅰ 模式意图
 
++ 为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，这个接口使得这个子系统更加容易使用。
+
+
+
 ### Ⅱ 模式适用
+
++ 当你要为一个复杂子系统提供一个简单接口时。
++ 客户程序与抽象类的实现部分之间存在着很大的依赖性。引入facade将这个子系统与客户以及其他的子系统分离，可以提高子系统的独立性和可以移植性。
++ 当你需要构建一个层次结构的子系统时，使用facade模式定义子系统中每层的入口点。如果子系统之间是相互依赖的，你可以让它们仅通过facade进行通讯，从而简化了它们之间的依赖。
+
+
 
 ### Ⅲ 模式效果
 
++ 它对客户屏蔽子系统组件，因而减少了客户处理的对象的数目并使得子系统使用起来更加方便
++ 它实现了子系统与客户之间的松耦合关系，而子系统的内部组件往往是紧耦合的。**有利于建立层次关系**，可以**消除复杂的循环依赖关系**。
++ 如果应用需要，**它并不限制它们使用子系统类**。因此你可以在系统易用性和通用性之间权衡。
+
+
+
 ### Ⅳ 模式结构
+
++ `Facade` 知道那些子系统类负责处理请求。将客户的请求代理给适当的子系统对象。
++ `Subsystem Classes` 实现子系统的功能；处理由Facaded对象指派的任务。没有facade的任何相关信息，即没有指向Facade的指针。
+
+![](../../../images/DesignPattern/DesignPattern.Structural.Facade.png)
+
+> + 客户程序通过发送请求给Facade的方式与子系统通讯。facade将这些信息转发给适当的子系统对象。尽管是子系统中的有关对象在做实际工作，但Facade模式本身也必须将它的接口转换成子系统的接口。
 
 ### Ⅴ 模式实现
 
+```c++
+class IFacade {
+ public:
+  virtual void TurnOff() = 0;
+  virtual void PlayMusic() = 0;
+  virtual ~IFacade(){};
+};
+
+class Light {
+ public:
+  void TurnOffLight() { printf("turn off the light\n"); }
+};
+
+class Mp3 {
+ public:
+  void PlayMusic() { printf("mp3 play music\n"); }
+};
+
+class Facade : public IFacade {
+ private:
+  Light* light;
+  Mp3* mp3;
+
+ public:
+  Facade() {
+    this->light = new Light();
+    this->mp3 = new Mp3();
+  }
+  virtual void TurnOff() { this->light->TurnOffLight(); }
+  virtual void PlayMusic() { this->mp3->PlayMusic(); }
+  
+  ~Facade() {
+    delete light;
+    delete mp3;
+  }
+};
+```
+
+```c++
+int main() {
+  IFacade* f = new Facade();
+  f->TurnOff();
+  f->PlayMusic();
+  delete f;
+  return 0;
+}
+```
+
+
+
 ### Ⅵ 相关模式
 
-
++ `Abstract Factory`Abstract Factory 可以与Facade模式一起使用以提供一个接口，这一接口可用来以一种子系统独立的方式创建子系统对象。Abstract Factory 也可以替换Facade模式隐藏那些与平台相关的类。
++ `Mediator` Medistor模式目的是对同事之间的任意通讯进行抽象，**通常集中不属于任何单个对象的功能**。Medistor的同事对象知道中介者并与它通信，Facade模式仅对子系统接口进行抽象，**它并不定义新功能**，**子系统也不知道facade的存在**。 
++ `Sinaleton` 通常来讲，仅需要一个Facade对象，因此Facade对象通常属于Sinaleton模式。
 
 
 
@@ -1563,15 +1683,121 @@ int main() {
 
 ### Ⅰ 模式意图
 
++ 运用共享技术有效地支持大量细粒度的对象。
+
+
+
 ### Ⅱ 模式适用
+
++ 一个应用程序使用了大量的对象
++ 完全由于使用大量对象，造成很大的存储开销
++ 对象的大多数状态都可变为外部状态
++ 如果删除对象的外部状态，那么可以用相对较小的共享对象取代很多组对象
++ 应用程序不依赖于对象的标识
+
+
 
 ### Ⅲ 模式效果
 
++ **时间和空间的权衡**
++ **用共享减少内部状态的消耗，用计算时间换取对外部状态的存储**
++ 因为共享，实例的总数目减少
+
+
+
 ### Ⅳ 模式结构
+
++ `Flyweight` 描述一个接口，通过这个接口flyweight可以接受并作用于内部状态
++ `ConcreteFlyweight` 实现Flyweight接口，并为内部状态增加储存空间
++ `UnsharedConcreteFlyweight` 并非所有的flyweight需要被共享
++ `FlyweightFactory` 管理并创建flyweight对象，确保合理地共享flyweight。
+
+
+
+![](../../../images/DesignPattern/DesignPattern.Structural.Flyweight.png)
+
+
+
+> + flyweight执行时所需的状态必定是内部或是外部的。
+> + 用户不应直接对ConcreteFlyweight进行实例化，只能通过FlyweightFactory
+
+
 
 ### Ⅴ 模式实现
 
++ 删除外部状态
++ 管理共享对象
+
+```c++
+// 享元抽象类
+class Flyweight {
+ protected:
+  char value;
+
+ public:
+  virtual char getValue() = 0;
+  virtual ~Flyweight(){};
+};
+
+// 享元具体类
+class ConcreteFlyweight : public Flyweight {
+ public:
+  ConcreteFlyweight(char val) { this->value = val; }
+  virtual char getValue() { return this->value; }
+};
+
+// 享元工厂
+class FlyweightFactory {
+ private:
+  std::map<char, Flyweight*> cache;
+
+ public:
+  Flyweight* GetFlyweight(char sign) {
+    std::map<char, Flyweight*>::iterator it;
+    it = this->cache.find(sign);
+
+    if (it == this->cache.end()) {
+      Flyweight* item = new ConcreteFlyweight(sign);
+      this->cache.insert(std::pair<char, Flyweight*>(sign, item));
+      return item;
+    }
+    return cache[sign];
+  };
+
+  void Clear() {
+    for (auto it = cache.begin(); it != cache.end(); it++) {
+      auto item = it->second;
+      delete item;
+    }
+    this->cache.clear();
+  }
+};
+
+```
+
+```c++
+int main(){
+    auto f = new FlyweightFactory();
+    auto item1 = f->GetFlyweight('a');
+    auto item2 = f->GetFlyweight('a');
+    auto item3 = f->GetFlyweight('b');
+    printf("%d %p\n",item1->getValue(),item1);
+    printf("%d %p\n",item2->getValue(),item2);
+    printf("%d %p\n",item3->getValue(),item3);
+
+    f->Clear();
+    delete f;
+}
+```
+
+
+
 ### Ⅵ 相关模式
+
++ `Composite` flyweight模式通常和Composite模式结合使用，用共享叶结点的有向无环图实现一个逻辑上的层次结构
++ `Strate` 通常最好用Flyweight实现State和Strategy对象
+
+
 
 
 
@@ -1581,12 +1807,100 @@ int main() {
 
 ### Ⅰ 模式意图
 
++ 为其他对象提供一种代理以控制对这个对象的访问
+
+
+
 ### Ⅱ 模式适用
+
++ **远程代理**： 为一个对象在不同的地址空间提供局部代理。
+
++ **虚代理**：根据需要创建开销很大的对象
+
++ **保护代理**：控制对原始对象的访问。控制权限
+
++ **智能指引**：取代了简单的指针，它在访问对象时执行一些附加操作
+
+  + 引用计数，自动释放
+
+  + 第一次访问持久对象，将它装入内存
+
+  + 在访问一个实际对象前，检查是否已经锁定了它
+
+     
 
 ### Ⅲ 模式效果
 
++ 引入了间接性
++ **Remote Proxy** 可以隐藏一个对象存在于不同地址空间的事实
++ **Virtual Proxy** 可以进行最优化，根据要求创建对象
++ **Protection Proxies**和**Smart Reference** 都允许在访问一个对象时有一些附加的内务处理。
+
+
+
 ### Ⅳ 模式结构
+
++ `Proxy` 保存一个引用使得代理可以访问实体；控制实体的存放，并可能负责创建和删除
++ `Subject` 定义RealSubject和Proxy的共用接口，这样就在任何使用RealSubject的地方都可以使用Proxy
++ `RealSubject` 定义Proxy所代表的实体
+
+
+
+![](../../../images/DesignPattern/DesignPattern.Structural.Proxy.png)
+
+
+
+> + 代理根据其种类，在适当的时候向RealSubject转发请求
 
 ### Ⅴ 模式实现
 
+```c++
+class Subject {
+ public:
+  virtual void TouchFile() = 0;
+  virtual ~Subject(){};
+};
+
+class RealSubject : public Subject {
+ public:
+  virtual void TouchFile() {
+    std::ofstream outfile("a.txt");
+    if (!outfile) exit(0);
+
+    outfile << "touch file a.txt\n";
+    outfile.close();
+  }
+};
+
+class Proxy : public Subject {
+ public:
+  virtual void TouchFile() {
+    Subject* realSubject = new RealSubject();
+    realSubject->TouchFile();
+    delete realSubject;
+  }
+};
+```
+
+```c++
+int main(){
+    Subject* handle = new Proxy();
+    handle->TouchFile();
+}
+```
+
+
+
 ### Ⅵ 相关模式
+
++ `Adapter` 适配器Adapter为它所适配的对象提供了一个不同的接口，代理提供了与它的实体相同的接口。
++ `Decorator` 尽管decorator的实现部分与代理相似，但decorator的目的不一样，Decorator为对象添加一个或多个功能，而代理则控制对对象的访问。
+
+
+
+
+
+
+
+# Behavioral
+

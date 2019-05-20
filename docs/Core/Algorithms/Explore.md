@@ -258,7 +258,7 @@ class Solution:
 
 
 
-### Depth-first Search
+### Deepth-first Search
 
 #### 1.0 岛屿的个数
 
