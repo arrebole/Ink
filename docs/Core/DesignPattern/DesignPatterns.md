@@ -123,109 +123,6 @@
 
 
 
-## SimpleFactory
-
-### Ⅰ模式意图
-
-- **在简单工厂模式中，可以根据参数的不同返回不同类的实例。**
-
-
-
-### Ⅱ 模式适用
-
-- 创建统一接口的对象
-
-
-
-### Ⅲ 模式效果
-
-- 简单工厂模式又称为静态工厂方法(Static Factory Method)模式，它属于类创建型模式。
-- 简单工厂模式专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类。
-
-
-
-### Ⅳ 模式结构
-
-- `Factory`：工厂角色负责实现创建所有实例的内部逻辑
-- `Product`：抽象产品角色是所创建的所有对象的父类，负责描述所有实例所共有的公共接口
-- `ConcreteProduct`：具体产品角色是创建目标，所有创建的对象都充当这个角色的某个具体类的实例。
-
-
-
-![](../../../images/DesignPattern/DesignPattern.Creational.SimpleFactory.png)
-
-### Ⅴ模式实现
-
-
-
-#### 参数化(c++)
-
-```c++
-// 抽象的产品(Product)接口
-class Computer {
- public:
-  virtual void use() = 0;
-};
-// 具体的产品(ConcreteProduct)
-class AppleComputer : public Computer {
-  virtual void use() { 
-      printf("use AppleComputer\n"; 
-  }
-};
-
-class IBMComputer : public Computer {
-  virtual void use() { 
-      printf("use IBMComputer\n"; 
-  }
-};
-// 生产的类型
-enum ComputerTypes {
-  apple,
-  ibm,
-};
-
-// 模式：SimpleFactory;
-// 算法：——
-// 复杂度：——
-class ComputerFactory {
- public:
-  static Computer* createComputer(ComputerTypes T) {
-    Computer* computer = nullptr;
-    switch (T) {
-      case ComputerTypes::apple:
-        computer = new AppleComputer();
-        break;
-
-      case ComputerTypes::ibm:
-        computer = new IBMComputer();
-        break;
-    }
-    return computer;
-  }
-};
-```
-
-测试
-
-```c++
-// Computer.test.cc
-int main() {
-  Computer* appleComputer = ComputerFactory::createComputer(ComputerTypes::apple);
-  Computer* ibmComputer = ComputerFactory::createComputer(ComputerTypes::ibm);
-  
-  appleComputer->use();
-  ibmComputer->use();
-  
-  return 0;
-}
-```
-
-[查看更多](/src/DesignPattern/Creational/SimpleFactory)
-
-
-
-
-
 
 ## FactoryMethod
 
@@ -1903,4 +1800,328 @@ int main(){
 
 
 # Behavioral
+
+> 行为模式涉及到算法和对象间职责的分配。行为模式不仅描述对象或类的模式，还描述它们之间的通信模式。
+>
+> 这些模式刻画了运行时难以追踪的复杂的控制流。它们将你的注意力从控制流转移到对象间的联系方式上来。
+
+
+
+## Observer
+
+### Ⅰ 模式意图
+
++ 定义对象间的一种一对多的依赖关系，当一个对象的状态发生变化时，所有依赖于它的对象都得到通知并被自动更新
+
+
+
+### Ⅱ 模式适用
+
++ 当一个抽象模型有两个方面，其中一个方面依赖于另一个方面。将这两者封装在独立的对象中以使它们可以各自独立地改变和复用。
+
++ 当对一个对象的改变需要同时改变其他对象，而不知道具体有多少对象有待改变。
+
++ 当一个对象必须通知其它对象，而它又不能假定其它对象是谁。
+
+  
+
+### Ⅲ 模式效果
+
++ 目标和观察者间的抽象耦合
++ 支持广播通讯
++ 意外的更新
+
+
+
+### Ⅳ 模式结构
+
++ `Subject` 提供注册和删除观察者对象的接口。
++ `Observer` 为那些在目标发生改变时需要获得通知的对象定义一个更新接口
++ `ConcreteSubject` 将有关状态存放各ConcreteObserver对象
++ `ConcreteObserver` 维护一个指向ConcreteSubject对象的引用
+
+
+
+![](../../../images/DesignPattern/DesignPattern.Behavioral.Observer.png)
+
+> + 当ConcreteSubject发生任何可能导致其观察者与其本身状态不一致的改变时，它将通知它的各个观察者。
+> + 在得到一个具体的目标的改变通知后，ConcreteObserver对象可向目标对象查询信息。
+
+### Ⅴ 模式实现
+
++ 创建目标到其观察者的映射
++ 观察多个目标
++ 谁触发更新
++ 对已删除目标的悬挂引用
++ 在发出通知前确保目标的状态自身是一致的
++ 避免特定于观察者的更新协议
++ 显式的指定感兴趣的改变
++ 封装复杂的更新语义
+
+
+
+```typescript
+export interface Observer {
+    Update()
+};
+
+export class ConcreteObserver implements Observer {
+    constructor(subj: Subject) {
+        this.subject = subj;
+    }
+    private observerState: number;
+    private subject: Subject;
+    private quite(oldData: number, newData: number) {
+        if (oldData > newData) {
+            console.log("变小了");
+        }
+        else if (oldData < newData) {
+            console.log("变大了");
+        } else {
+            console.log("没变化");
+        }
+    };
+    public Update() {
+        let newData: number = this.subject.GetState();
+        this.quite(this.observerState, newData);
+        this.observerState = newData;
+    }
+};
+
+
+export class Subject {
+    constructor() {
+        this.observers = new Array<Observer>();
+    }
+    protected observers: Observer[];
+    protected state: number;
+    public Attach(observer: Observer) {
+        this.observers.push(observer);
+    }
+    // 通知观察者
+    public Notufy() {
+        for (const iterator of this.observers) {
+            iterator.Update()
+        }
+    }
+    public GetState(): number {
+        return this.state;
+    }
+    public SetState(data: number) {
+        this.state = data;
+        this.Notufy();
+    }
+};
+```
+
+```typescript
+let subject = new Subject();
+// 创建观察者
+let observer = new ConcreteObserver(subject);
+// 添加观察者
+subject.Attach(observer);
+
+for (let i: number = 0; i < 5; i++) {
+    subject.SetState(i);
+}
+for (let i: number = 5; i > 0; i--) {
+    subject.SetState(i);
+}
+```
+
+
+
+### Ⅵ 相关模式
+
++ `Mediator`: 通过封装复杂的更新语义，ChangeManager充当目标和观察者之间的中介者
++ `Singleton` : ChangeManager可使用Singleton模式来保证它是唯一的并且是可全局访问的。
+
+
+
+
+
+## Strategy
+
+### Ⅰ 模式意图
+
++ 定义一系列的算法，把它们一个个封装起来，并且可以使它们可互相替换。本模式使得算法可独立于使用它的客户而变化。
+
+
+
+### Ⅱ 模式适用
+
++ 使用相关的类仅仅是行为有异。‘策略’提供了一种用多个行为中的一个行为来配置一个类的方法。
++ 需要使用一个算法的不同变体。
++ 算法使用客户不应该知道的数据。
++ 一个类定义了多种行为，并且这些行为在**这个类的操作中以多个条件语句的形式出现**。
+
+
+
+### Ⅲ 模式效果
+
++ 消除了一些条件语句。
++ 一个替代继承的方法
++ 客户必须了解不同的strategy
++ 增加了对象的数目
+
+
+
+### Ⅳ 模式结构
+
++ `Strategy` 定义所有支持的算法的公共接口。Context使用这个接口来调用某ConcreteStrategy定义的算法
++ `ConcreteStrategy` 以Strategy接口实现某具体算法
++ `Context` 用一个ConcreteStrate对象来配置，维护一个对StrateStrategy对象的引用，可定义一个接口来让Strategy访问它的数量。
+
+
+
+![](../../../images/DesignPattern/DesignPattern.Behavioral.Strategy.png)
+
+> + Strategy和Context相互作用以实现选定的算法
+> + Context将它的客户的请求转发给它的Strategy
+
+### Ⅴ 模式实现
+
+```c++
+class Sort {
+ public:
+  virtual int* solve(int* arr, int len) = 0;
+};
+
+class Context {
+ private:
+  Sort* _strategy;
+
+ public:
+  Context* selectAlg(Sort* strategy) {
+    this->_strategy = strategy;
+    return this;
+  }
+  int* exec(int* arr, int len) { 
+      return this->_strategy->solve(arr, len); 
+    }
+};
+
+class BubbleSort : public Sort {
+ public:
+  virtual int* solve(int* arr, int len) {
+    //.....
+  }
+};
+
+class MergerSort : public Sort {
+ public:
+  virtual int* solve(int* arr, int len) {
+    //.....
+  }
+};
+```
+
+```c++
+void print(int* p, int len) {
+  for (int i = 0; i < len; i++) printf("%d ", p[i]);
+}
+
+int main() {
+  const int arrayLen = 10;
+  Sort* sort = new BubbleSort();
+  Context* context = new Context();
+
+  int* array = new int[10]{2, 4, 5, 6, 1, 2, 79, 0, 25, 70}; 
+  
+  array = context->selectAlg(sort)->exec(array, arrayLen);
+  print(array, arrayLen);
+
+  delete sort;
+  delete context;
+}
+```
+
+
+
+### Ⅵ 相关模式
+
++ `Flyweight` Strategy 对象经常是很好的轻量级对象。
+
+
+
+
+
+
+
+## Template Method
+
+### Ⅰ 模式意图
+
++ 定义一个操作中的算法的骨架，而将一些步骤延迟到子类中。TemplateMethod使得子类可以不改变一个算法的结构即可重定义该算法的某些具体步骤
+
+
+
+### Ⅱ 模式适用
+
++ 一次性实现一个算法的不可变部分，并将可变的行为留给子类来实现。
++ 各子类中公共的行为应该被提取出来并集中到一个公共父类中以避免代码重发。
++ 控制子类扩展。模板方法只在特定点调用`hook` 操作，这样就只允许在这些点进行扩展。
+
+
+
+### Ⅲ 模式效果
+
++ 模板方法导致一种反向的控制结构。
++ 钩子操作，它提供了缺省的行为，子类可以在必要时进行扩展。
+
+
+
+### Ⅳ 模式结构
+
++ `AbstractClass` 定义抽象的原语操作，具体的子类将重定义它们实现一个算法的各步骤。
++ `ConcreteClass` 实现原语操作以完成算法中与特定子类相关的步骤。
+
+
+
+![](../../../images/DesignPattern/DesignPattern.Behavioral.TemplateMethod.png)
+
+> ConcreteClass靠AbstractClass来实现算法中不可变的步骤。
+
+### Ⅴ 模式实现
+
+```c++
+class AbstractClass {
+ public:
+  void TemplateMethod() {
+    this->step1();
+    this->step2();
+    this->step3();
+  }
+  virtual ~AbstractClass(){};
+
+ protected:
+  void step1() { printf("step1 \n"); }
+  void step3() { printf("step 3\n"); }
+  virtual void step2() = 0;
+};
+```
+
+```c++
+class ConcreteClass : public AbstractClass {
+  virtual void step2() { 
+      printf("xxxx\n"); 
+  }
+};
+
+int main() {
+  auto t = new ConcreteClass();
+  t->TemplateMethod();
+  delete t;
+  return 0;
+}
+```
+
+
+
+### Ⅵ 相关模式
+
++ `Factory Method` 常被模板方法调用；
++ `Strategy` 模板方法使用继承来改变算法的一部分，Strategy使用委托来改变整个算法。
+
+
 

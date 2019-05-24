@@ -9,33 +9,25 @@
 
 + [Operating System](/docs/Core/System/Main.md)
 
-+ [Design Pattern](/docs/Core/DesignPattern/Main.md)
++ [Design Pattern](/docs/Core/DesignPattern/DesignPatterns.md)
 
-+ [Refactoring](/docs/Core/Refactoring/Main.md)
++ [Refactoring](/docs/Core/Refactoring/Refactoring.md)
 
 
 ### Acrobatics (杂技)
 
-+ [Shell Command](/docs/Acrobatics/Shell/Main.md)
++ [Shell Command](/docs/Acrobatics/Shell.md)
 
 ### Hard Core (硬核)
 
 + [Compilation Principle]()
-+ [Blockchain]()
++ [Architecture]()
 
-### Architecture (架构)
-
-+ [Concurrent]()
-+ [Microservice]()
-
-### Hack (黑客)
-
-+ [Binary]()
-+ [network]()
++ [Hack]()
 
 ### Ideal State (境界)
 
-+ [道德经]()
++ [Ancient]()
 
 ### Extra (额外)
 
