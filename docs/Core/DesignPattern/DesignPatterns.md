@@ -10,7 +10,6 @@
 
 ### Creational
 
-- [SimpleFactory](#SimpleFactory)
 - [Factory Method](#FactoryMethod)
 - [Abstract Factory](#AbstractFactory)
 - [Builder](#Builder)
@@ -1807,6 +1806,133 @@ int main(){
 
 
 
+## Mediator
+
+### Ⅰ 模式意图
+
++ 用一个中介对象来封装一系列的对象交互，**中介者使各对象不需要显示的互相引用**，从而使其耦合松散，而且可以独立的改变它们之间的交互。
+
+
+
+### Ⅱ 模式适用
+
++ 一组对象以定义良好但是复杂的方式进行通信。产生的相互依赖关系结构混乱且难以理解。
++ 一个对象引用其它很多对象并且直接与这些对象通信，导致难以复用该对象。
++ 想定制一个分布在多个类中的行为，而又不想生成太多的子类。
+
+
+
+### Ⅲ 模式效果
+
++ 减少了子类的生成
++ 它将各Colleague解耦
++ 它简化了对象协议
++ 它将对象如何协作进行了抽象
++ 它使控制集中化
+
+
+
+### Ⅳ 模式结构
+
++ `Mediator` 中介者定义一个接口用于与各同事对象通信
++ `ConcreteMediator` 具体中介者通过协调各同事对象实现协作行为
++ `Colleague` 每一个同事类都知道它的中介者对象；
+
+
+
+![](../../../images/DesignPattern/DesignPattern.Behavioral.Mediator.png)
+
+> + 同事向一个中介者对象发送和接收请求。中介者在各同事间适当地转发请求以实现协作行为。
+
+### Ⅴ 模式实现
+
+```c++
+class Mediator {
+ public:
+  virtual void use1() = 0;
+  virtual void use2() = 0;
+  virtual void setC1(Colleague* _c1) = 0;
+  virtual void setC2(Colleague* _c2) =0;
+  virtual ~Mediator(){};
+};
+
+class Colleague {
+ protected:
+  Mediator* mediator;
+
+ public:
+  virtual void use() = 0;
+  virtual ~Colleague(){};
+};
+
+class ConcreteColleague1 : public Colleague {
+ public:
+  ConcreteColleague1(Mediator* mediator) { 
+    this->mediator = mediator; 
+  }
+
+  virtual void use() {
+    printf("use Colleague 1\n");
+    mediator->use2();
+  }
+};
+
+class ConcreteColleague2 : public Colleague {
+ public:
+  ConcreteColleague2(Mediator* mediator) { 
+    this->mediator = mediator; 
+  }
+  virtual void use() { 
+    printf("use Colleague 2\n"); 
+    //mediator->use1();
+  }
+};
+
+class ConcreteMediator : public Mediator {
+ private:
+  Colleague* c1;
+  Colleague* c2;
+
+ public:
+
+  void setC1(Colleague* _c1){
+        this->c1 = _c1;
+  }
+  void setC2(Colleague* _c2){
+        this->c2 = _c2;
+  }
+
+  virtual void use1() { c1->use(); }
+  virtual void use2() { c2->use(); }
+};
+```
+
+```c++
+int main() {
+  Mediator* m = new ConcreteMediator();
+
+  Colleague* c1 = new ConcreteColleague1(m);
+  m->setC1(c1);
+  Colleague* c2 = new ConcreteColleague2(m);
+  m->setC2(c2);
+  
+  c1->use();
+
+  return 0;
+}
+```
+
+
+
+### Ⅵ 相关模式
+
++ `Facade` : facade协作是单向的；是对一个对象子系统进行抽象；
++ `Colleague`: 可使用Observer模式与Mediator通信；
+
+
+
+
+
 ## Observer
 
 ### Ⅰ 模式意图
@@ -1935,6 +2061,161 @@ for (let i: number = 5; i > 0; i--) {
 
 + `Mediator`: 通过封装复杂的更新语义，ChangeManager充当目标和观察者之间的中介者
 + `Singleton` : ChangeManager可使用Singleton模式来保证它是唯一的并且是可全局访问的。
+
+
+
+
+
+## State
+
+### Ⅰ 模式意图
+
++ 允许一个对象在其内部状态改变时改变它的行为。对象看起来似乎修改了它的类
+
+
+
+### Ⅱ 模式适用
+
++ 一个对象的行为取决于它的状态，并且它必须在运行时刻根据状态改变它的行为。
+
++ 一个操作中含有庞大的多分支的条件语句，且这些分支依赖于该对象的状态。
+
+  
+
+### Ⅲ 模式效果
+
++ 它将与特定状态相关的行为局部化，并且将不同状态的行为分割开来。
++ 它使得状态的转换显示化
++ State对象可被共享
+
+
+
+### Ⅳ 模式结构
+
++ `Context` (环境)定义客户感兴趣的接口；维护一个ConcreteState子类的实例，这个实例定义当前状态
++ `State` 状态，定义一个接口以封装与Context的一个特定状态相关的行为
++ `ConcreteState` 每个子类实现一个与Context的一个状态相关的行为
+
+
+
+![](../../../images/DesignPattern/DesignPattern.Behavioral.State.png)
+
+
+
+> + Context将与状态相关的请求委托给当前的ConcreteState对象处理
+> + Context可将自身作为一个参数传递给处理该请求的状态对象。这使得状态对象在必要时可访问Context
+> + Context是客户使用的主要接口。客户可用状态对象来配置一个Context
+> + Context或ConcreteState子类都可决定哪个状态是另外哪一个的后继者，以及是在何种条件下进行转换的。
+
+### Ⅴ 模式实现
+
+```c++
+class State {
+ public:
+  virtual void use() = 0;
+  virtual State* next() = 0;
+  virtual ~State(){}
+};
+
+class Context {
+ private:
+  State* current;
+
+ public:
+  void setCurrent(State* s) { current = s; }
+  void exec() {
+    if (current == nullptr) return;
+    current->use();
+    current = current->next();
+  };
+};
+
+class CloseState : public State {
+private:
+  CloseState(){};
+  static CloseState* uniqueInstance;
+
+  public:
+  void use() {
+    printf("close ....\n");
+  }
+  State* next() {
+      return nullptr;
+  }
+  
+  static CloseState* Instance(){
+      if(uniqueInstance == nullptr){
+        uniqueInstance = new CloseState();
+      }
+      return uniqueInstance;
+  }
+};
+
+class SendState : public State {
+private:
+  SendState(){};
+  static SendState* uniqueInstance;
+
+  public:
+  void use() {
+    printf("send ...\n");
+  }
+  State* next() {
+      return CloseState::Instance();
+  }
+  
+  static SendState* Instance(){
+      if(uniqueInstance == nullptr){
+        uniqueInstance = new SendState();
+      }
+      return uniqueInstance;
+  }
+};
+
+class OpenState : public State {
+ private:
+  OpenState(){};
+  static OpenState* uniqueInstance;
+
+ public:
+  void use() {
+    printf("open ...\n");
+  }
+  State* next() {
+      return SendState::Instance();
+  }
+  
+  static OpenState* Instance(){
+      if(uniqueInstance == nullptr){
+        uniqueInstance = new OpenState();
+      }
+      return uniqueInstance;
+  }
+};
+
+OpenState* OpenState::uniqueInstance = nullptr;
+SendState* SendState::uniqueInstance = nullptr;
+CloseState* CloseState::uniqueInstance = nullptr;
+```
+
+```c++
+int main(){
+    Context context;
+
+    context.setCurrent(OpenState::Instance());
+    context.exec();
+    context.exec();
+    context.exec();
+    return 0;
+}
+```
+
+
+
+### Ⅵ 相关模式
+
++ `Flyweight` 享元模式解释了何时以及怎样共享状态对象
++ `Singleton` 状态对象通常时单件模式
 
 
 
