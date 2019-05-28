@@ -1806,6 +1806,22 @@ int main(){
 
 
 
+## Iterator
+
+### Ⅰ 模式意图
+
+### Ⅱ 模式适用
+
+### Ⅲ 模式效果
+
+### Ⅳ 模式结构
+
+### Ⅴ 模式实现
+
+### Ⅵ 相关模式
+
+
+
 ## Mediator
 
 ### Ⅰ 模式意图
@@ -1928,6 +1944,77 @@ int main() {
 
 + `Facade` : facade协作是单向的；是对一个对象子系统进行抽象；
 + `Colleague`: 可使用Observer模式与Mediator通信；
+
+
+
+
+
+## Memento
+
+### Ⅰ 模式意图
+
+### Ⅱ 模式适用
+
+### Ⅲ 模式效果
+
+### Ⅳ 模式结构
+
+
+
+![](../../../images/DesignPattern/DesignPattern.Behavioral.Memento.png)
+
+
+
+### Ⅴ 模式实现
+
+```c++
+class Memento {
+ private:
+  int state;
+
+ public:
+  int getState() { 
+      return state; 
+    }
+  void setState(int state) { 
+      this->state = state; 
+    }
+};
+
+class Originator {
+ private:
+  int state;
+
+ public:
+  void setMemento(Memento* m) { 
+      this->state = m->getState(); 
+    }
+  Memento* CreateMemento() {
+    Memento* m = new Memento();
+    m->setState(this->state);
+    return m;
+  }
+};
+```
+
+```c++
+int main(){
+    Originator originator;
+    auto m = originator.CreateMemento();
+
+    originator.setMemento(m);
+
+    delete m;
+
+    return 0;
+}
+```
+
+
+
+### Ⅵ 相关模式
+
+
 
 
 
