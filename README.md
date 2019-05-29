@@ -16,7 +16,7 @@
 
 ### Acrobatics (杂技)
 
-+ [Shell Command](/docs/Acrobatics/Shell.md)
++ [Shell Command](/docs/Acrobatics/Shell/Main.md)
 
 ### Hard Core (硬核)
 

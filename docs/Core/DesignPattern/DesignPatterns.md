@@ -104,13 +104,11 @@
 + 不降变量类声明为某个特定的具体类，而是声明为某个接口
 
 + 客户程序无需获得知对象的类型，只需要知道对象所具有的接口
-+ 减少系统中各部分的依赖关系
++ 减少系统中各部分的依赖关系  
 
 
 
-
-
-
+</br>
 
 # Creational 
 
@@ -118,9 +116,10 @@
 >
 > 特征： 1）它们将关于该系统使用那些**具体的类的信息封装起来**
 >
-> ​		2）它们**隐藏了这些类的实例是如何被创建和放在一起的**。	
+> 		2）它们**隐藏了这些类的实例是如何被创建和放在一起的**。	
 
 
+</br>
 
 
 ## FactoryMethod
@@ -276,8 +275,7 @@ int main() {
 
 
 
-
-
+</br>
 
 
 ## AbstractFactory
@@ -538,7 +536,7 @@ function main() {
 
 
 
-
+</br>
 
 ## Builder
 
@@ -728,7 +726,7 @@ int main() {
 
 
 
-
+</br>
 
 ## Prototype
 
@@ -842,11 +840,7 @@ int main() {
 
 
 
-
-
-
-
-
+</br>
 
 ## Singleton
 
@@ -936,11 +930,13 @@ int main(）{
 
 
 
+</br>
+
 # Structural 
 
 > 定义：结构型模式涉及到如何组合类和对象以获得更大的结构。结构型模式不是对接口和实现进行组合，而是描述了如何对一些对象进行组合，从而实现新功能的一种方法。
 
-
+</br>
 
 ## Adapter
 
@@ -1040,7 +1036,7 @@ class Adapter : public ITarget {
 
 
 
-
+</br>
 
 ## Bridge
 
@@ -1221,6 +1217,8 @@ export function NewBridgeWin():Abstraction{
 
 
 
+</br>
+
 ## Composite
 
 ### Ⅰ模式意图
@@ -1357,7 +1355,7 @@ root.Print();
 
 
 
-
+</br>
 
 ## Decorator
 
@@ -1478,6 +1476,8 @@ int main() {
 
 
 
+</br>
+
 
 
 ## Facade
@@ -1573,7 +1573,7 @@ int main() {
 
 
 
-
+</br>
 
 ## Flyweight
 
@@ -1697,7 +1697,7 @@ int main(){
 
 
 
-
+</br>
 
 ## Proxy
 
@@ -1796,7 +1796,7 @@ int main(){
 
 
 
-
+</br>
 
 # Behavioral
 
@@ -1805,6 +1805,8 @@ int main(){
 > 这些模式刻画了运行时难以追踪的复杂的控制流。它们将你的注意力从控制流转移到对象间的联系方式上来。
 
 
+
+</br>
 
 ## Chain Of Responsible Ity
 
@@ -1860,7 +1862,7 @@ int main(){
 
 
 
-
+</br>
 
 ## Command
 
@@ -1921,7 +1923,7 @@ int main(){
 
 
 
-
+</br>
 
 ## Interpreter
 
@@ -1981,7 +1983,7 @@ int main(){
 
 
 
-
+</br>
 
 ## Iterator
 
@@ -2038,7 +2040,7 @@ int main(){
 
 
 
-
+</br>
 
 ## Mediator
 
@@ -2165,7 +2167,7 @@ int main() {
 
 
 
-
+</br>
 
 ## Memento
 
@@ -2263,6 +2265,8 @@ int main(){
 
 
 
+
+</br>
 
 ## Observer
 
@@ -2395,7 +2399,7 @@ for (let i: number = 5; i > 0; i--) {
 
 
 
-
+</br>
 
 ## State
 
@@ -2550,7 +2554,7 @@ int main(){
 
 
 
-
+</br>
 
 ## Strategy
 
@@ -2658,7 +2662,7 @@ int main() {
 
 
 
-
+</br>
 
 ## Template Method
 
@@ -2739,7 +2743,7 @@ int main() {
 
 
 
-
+</br>
 
 ## Visitor
 
