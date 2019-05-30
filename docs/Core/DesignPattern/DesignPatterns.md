@@ -108,7 +108,7 @@
 
 
 
-</br>
+<br/>
 
 # Creational 
 
@@ -119,7 +119,7 @@
 > 		2）它们**隐藏了这些类的实例是如何被创建和放在一起的**。	
 
 
-</br>
+<br/>
 
 
 ## FactoryMethod
@@ -275,7 +275,7 @@ int main() {
 
 
 
-</br>
+<br/>
 
 
 ## AbstractFactory
@@ -536,7 +536,7 @@ function main() {
 
 
 
-</br>
+<br/>
 
 ## Builder
 
@@ -726,7 +726,7 @@ int main() {
 
 
 
-</br>
+<br/>
 
 ## Prototype
 
@@ -840,7 +840,7 @@ int main() {
 
 
 
-</br>
+<br/>
 
 ## Singleton
 
@@ -930,13 +930,13 @@ int main(）{
 
 
 
-</br>
+<br/>
 
 # Structural 
 
 > 定义：结构型模式涉及到如何组合类和对象以获得更大的结构。结构型模式不是对接口和实现进行组合，而是描述了如何对一些对象进行组合，从而实现新功能的一种方法。
 
-</br>
+<br/>
 
 ## Adapter
 
@@ -1036,7 +1036,7 @@ class Adapter : public ITarget {
 
 
 
-</br>
+<br/>
 
 ## Bridge
 
@@ -1217,7 +1217,7 @@ export function NewBridgeWin():Abstraction{
 
 
 
-</br>
+<br/>
 
 ## Composite
 
@@ -1355,7 +1355,7 @@ root.Print();
 
 
 
-</br>
+<br/>
 
 ## Decorator
 
@@ -1476,7 +1476,7 @@ int main() {
 
 
 
-</br>
+<br/>
 
 
 
@@ -1573,7 +1573,7 @@ int main() {
 
 
 
-</br>
+<br/>
 
 ## Flyweight
 
@@ -1697,7 +1697,7 @@ int main(){
 
 
 
-</br>
+<br/>
 
 ## Proxy
 
@@ -1796,7 +1796,7 @@ int main(){
 
 
 
-</br>
+<br/>
 
 # Behavioral
 
@@ -1806,7 +1806,7 @@ int main(){
 
 
 
-</br>
+<br/>
 
 ## Chain Of Responsible Ity
 
@@ -1862,7 +1862,7 @@ int main(){
 
 
 
-</br>
+<br/>
 
 ## Command
 
@@ -1923,7 +1923,7 @@ int main(){
 
 
 
-</br>
+<br/>
 
 ## Interpreter
 
@@ -1983,7 +1983,7 @@ int main(){
 
 
 
-</br>
+<br/>
 
 ## Iterator
 
@@ -2040,7 +2040,7 @@ int main(){
 
 
 
-</br>
+<br/>
 
 ## Mediator
 
@@ -2167,7 +2167,7 @@ int main() {
 
 
 
-</br>
+<br/>
 
 ## Memento
 
@@ -2266,7 +2266,7 @@ int main(){
 
 
 
-</br>
+<br/>
 
 ## Observer
 
@@ -2399,7 +2399,7 @@ for (let i: number = 5; i > 0; i--) {
 
 
 
-</br>
+<br/>
 
 ## State
 
@@ -2554,7 +2554,7 @@ int main(){
 
 
 
-</br>
+<br/>
 
 ## Strategy
 
@@ -2662,7 +2662,7 @@ int main() {
 
 
 
-</br>
+<br/>
 
 ## Template Method
 
@@ -2743,7 +2743,7 @@ int main() {
 
 
 
-</br>
+<br/>
 
 ## Visitor
 

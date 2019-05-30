@@ -6,9 +6,9 @@
 
 **数据结构**：线性数据结构、树、图、集合和字典
 
-[刷题整理](/docs/Core/Algorithms/Explore.md)
+[刷题整理](/docs/Core/Algorithms/Explore.md) 
 
-
+<br />
 
 ### Ⅰ 暴力法
 
@@ -104,15 +104,16 @@
 
 
 
-
-
+<br />
 
 
 # Ⅰ 暴力法
 
 ## 选择排序和冒泡排序
 
+
 ### 选择排序
+
 
 > 时间复杂度：θ(n^2)  但键的交换次数为 θ(n); 
 >
@@ -141,6 +142,8 @@ void selection_sort(int arr[], int len)
     }
 }
 ```
+
+​	
 
 
 
@@ -175,6 +178,8 @@ void bubble_sort(int arr[], int len)
 ```
 
 
+
+ 
 
 ## 顺序查找和蛮力字符串匹配
 
@@ -511,7 +516,7 @@ void bfs(map<string, vector<string>> graph, string s)
 
 
 
-
+<br />
 
 # Ⅱ 减治法
 
@@ -545,6 +550,8 @@ void insertionSort(int a[], int len)
     }
 }
 ```
+
+
 
 
 
@@ -1410,7 +1417,7 @@ bool nim(int total, int limit)
 
 
 
-
+<br />
 
 # Ⅲ 分治法
 
@@ -1964,6 +1971,8 @@ int main() {
 …
 
 
+
+<br />
 
 # Ⅳ 变治法
 
