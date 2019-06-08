@@ -1,16 +1,32 @@
 # IO 模型
 
+## Index
+
++ 同步模型
+
+  + 阻塞 IO
+  + 非阻塞 IO
+  + 多路复用 IO
+  + 信号驱动 IO
+
++ 异步模型
+
+  + 异步 IO
+
+  
+
 ## Block I/O
 
-> **阻塞I/O模型**，在系统调用结果返回之前，当前线程会被挂起，处于不可中断的挂起状态。直到操作系统通知完成，才继续执行。
+> **阻塞I/O模型**，进行系统调用后，内核只有准备完成后才返回，等待期间当前线程会被挂起，处于不可中断的挂起状态。直到操作系统通知完成，才继续执行。
 
 ![](../../../images/IO/IO.Blocking.png)
 
-### Block tcpServer
+### BlockIO.TcpServer
 
 + 产生阻塞的系统调用 `accept()` `recv()` 
 
 ```c
+// runtime: win10-x64;
 SOCKET createTcpSocket() {
   SOCKET result = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   return result;
@@ -86,17 +102,18 @@ int main() {
 
 ## NonBlock I/O
 
-> 应用进程执行系统调用之后，内核返回一个错误码。应用进程可以继续执行，但是需要不断的执行系统调用来获知 I/O 是否完成，这种方式称为轮询（polling）
+> **由阻塞io模型的扩展，检测是否准备完成交给用户态。**在执行系统调用之后，内核直接返回一个错误码。由用户态进行轮询，不断的执行系统调用来查看 I/O 是否完成。
 >
-> 由于 CPU 要处理更多的系统调用，因此这种模型的 CPU 利用率比较低，**但是线程不会长时间挂起，可以在等待的同时处理其它的事件**。
+> 由于处理更多的系统调用，因此这种模型的 CPU 利用率比较低，**但是线程不会长时间挂起，可以在等待的同时处理其它的事件**。
 
 ![](../../../images/IO/IO.NonBlock.png)
 
-### NonBlock tcpServer
+### NonBlockIO.TcpServer
 
 + 重点轮询操作
 
 ```c++
+// runtime: win10-x64;
 class Server {
  private:
   typedef DWORD (*pFunc)(PVOID);
@@ -159,7 +176,9 @@ class Server {
     this->serverSocket = createTcpSocket();
   }
 
-  void setHandleFunc(pFunc aHandleFunc) { this->handleFunc = aHandleFunc; }
+  void setHandleFunc(pFunc aHandleFunc) { 
+      this->handleFunc = aHandleFunc; 
+  }
 
   void bindAndListen(u_short port) {
     this->serverAddr = createSocketConfig(port);
@@ -183,7 +202,9 @@ char* createBuffer(int len) {
   return result;
 }
 
-void fillStringEnd(char* str, int index) { str[index] = 0x00; }
+void fillStringEnd(char* str, int index) { 
+    str[index] = 0x00; 
+}
 
 DWORD handleFunc(PVOID pSocket) {
   SOCKET aSocket = (SOCKET)pSocket;
@@ -230,13 +251,13 @@ int main() {
 
 ## Multiplexing I/O
 
-> **它可以让单个进程具有处理多个 I/O 事件的能力。又被称为 Event Driven I/O，即事件驱动 I/O**。
+> **单线程具有处理多个 I/O 事件的能力。又被称为 Event Driven I/O，即事件驱动 I/O**。
 >
-> 使用 select 或者 poll 等待数据，并且可以等待多个套接字中的任何一个变为可读。这一过程会被阻塞，当某一个套接字可读时返回，之后再使用 recvfrom 把数据从内核复制到进程中。
+> **非阻塞io模拟实现**：将io设置为非阻塞，将多个io封装成数组进行轮询，系统调用检测是否有数据。用户态轮询需要反复进行系统调用，内核态切换产生大量开销。
 >
-> 如果一个 Web 服务器没有 I/O 复用，那么每一个 Socket 连接都需要创建一个线程去处理。如果同时有几万个连接，那么就需要创建相同数量的线程。相比于多进程和多线程技术，I/O 复用不需要进程线程创建和切换的开销，但是涉及两个系统调用，有部分性能开销。
+> **系统支持**：提供如select函数， **由内核接管轮询**（**此处会进行阻塞，线程挂起**）。有io描述符可读写时返回（返回数量），之后用户态遍历检测具体的的io，利用系统函数把对应的数据从内核空间复制到进程中。
 
 ![](../../../images/IO/IO.Multiplexing.png)
 
-### Multiplexing tcpServer
+### MultiplexingIO.TcpServer
 

@@ -1,8 +1,6 @@
-/**
- *  测试平台：windows 10
- *  style: 阻塞io模型, 阻塞tcp服务器
- *
- */
+// TCP server (oneThread)
+// runtime：win10-x64
+// 基于io阻塞模型实现的 TCP服务器 单线程版本
 
 #include <stdio.h>
 #include <winsock2.h>

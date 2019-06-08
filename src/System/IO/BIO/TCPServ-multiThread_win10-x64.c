@@ -1,6 +1,7 @@
-// UDP service
-// 基于io阻塞模型实现的 UDP服务器 多线程版本
-// 平台：windows
+// TCP server (MultiThread)
+// runtime：win10-x64
+// 基于io阻塞模型实现的 TCP服务器 多线程版本
+
 
 #include <stdio.h>
 #include <winsock2.h>
