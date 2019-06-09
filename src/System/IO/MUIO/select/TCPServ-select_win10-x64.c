@@ -8,7 +8,7 @@
 #define BUFFER_SIZE 255  // io缓冲区大小
 
 // 文件描述符池
-int sockNum = 0;
+//int sockNum = 0;
 SOCKET GlobSocksPool[FD_SETSIZE];
 
 // 服务器socket和addr打包一起
@@ -73,13 +73,6 @@ void bindAndListen(SOCKETPACK* serv) {
   }
 }
 
-TIMEVAL createTimeval() {
-  TIMEVAL result;
-  result.tv_sec = 100000;
-  result.tv_usec = 0;
-  return result;
-}
-
 void removeDeathSocket(SOCKET* sockPool, int index, fd_set* pFds) {
   printf("client socket closed ...\n");
   closesocket(sockPool[index]);
@@ -97,7 +90,7 @@ void recvMessage(char* buffer, fd_set* pFds, fd_set* pCopyRead) {
       //客户端断开了连接
       if (strLen <= 0) {
         removeDeathSocket(&GlobSocksPool[0], i, pFds);
-        sockNum--;
+        //sockNum--;
       }
       //客户端发送了数据
       else if (strLen > 0)
@@ -117,14 +110,13 @@ void MultiplexingSocket(SOCKET servSock) {
   char buffer[BUFFER_SIZE];
 
   fd_set fds, copyRead;
-  TIMEVAL tm = createTimeval();  // select 轮询时间
 
   //遍历socks，将所有的元素置于无效的socket
   cleanGlobSocksPool();
 
   // 把监听accept的socket放入池中
   GlobSocksPool[0] = servSock;
-  sockNum += 1;
+  //sockNum += 1;
 
   FD_ZERO(&fds);
   FD_SET(servSock, &fds);
@@ -132,36 +124,27 @@ void MultiplexingSocket(SOCKET servSock) {
   while (TRUE) {
     copyRead = fds;
 
-    int selResult = select(sockNum + 1, &copyRead, NULL, NULL, &tm);
+    int selResult = select(0, &copyRead, NULL, NULL, NULL);
     printf("select loop selResult %d\n", selResult);
 
-    if (selResult == -1)
-      printf("select error");
+    // 判断是否是新的客户端连接
+    if (FD_ISSET(GlobSocksPool[0], &copyRead)) {
+      printf("new accept\n");
 
-    else if (selResult == 0)
-      printf("timeout!");
+      clntAddrSz = sizeof(clntAddr);
+      clntSock = accept(servSock, (PSOCKADDR)&clntAddr, &clntAddrSz);
 
-    else {
-      // 判断是否是新的客户端连接
-      if (FD_ISSET(GlobSocksPool[0], &copyRead)) {
-        printf("new accept\n");
-
-        clntAddrSz = sizeof(clntAddr);
-        clntSock = accept(servSock, (PSOCKADDR)&clntAddr, &clntAddrSz);
-
-        for (int i = 1; i < FD_SETSIZE; i++) {
-          if (GlobSocksPool[i] == INVALID_SOCKET) {
-            GlobSocksPool[i] = clntSock;
-            FD_SET(clntSock, &fds);
-            sockNum++;
-            break;
-          }
+      for (int i = 1; i < FD_SETSIZE; i++) {
+        if (GlobSocksPool[i] == INVALID_SOCKET) {
+          GlobSocksPool[i] = clntSock;
+          FD_SET(clntSock, &fds);
+          break;
         }
-        continue;
       }
-      // 接收信息
-      recvMessage(buffer, &fds, &copyRead);
+      continue;
     }
+    // 接收信息
+    recvMessage(buffer, &fds, &copyRead);
   }
 }
 
