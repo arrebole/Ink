@@ -19,7 +19,7 @@
 
 > **阻塞I/O模型**，进行系统调用后，内核只有准备完成后才返回，等待期间当前线程会被挂起，处于不可中断的挂起状态。直到操作系统通知完成，才继续执行。
 
-![](../../../images/IO/IO.Blocking.png)
+![](../../../images/System/IO/IO.Blocking.png)
 
 ### BlockIO.TcpServer
 
@@ -106,7 +106,7 @@ int main() {
 >
 > 由于处理更多的系统调用，因此这种模型的 CPU 利用率比较低，**但是线程不会长时间挂起，可以在等待的同时处理其它的事件**。
 
-![](../../../images/IO/IO.NonBlock.png)
+![](../../../images/System/IO/IO.NonBlock.png)
 
 ### NonBlockIO.TcpServer
 
@@ -257,7 +257,7 @@ int main() {
 >
 > **系统支持**：提供如select函数， **由内核接管轮询**（**此处会进行阻塞，线程挂起**）。有io描述符可读写时返回（返回数量），之后用户态遍历检测具体的的io，利用系统函数把对应的数据从内核空间复制到进程中。
 
-![](../../../images/IO/IO.Multiplexing.png)
+![](../../../images/System/IO/IO.Multiplexing.png)
 
 ### MultIO.select.TcpServer
 
@@ -428,3 +428,220 @@ int main() {
 
 
 ### MultIO.poll.TcpServer
+
+```c
+// runtime: linux
+
+#define BUF_SIZE 255
+#define POLL_SIZE 20
+#define PORT 3000
+
+typedef struct servConfig{
+    struct sockaddr_in addr;
+    socklen_t socketLen;
+} ServConfig;
+
+int main(){
+
+    ServConfig config = newServConfig();
+    int serverFd = newServer();
+
+    bindAndListen(serverFd, &config);
+    pollLoop(serverFd);
+
+    return 0;
+}
+// 服务器监听socke配置
+ServConfig newServConfig(){
+    ServConfig result;
+    result.addr.sin_family = AF_INET;
+    result.addr.sin_port = htons(PORT);
+    result.addr.sin_addr.s_addr =  htonl(INADDR_ANY);
+    result.socketLen = sizeof(result.addr);
+    return result;
+}
+
+int newServer(){
+    int result = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if(result == -1) exit(1);
+    return result;
+}
+
+void bindAndListen(int aSockFd, ServConfig* aConf){
+    bind(aSockFd,(struct sockaddr *)&aConf->addr, aConf->socketLen);
+    listen(aSockFd, 64);
+}
+
+
+void pollLoop(int aServ) {
+  char buffer[BUF_SIZE];
+  struct pollfd socksPool[POLL_SIZE];
+
+  for (int i = 1; i < POLL_SIZE; ++i) {
+    socksPool[i].fd = -1;
+  }
+  socksPool[0].fd = aServ;
+  socksPool[0].events = POLLIN;
+
+  struct sockaddr_in cliaddr;
+  int clilen = sizeof(cliaddr);
+  int ndfs = 0;
+  while (1) {
+    int nready = poll(socksPool, ndfs + 1, -1);
+    if (socksPool[0].revents & POLLIN) {
+      int connfd = accept(aServ, (struct sockaddr *)&cliaddr, &clilen);
+      printf("accpet a new client: %s:%d\n", inet_ntoa(cliaddr.sin_addr),
+             cliaddr.sin_port);
+
+      for (int i = 1; i < POLL_SIZE; i++) {
+        if (socksPool[i].fd < 0) {
+          socksPool[i].fd = connfd;
+          socksPool[i].events = POLLIN;
+          if (i > ndfs) {
+            ndfs = i;
+            break;
+          }
+        }
+      }
+      if (--nready < 0) continue;
+    }
+
+    for (int i = 1; i <= ndfs; ++i) {
+      if (socksPool[i].fd < 0) continue;
+      if (socksPool[i].revents & POLLIN) {
+        int nRed = recv(socksPool[i].fd, buffer, BUF_SIZE, 0);
+        if (nRed <= 0) {
+          printf("close client socket\n");
+          close(socksPool[i].fd);
+          socksPool[i].fd = -1;
+        } else {
+          buffer[nRed] = 0x00;
+          printf("recv %s\n", buffer);
+        }
+        if (--nready <= 0) break;
+      }
+    }
+  }
+}
+```
+
+
+
+### MultIO.epoll.TcpServer
+
++  LT 模式
+
+当 epoll_wait() 检测到描述符事件到达时，将此事件通知进程，进程可以不立即处理该事件，下次调用 epoll_wait() 会再次通知进程。是默认的一种模式，并且同时支持 Blocking 和 No-Blocking。
+
++ ET 模式
+
+和 LT 模式不同的是，通知之后进程必须立即处理事件，下次再调用 epoll_wait() 时不会再得到事件到达的通知。
+
+很大程度上减少了 epoll 事件被重复触发的次数，因此效率要比 LT 模式高。只支持 No-Blocking，以避免由于一个文件句柄的阻塞读/阻塞写操作把处理多个文件描述符的任务饿死。
+
+
+
+```c
+// runtime: linux
+#define PORT 3000
+#define BUFF_SIZE 255
+#define EPOLL_SIZE 64
+
+typedef struct servConfig{
+    struct sockaddr_in addr;
+    socklen_t socketLen;
+} ServConfig;
+
+int main() {
+  ServConfig config = newServConfig();
+  int serverFd = newServer();
+
+  bindAndListen(serverFd, &config);
+  epollLoop(serverFd);
+
+  return 0;
+}
+
+ServConfig newServConfig() {
+  ServConfig result;
+  result.addr.sin_family = AF_INET;
+  result.addr.sin_port = htons(PORT);
+  result.addr.sin_addr.s_addr = htonl(INADDR_ANY);
+  result.socketLen = sizeof(result.addr);
+  return result;
+}
+
+int newServer() {
+  int result = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  if (result == -1) exit(1);
+  return result;
+}
+
+void bindAndListen(int aSockFd, ServConfig *aConf) {
+  bind(aSockFd, (struct sockaddr *)&aConf->addr, aConf->socketLen);
+  listen(aSockFd, 64);
+}
+
+void makeEpollEvent(struct epoll_event *ev, int fd) {
+  ev->data.fd = fd;
+  ev->events = EPOLLIN;
+}
+
+void epollLoop(int listenSock) {
+  struct epoll_event events[EPOLL_SIZE], event;
+  char buffer[BUFF_SIZE];
+
+  int epollFd = epoll_create(EPOLL_SIZE);
+
+  makeEpollEvent(&event, listenSock);
+  epoll_ctl(epollFd, EPOLL_CTL_ADD, listenSock, &event);
+
+  struct sockaddr_in ClientAddr;
+  socklen_t CliLen = sizeof(ClientAddr);
+  while (1) {
+    int nfds = epoll_wait(epollFd, events, EPOLL_SIZE, -1);
+    for (int i = 0; i < nfds; i++) {
+      if (events[i].data.fd == listenSock) {
+        int connSock = accept(listenSock, (struct sockaddr *)&ClientAddr, &CliLen);
+        printf("new accept\n");
+        makeEpollEvent(&event, connSock);
+        epoll_ctl(epollFd, EPOLL_CTL_ADD, connSock, &event);
+        continue;
+      }
+
+      int ret = recv(events[i].data.fd, buffer, BUFF_SIZE, 0);
+      if (ret == 0) {
+        close(events[i].data.fd);
+        epoll_ctl(epollFd, EPOLL_CTL_DEL, events[i].data.fd, NULL);
+        printf("client close socket ...\n");
+      } else {
+        buffer[ret] = 0x00;
+        printf("%s\n", buffer);
+      }
+    }
+  }
+}
+```
+
+
+
+## Signal-drive I/O
+
+> 应用进程使用 sigaction 系统调用，内核立即返回，应用进程可以继续执行，也就是说等待数据阶段应用进程是非阻塞的。内核在数据到达时向应用进程发送 SIGIO 信号，应用进程收到之后在信号处理程序中调用 recvfrom 将数据从内核复制到应用进程中。
+>
+> 相比于非阻塞式 I/O 的轮询方式，信号驱动 I/O 的 CPU 利用率更高。
+
+![](../../../images/System/IO/IO.SignalDrive.png)
+
+
+
+## Async I/O
+
+> 应用进程执行 aio_read 系统调用会立即返回，应用进程可以继续执行，不会被阻塞，内核会在所有操作完成之后向应用进程发送信号。
+>
+> 异步 I/O 与信号驱动 I/O 的区别在于，异步 I/O 的信号是通知应用进程 I/O 完成，而信号驱动 I/O 的信号是通知应用进程可以开始 I/O。
+
+![](../../../images/System/IO/IO.Async.png)
+
+### AsyncIO.iocp.TcpServer
+

@@ -21,13 +21,14 @@
 ### Hard Core (硬核)
 
 + [Compilation Principle]()
+
 + [Architecture]()
 
 + [Hack]()
 
 ### Ideal State (境界)
 
-+ [Ancient]()
++ [Waldeinsamkeit](/docs/Ideal/Waldeinsamkeit/Main.md)
 
 ### Extra (额外)
 
