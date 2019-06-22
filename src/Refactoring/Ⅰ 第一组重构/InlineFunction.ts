@@ -1,4 +1,4 @@
-
+// 内联函数
 class Customer {
     name: string
     location: string

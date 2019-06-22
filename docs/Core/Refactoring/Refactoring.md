@@ -13,9 +13,11 @@
 + 重构名：**提炼函数**
 + 反向重构：**内联函数**
 
+### 动机
+
 > **将意图和实现分离**，如果你需要花时间浏览一段代码才能弄清楚在干什么，那么就应该将其提炼到函数中，并根据它所做的事为其命名。
 
-### 应对
+### 操作
 
 + **无局部变量**	 
   + [直接抽离]();
@@ -30,7 +32,7 @@
 ### 演示
 
 ```typescript
-// typescript
+// 待重构: 提炼函数
 function createArray(siez: number): number[] {
     let result = new Array<number>(siez);
     result.fill(-1, 0, result.length);
@@ -39,7 +41,7 @@ function createArray(siez: number): number[] {
 ```
 
 ```typescript
-// 重构结果
+// 重构后: 提炼函数
 function createArray(siez: number) {
     let result = new Array<number>(siez);
     result = fillArray<number>(result, -1);
@@ -60,9 +62,11 @@ function fillArray<T>(aArray: Array<T>, value: T): Array<T> {
 + 重构名：**内联函数**
 + 反向重构：**提炼函数**
 
-> 其内部代码和函数名称同样清晰易读。
+### 动机
 
-### 应对
+> 当其内部代码和函数名称同样清晰易读时，进行内联函数。
+
+### 操作
 
 + 函数具有多态性
   + [无法内联]()；
@@ -73,12 +77,11 @@ function fillArray<T>(aArray: Array<T>, value: T): Array<T> {
 ### 演示
 
 ```typescript
-// typescript
 class Customer{
     name:string
     location:string
 }
-
+// 待重构: 内联函数
 function reportLines(aCustomer: Customer):any[]{
     const lines = [];
     getherCustomerData(lines, aCustomer);
@@ -91,7 +94,7 @@ function getherCustomerData(out: any[], aCustomer:Customer){
 ```
 
 ```typescript
-// 重构结果
+// 重构后： 内联函数
 function reportLines(aCustomer: Customer): any[] {
     const lines = [];
     lines.push(["name", aCustomer.name])
@@ -103,6 +106,76 @@ function reportLines(aCustomer: Customer): any[] {
 
 
 ## 提炼变量
+
++ 重构名：提炼变量、引入解释性变量
++ 反向重构：内联变量
+
+### 动机
+
+> 局部变量可以帮助我们将表达式分解为比较容易管理的形似。
+
+### 操作
+
++ 函数普通操作
+  + [添加临时操作]()
++ 函数位于一个类中
+  + [变量提炼成方法]()
+
+### 演示
+
+```typescript
+class Order {
+    quantity: number
+    itemPrice: number
+}
+
+// 待重构: 函数内提炼变量
+function price(order: Order): number {
+    return order.quantity * order.itemPrice -
+        Math.max(0, order.quantity - 500) * order.itemPrice * 0.05 +
+        Math.min(order.quantity * order.itemPrice * 0.1, 100);
+}
+// 重构后： 函数内提炼变量
+function price(order: Order): number {
+    const basePrice = order.quantity * order.itemPrice;
+    const quantityDiscount = Math.max(0, order.quantity - 500) * order.itemPrice * 0.05;
+    const shipping = Math.min(order.quantity * order.itemPrice * 0.1, 100);
+    return basePrice - quantityDiscount + shipping;
+}
+```
+
+
+
+```typescript
+// 待重构：类内提炼变量
+class Order {
+    quantity: number
+    itemPrice: number
+    price(): number {
+        return this.quantity * this.itemPrice -
+            Math.max(0, this.quantity - 500) * this.itemPrice * 0.05 +
+            Math.min(this.quantity * this.itemPrice * 0.1, 100);
+    }
+}
+
+// 重构后：类内提炼变量
+class Ref_Order {
+    quantity: number
+    itemPrice: number
+    get quantityDiscount(): number {
+        return Math.max(0, this.quantity - 500) * this.itemPrice * 0.05;
+    }
+    get basePrice(): number {
+        return this.quantity * this.itemPrice;
+    }
+    get shipping(): number {
+        return Math.min(this.quantity * this.itemPrice * 0.1, 100);
+    }
+    price(): number {
+        return this.basePrice - this.quantityDiscount + this.shipping;
+    }
+}
+```
 
 
 
