@@ -13,90 +13,41 @@
 + 重构名：**提炼函数**
 + 反向重构：**内联函数**
 
-> 将意图和实现分离，如果你需要花时间浏览一段代码才能弄清楚在干什么，那么就应该将其提炼到函数中，并根据它所做的事为其命名。
+> **将意图和实现分离**，如果你需要花时间浏览一段代码才能弄清楚在干什么，那么就应该将其提炼到函数中，并根据它所做的事为其命名。
 
-### 无局部变量(ts)
+### 应对
 
-```typescript
-function add(a: number, b: number): number {
-    console.log("**************");
-    console.log("****add*****");
-    console.log("**************");
-    return a + b;
-}
-```
++ **无局部变量**	 
+  + [直接抽离]();
 
-```typescript
-// ==> 重构结果
-function add(a: number, b: number): number {
-    addLog();
-    return a + b;
-}
++ **有局部变量**   
+  + [作为参数传给目标函数]()；
 
-function addLog() {
-    console.log("**************");
-    console.log("*****add******");
-    console.log("**************");
-}
-```
++ **对局部变量再赋值**   
+  + [返回修改后的值]()；
+  + [连同临时变量一起提炼]()；
 
-
-
-### 有局部变量(ts)
+### 演示
 
 ```typescript
-function addPro(n: { a: number, b: number }): number {
-    console.log("**************");
-    console.log(`add ${n.a} ${n.b}`);
-    console.log("**************");
-    return n.a + n.b;
-}
-```
-
-```typescript
-// ==> 重构结果
-function addPro(n: { a: number, b: number }): number {
-    addProLog(n);
-    return n.a + n.b;
-}
-
-function addProLog(n: { a: number, b: number }) {
-    console.log("**************");
-    console.log(`add ${n.a} ${n.b}`);
-    console.log("**************");
-}
-```
-
-
-
-### 对局部变量再赋值(ts)
-
-```typescript
-// 局部变量再赋值
-function handle(lo: number, hi: number) {
-    let result = 0;
-    for (let i = lo; i < hi; i++) {
-        result += i;
-    }
-    for (let i = lo ** lo; i < hi ** hi; i++) {
-        result += i;
-    }
+// typescript
+function createArray(siez: number): number[] {
+    let result = new Array<number>(siez);
+    result.fill(-1, 0, result.length);
     return result;
 }
 ```
 
 ```typescript
-// ==> 重构结果
-function handle(lo: number, hi: number) {
-    return addAll(lo, hi) + addAll(lo ** lo, hi ** hi);
-}
-
-function addAll(lo: number, hi: number): number {
-    let result = 0;
-    for (let i = lo; i < hi; i++) {
-        result += i;
-    }
+// 重构结果
+function createArray(siez: number) {
+    let result = new Array<number>(siez);
+    result = fillArray<number>(result, -1);
     return result;
+}
+function fillArray<T>(aArray: Array<T>, value: T): Array<T> {
+    aArray.fill(value, 0, aArray.length);
+    return aArray;
 }
 ```
 
@@ -111,9 +62,43 @@ function addAll(lo: number, hi: number): number {
 
 > 其内部代码和函数名称同样清晰易读。
 
+### 应对
 
++ 函数具有多态性
+  + [无法内联]()；
 
++ 函数不具有多态性
+  + [可以内联]()；
 
+### 演示
+
+```typescript
+// typescript
+class Customer{
+    name:string
+    location:string
+}
+
+function reportLines(aCustomer: Customer):any[]{
+    const lines = [];
+    getherCustomerData(lines, aCustomer);
+    return lines;
+}
+function getherCustomerData(out: any[], aCustomer:Customer){
+    out.push(["name", aCustomer.name])
+    out.push(["location", aCustomer.location])
+}
+```
+
+```typescript
+// 重构结果
+function reportLines(aCustomer: Customer): any[] {
+    const lines = [];
+    lines.push(["name", aCustomer.name])
+    lines.push(["location", aCustomer.location])
+    return lines;
+}
+```
 
 
 

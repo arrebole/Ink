@@ -6,11 +6,9 @@
 ### Core (核心)
 
 + [Algorithms](/docs/Core/Algorithms/Main.md)
-
 + [Operating System](/docs/Core/System/Main.md)
-
++ [Network](/docs/Core/Network/Network.md)
 + [Design Pattern](/docs/Core/DesignPattern/DesignPatterns.md)
-
 + [Refactoring](/docs/Core/Refactoring/Refactoring.md)
 
 
@@ -24,7 +22,11 @@
 
 + [Architecture]()
 
-+ [Hack]()
++ [Hack](/docs/HardCore/Hack/Main.md)
+
+### Battlefield(战场)
+
++ [Programming Pearls](/docs/Battlefield/Main.md)
 
 ### Ideal State (境界)
 
