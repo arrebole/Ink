@@ -1,9 +1,13 @@
-## Algorithms
+# Algorithms
+
+## Introduction
+
+算法
 
 
 
-| Index                                                  | **Description** | **Status** |
-| ------------------------------------------------------ | --------------- | ---------- |
-| [Algoithms basic](/docs/Core/Algorithms/Algorithms.md) | 算法基础        | 10%        |
-| [Algorithms Explore](/docs/Core/Algorithms/Explore.md) | 刷题收集        | ∞          |
+## Table of Contents
+
++ [Algoithms](/docs/Core/Algorithms/Algorithms.md) 介绍算法类型   
++  [Algorithms Explore](/docs/Core/Algorithms/Explore.md)  刷题中整理的算法       
 

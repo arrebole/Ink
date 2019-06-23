@@ -1,38 +1,37 @@
 # 路漫漫其修远兮，吾将上下而求索。
+
+## Introduction
+
 > 平衡 ↔ 混沌（熵增）
 >
 > FontFamily：`Ubuntu Mono`, `Fira Code`, `Menlo`,`Monaco`,`DejaVu Sans Mono`, `Consolas`
 
-### Core (核心)
-
-+ [Algorithms](/docs/Core/Algorithms/Main.md)
-+ [Operating System](/docs/Core/System/Main.md)
-+ [Network](/docs/Core/Network/Network.md)
-+ [Design Pattern](/docs/Core/DesignPattern/DesignPatterns.md)
-+ [Refactoring](/docs/Core/Refactoring/Refactoring.md)
 
 
-### Acrobatics (杂技)
+## Table of Contents
 
-+ [Shell Command](/docs/Acrobatics/Shell/Main.md)
-
-### Hard Core (硬核)
-
-+ [Compilation Principle]()
-
++ **Core**
+  + [Algorithms](/docs/Core/Algorithms/Main.md)
+  + [Network](/docs/Core/Network/Main.md)
+  + [Operating System](/docs/Core/System/Main.md)
+  + [Design Pattern](/docs/Core/DesignPattern/DesignPatterns.md)
+  + [Refactoring](/docs/Core/Refactoring/Refactoring.md)
++ **Expansive** 
+  + [Shell Command](/docs/Expansive/Shell/Main.md)
++ **Vertical and horizontal**
+  + [Programming Pearls]()
++ **Battlefield**
+  + [Interview]()
++ **Nuclear Reaction**
+  - [Graphics]()
+  - [Blockchain]()
+  - [Cryptography]()
+  - [Machine Learning]()
+  - [Compilation Principle]()
++ **Newborn**
+  + [Hack](/docs/Newborn/Hack/Main.md)
 + [Architecture]()
-
-+ [Hack](/docs/HardCore/Hack/Main.md)
-
-### Battlefield(战场)
-
-+ [Programming Pearls](/docs/Battlefield/Main.md)
-
-### Ideal State (境界)
-
-+ [Waldeinsamkeit](/docs/Ideal/Waldeinsamkeit/Main.md)
-
-### Extra (额外)
-
-+ [Interview]()
+  + [Literature](/docs/Newborn/Literaturet/Main.md)
++ **Limit**
++ **Beyond the limits**
 
