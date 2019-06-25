@@ -30,7 +30,7 @@
   - [Compilation Principle]()
 + **Newborn**
   + [Hack](/docs/Newborn/Hack/Main.md)
-+ [Architecture]()
+  + [Architecture](/docs/Newborn/Architecture/Main.md)
   + [Literature](/docs/Newborn/Literaturet/Main.md)
 + **Limit**
 + **Beyond the limits**
