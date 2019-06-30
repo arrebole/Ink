@@ -61,9 +61,11 @@
 
 > **Cross-site scripting (XSS)**: 一种代码注入攻击，允许攻击者在另一个用户的浏览器中执行恶意JavaScript。
 
-**漏洞点**：不安全地处理用户输入，实现的代码注入攻击;
+**漏洞点**：浏览器执行，用户注入的javascript;
 
-**实现难点**：绕过输入过滤;
+**实现难点**：绕过文本过滤;
+
+
 
 ### major types
 
@@ -74,13 +76,15 @@
 
 ### consequences
 
-+ Cookie theft：盗取cookie，伪造登陆；
++ **Cookie theft：盗取cookie，伪造登陆；**
 + Keylogging：侦听键盘，窃取密码；
 
 + Phishing： 伪造的登录表，指向自己的服务器
 + …
 
 [详细操作…](/docs/Newborn/Hack/Injection/XSS.md)
+
+
 
 ## CSV Injection
 
