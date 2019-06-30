@@ -30,8 +30,8 @@
 
 ## 提炼函数
 
-+ 重构名：**提炼函数**
-+ 反向重构：**内联函数**
++ 重构名：**提炼函数**（Extract Function）
++ 反向重构：**内联函数** （Inline Function）
 
 ### 动机
 
@@ -77,8 +77,8 @@ function fillArray<T>(aArray: Array<T>, value: T): Array<T> {
 
 ## 内联函数
 
-+ 重构名：**内联函数**
-+ 反向重构：**提炼函数**
++ 重构名：**内联函数**（Inline Function）
++ 反向重构：**提炼函数**（Extract Function）
 
 ### 动机
 
@@ -121,12 +121,14 @@ function reportLines(aCustomer: Customer): any[] {
 }
 ```
 
+​	
+
 
 
 ## 提炼变量
 
-+ 重构名：提炼变量、引入解释性变量
-+ 反向重构：内联变量
++ 重构名：提炼变量（Extract Variable）、引入解释性变量
++ 反向重构：内联变量（Inline Variable）
 
 ### 动机
 
