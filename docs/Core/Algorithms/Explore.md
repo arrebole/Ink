@@ -2,17 +2,23 @@
 
 >算法对问题的具体实现。
 
-## Index
 
-### Brute-Forc
+
+
+
+## Table of Contents
+
+**Brute-Forc**
 
 + [Breadth-first Search]()
-  + [岛屿的个数]()
-  + [打开转盘锁]()
-  + [完全平方数]()
-+ [Depth-first Search]()
-  + [岛屿的个数]()
-  + [目标和]()
+  + [number-of-islands](#number-of-islands)
+  + [open-the-lock](#open-the-lock)
+  + [perfect-squares](#perfect-squares)
++ [Deepth-first Search]()
+  + [number-of-islands](#number-of-islands)
+  + [target-sum](#target-sum)
+  + [clone-graph](#clone-graph)
+  + [keysAndRooms](#keysAndRooms)
 
 
 
@@ -20,11 +26,11 @@
 
 ### Breadth-first search
 
-#### 1.0 岛屿的个数
+#### number-of-islands
 
->[原题链接](https://leetcode-cn.com/explore/learn/card/queue-stack/217/queue-and-bfs/872/)
+>[200.题目链接](https://leetcode.com/problems/number-of-islands/)
 >
->架构： 暴力法-广度优先搜索，队列。
+>暴力法-广度优先搜索，队列。
 
 ```javascript
 /**
@@ -124,13 +130,14 @@ function main() {
 
 
 
-#### 2.0 打开转盘锁
+#### open-the-lock
 
->[原题链接](https://leetcode-cn.com/explore/learn/card/queue-stack/217/queue-and-bfs/873/)
+>[752.题目链接](https://leetcode.com/problems/open-the-lock/)
 >
->架构：暴力法-广度优先搜索
+>暴力法-广度优先搜索
 
 ```java
+// java 
 class Solution {
     private Set<String> seen;
     private Queue<String> queue;
@@ -143,11 +150,9 @@ class Solution {
     }
 
     public boolean isUnableStart(String[] deadends, String target) {
-
         for (String i : deadends) {
             seen.add(i);
         }
-
         if (seen.contains(target) || seen.contains("0000")) {
             return false;
         }
@@ -165,15 +170,12 @@ class Solution {
 
         while (!queue.isEmpty()) {
             int sizeQueue = queue.size();
-
             for (int i = 0; i < sizeQueue; i++) {
                 String roulette = queue.poll();
-
                 if (target.equals(roulette)) {
                     return count;
                 }
                 for (int j = 0; j < 4; j++) {
-
                     String up = neighbor(roulette, j, 1);
                     String down = neighbor(roulette, j, -1);
                     System.out.println(up);
@@ -188,7 +190,6 @@ class Solution {
             }
             count++;
         }
-
         return -1;
     }
 
@@ -210,11 +211,10 @@ class Solution {
                 cs[i]--;
             }
         }
-
         return new String(cs);
     }
-
 }
+
 ```
 
 ```java
@@ -228,9 +228,14 @@ class Solution {
 
 
 
-#### 3.0 完全平方数
+#### perfect-squares
+
+> [279.题目链接](https://leetcode.com/problems/perfect-squares/)
+>
+> 暴力法-广度优先搜索
 
 ```python
+# /usr/bin/python
 class Solution:
     def numSquares(self, n: int) -> int:
         bfsQueue: set = {n}
@@ -260,11 +265,11 @@ class Solution:
 
 ### Deepth-first Search
 
-#### 1.0 岛屿的个数
+#### Number of Islands
 
->[原题链接](https://leetcode-cn.com/explore/learn/card/queue-stack/217/queue-and-bfs/872/)
+>[200.原题链接](https://leetcode.com/problems/number-of-islands/)
 >
->算法： 暴力法-深度优先搜索，栈。
+>暴力法-深度优先搜索，栈。
 
 ```javascript
 /**
@@ -309,13 +314,11 @@ function dfsTravelIsLands(grid, entrance) {
 
 
 
+#### target-sum
 
-
-#### 2.0 目标和
-
->[原题链接](https://leetcode-cn.com/explore/learn/card/queue-stack/219/stack-and-dfs/883/)
+>[494.原题链接](https://leetcode.com/problems/target-sum/)
 >
->算法： 暴力法-深度优先搜索，栈。
+> 暴力法-深度优先搜索，栈。
 
 ```java
 class Solution {
@@ -346,11 +349,11 @@ class Solution {
 
 
 
-#### 3.0 克隆图
+#### clone-graph
 
->[原题链接](https://leetcode-cn.com/explore/learn/card/queue-stack/219/stack-and-dfs/884/)
+>[133.原题链接](https://leetcode.com/problems/clone-graph/)
 >
->算法：暴力法-深度优先搜索
+>暴力法-深度优先搜索
 
 ```c++
 
@@ -378,5 +381,64 @@ class Solution {
     return newNode;
   }
 };
+```
+
+
+
+#### keysAndRooms
+
+> [841.题目链接](https://leetcode.com/problems/keys-and-rooms/)
+>
+> dfs、stack
+
+```javascript
+/** 
+ * @param {number[][]} rooms 
+ */
+function canVisitAllRooms(rooms) {
+    let q = new KeysAndRooms(rooms);
+    return q.resolve();
+};
+
+class KeysAndRooms {
+    constructor(rooms) {
+        this.Rooms = rooms
+        this.Seen = new Array(rooms.length);
+        this.Seen.fill(false,0,rooms.length)
+    }
+
+    Room = null
+    Seen = null
+    Stack = new Array();
+
+    resolve(){
+        this.mark(0)
+        this.dsf()
+        return this.isEnterEvery()
+    }
+    mark(index) {
+        this.Stack.push(this.Rooms[index])
+        this.Seen[index] = true;
+    }
+    dsf() {
+        while (this.Stack.length > 0) {
+            let list = this.Stack.pop()
+            if (list.length == 0) {
+                continue;
+            }
+            for (const iterator of list) {
+                if (!this.Seen[iterator]) {
+                    this.mark(iterator)
+                }
+            }
+        }
+    }
+    isEnterEvery() {
+        for (const i of this.Seen) {
+            if(!i) return false;
+        }
+        return true;
+    }
+}
 ```
 

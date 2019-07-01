@@ -11,8 +11,7 @@
 + Resources
   + [AwesomeXSS](https://github.com/s0md3v/AwesomeXSS)
   + [Cheatsheet](https://github.com/cure53/H5SC)
-  
-+ Feature
++ Payload
   + Server render
     + [直接吐html]()
   + Browser render
@@ -22,18 +21,18 @@
     + [apend()]()
     + [innerText()]()
   + Filtering rules
-    + 无过滤
+    + [无过滤](#无过滤类型)
     + 过滤 `</>`
-  
-+ 漏洞
++ Exploit
 
   +  低版本Jquery
-
++ Tools
+  + [xsstrike]()
 + 实战记录
 
 
 
-## Feature
+## Payload
 
 ### Filtering rules
 
