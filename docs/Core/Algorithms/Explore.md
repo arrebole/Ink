@@ -10,11 +10,14 @@
 
 **Brute-Forc**
 
-+ [Breadth-first Search]()
++ Sequential Search
+  + [find-pivot-index](#find-pivot-index)
+
++ Breadth-first Search
   + [number-of-islands](#number-of-islands)
   + [open-the-lock](#open-the-lock)
   + [perfect-squares](#perfect-squares)
-+ [Deepth-first Search]()
++ Deepth-first Search
   + [number-of-islands](#number-of-islands)
   + [target-sum](#target-sum)
   + [clone-graph](#clone-graph)
@@ -23,6 +26,40 @@
 
 
 ## Brute-Forc
+
+### Sequential Search
+
+#### find-pivot-index
+
+> [724. 题目链接](https://leetcode.com/problems/find-pivot-index/)
+>
+> 暴力法—顺序查找
+
+```javascript
+/**
+ * @param {number[]} nums
+ */
+function pivotIndex(nums) {
+    for (let i = 0; i < nums.length; i++) {
+        const LeftSum = arraySum(nums, 0, i - 1);
+        const RightSum = arraySum(nums, i + 1, nums.length - 1)
+        if (LeftSum == RightSum) {
+            return i;
+        }
+    }
+    return -1;
+};
+
+function arraySum(aArray, start, end) {
+    let result = 0;
+    while (start <= end) {
+        result += aArray[start++];
+    }
+    return result;
+}
+```
+
+
 
 ### Breadth-first search
 
