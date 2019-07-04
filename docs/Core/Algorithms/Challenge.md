@@ -59,6 +59,59 @@ function arraySum(aArray, start, end) {
 }
 ```
 
+#### Largest Number At Least Twice of Others
+
+> [题目链接](https://leetcode.com/problems/largest-number-at-least-twice-of-others/)
+>
+> 暴力法-顺序查找
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+function dominantIndex(nums) {
+    if(nums.length < 2){
+        return nums.length -1;
+    }
+    const solution = new Solution(nums)
+    return solution.solve()
+};
+
+class Solution {
+    constructor(nums) {
+        this.nums = nums;
+        this.maxIndex = 0;
+        this.maxValue = nums[0];
+    }
+    findMaxValue() {
+        this.nums.forEach((value, index) => {
+            if (value > this.maxValue) {
+                this.maxIndex = index;
+                this.maxValue = this.nums[index];
+            }
+        });
+    }
+    maxIsTwoPow() {
+        let result = this.maxIndex;
+        this.nums.forEach((v, i) => {
+            if (v * 2 > this.maxValue && i != this.maxIndex) {
+                result = -1
+            }
+        })
+        return result
+    }
+    solve() {
+        this.findMaxValue()
+        return this.maxIsTwoPow()
+    }
+}
+```
+
+
+
+
+
 
 
 ### Breadth-first search

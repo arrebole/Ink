@@ -11,11 +11,11 @@
 ## Table of Contents
 
 + 第一组重构
-  + [提炼函数](#提炼函数)
+  + [提炼函数](#提炼函数) 
   + [内联函数](#内联函数)
   + [提炼变量](#提炼变量)
   + [内联变量](#内联变量)
-  + [改变函数声明](#改变函数声明)
+  + [改变函数声明](#改变函数声明) 
   + [封装变量](#封装变量)
   + [变量改名](#变量改名)
   + [引入参数对象](#引入参数对象)
@@ -23,7 +23,25 @@
   + [函数组合成变换](#函数组合成变换)
   + [拆分阶段](#拆分阶段)
 + 封装
+  + [封装记录](#封装记录)
+  + [封装集合](#封装集合)
+  + [以对象取代基本类型](#以对象取代基本类型)
+  + [以查询取代临时变量](#以查询取代临时变量)
+  + [提炼类](#提炼类)
+  + [内联类](#内联类)
+  + [隐藏委托关系](#隐藏委托关系)
+  + [移除中间人](#移除中间人)
+  + [替换算法](#替换算法)
 + 搬移特性
+  + [搬移函数](#搬移函数)
+  + [搬移字段](#搬移字段)
+  + [搬移语句到函数](#搬移语句到函数)
+  + [搬移语句到调用者](#搬移语句到调用者)
+  + [以函数调用取代内联代码](#以函数调用取代内联代码)
+  + [移动语句](#移动语句)
+  + [拆分循环](#拆分循环)
+  + [以管道取代循环](#以管道取代循环)
+  + [移除死代码](#移除死代码)
 + 重新组织数据
 + 简化条件逻辑
 + 重构API
@@ -232,11 +250,7 @@ class Ref_Order {
 
 ```typescript
 #! /usr/bin/deno
-class Order {
-    basePrice: number
-}
-
-function isExpensive(anOrder: Order) {
+function isExpensive(anOrder: {basePrice: number}) {
     let basePrice = anOrder.basePrice;
     return (basePrice > 10000)
 }
@@ -245,7 +259,7 @@ function isExpensive(anOrder: Order) {
 
 ```typescript
 // ⭐Skill: 先将变量改为不可修改然后测试，确保变量只被修改一次
-function isExpensive(anOrder: Order) {
+function isExpensive(anOrder: {basePrice: number}) {
     return anOrder.basePrice > 10000
 }
 ```
@@ -304,6 +318,7 @@ function circumference(redius:number):number{
 ### 演变
 
 + 返回拷贝副本防止修改
++ 进阶—[封装记录](#封装记录)
 
 ### 操作
 
@@ -346,10 +361,11 @@ export namespace Owner {
 一个好的变量名很重要
 
 ```typescript
- let a = height * width;
+let a = height * width;
 ```
 
 ```typescript
+// 重构：变量改名
 let area = height * width;
 ```
 
@@ -597,7 +613,688 @@ function applyShipping(priceData, shaippingMethod) {
 
 # Ⅱ 封装
 
+## 封装记录
+
+> 封装变量的进阶，对过长作用域的变量，进行监管控制。
+
++ 重构名：封装记录(Encapsulate Record)
++ Ideas：相似点（设计模式—单例模式）
+
+### 演变
+
++ 先进行封装变量，再分装成类
+
+### 操作
+
+```typescript
+const organization = { name: "Acme Gooseberries", country: "GB" }
+```
+
+```typescript
+// 重构后
+class Organization {
+    constructor(organization: { name: string, country: string }) {
+        this._name = organization.name;
+        this._country = organization.country;
+    }
+    private _name: string
+    private _country: string
+
+    get name(): string { return this._name }
+    get country(): string { return this._country }
+    set name(aName: string) { this._name = aName }
+    set country(aCountry: string) { this._country = aCountry }
+}
+
+const organization = new Organization({ name: "Acme Gooseberries", country: "GB" })
+
+export function getOrganization() {
+    return organization;
+}
+```
+
+
+
+
+
+## 封装集合
+
+> 避免直接操作对象的集合成员，应在对象上定义统一接口，
+>
+> 返回的数据应是源数据的拷贝，避免修改。
+
++ 重构名：封装集合(Encapsulate Collection)
+
+### 演变
+
++ 先封装变量再封装集合
+
++ 永远不直接返回集合的值
++ 限制集合的访问权限
+
+### 操作
+
+```typescript
+// 待重构：无封装集合操作
+class Course {
+    constructor(name: string) {
+        this._name = name;
+        this._isAdvanced = false;
+    }
+    private _name: string
+    private _isAdvanced: boolean
+
+    get name() { return this._name }
+    get isAdvance() { return this._isAdvanced }
+}
+class Person {
+    constructor(name: string) {
+        this._name = name
+        this._courses = []
+    }
+    private _name: string;
+    private _courses: Array<Course>;
+
+    get name() { return this._name };
+    get courses() { return this._courses }
+    set courses(aList: Course[]) { this._courses = aList }
+}
+
+const Bob = new Person("bob")
+Bob.courses = [new Course("cs") ]//💀十分危险的行为
+```
+
+```typescript
+// 重构后
+class Course {
+    constructor(name: string) {
+        this._name = name;
+        this._isAdvanced = false;
+    }
+    private _name: string
+    private _isAdvanced: boolean
+
+    get name() { return this._name }
+    get isAdvance() { return this._isAdvanced }
+}
+class Person {
+    constructor(name: string) {
+        this._name = name
+        this._courses = []
+    }
+    private _name: string;
+    private _courses: Array<Course>;
+
+    get name() { return this._name };
+    get courses() { return this._courses.slice() }
+
+    addCourse(aCourse:Course){
+        this._courses.push(aCourse);
+    }
+    removeCourse(aCourse:Course){
+        const index = this._courses.indexOf(aCourse);
+        if(index == -1) throw new RangeError();
+        else this._courses.splice(index, 1);
+    }
+}
+
+const Bob = new Person("bob")
+Bob.addCourse( new Course("cs"))
+```
+
+
+
+## 以对象取代基本类型
+
+> 一旦发现对某个数据的操作不仅仅局限于打印时，就该为它创建一个新类
+
++ 重构名：以对象取代基本类型(Replace Primitive with Object)、以对象取代数据值
+
++ 反向重构：引用对象改为值对象
+
+### 演变
+
++ 一开始只是简单包装一下
+
+### 操作
+
+```typescript
+class Order {
+    constructor(data: { priority: string }) {
+        this.priority = data.priority
+    }
+    public priority: string
+}
+
+const orders = new Array<Order>();
+const highPriorityCount = orders.filter(
+    o => "high" === o.priority || "rush" == o.priority
+).length;
+```
+
+```typescript
+// 重构后
+class Priority{
+    constructor(value:string){
+        this._value = value
+    }
+    private _value:string
+    toString(){
+        return this._value;
+    }
+    static legalValues(){return ["low","normal","high","rush"]}
+    get _index() {return Priority.legalValues().findIndex(s=>s===this._value)}
+    // 🔨骚操作：利用legalValues索引比较
+    higherThan(other:Priority){return this._index > other._index}
+    lowerThan(other:Priority){return this._index < other._index}
+    equals(other:Priority){return this._index ==  other._index}
+}
+class Order {
+    constructor(data: { priority: string }) {
+        this._priority = new Priority(data.priority)
+    }
+    // priority被封装成了对象 
+    private _priority: Priority
+    get priority():Priority {return this._priority}
+    get priorityString(){return this._priority.toString()}
+    set setPriority(aString:string){this._priority = new Priority(aString)}
+}
+
+const orders = new Array<Order>();
+const highPriorityCount = orders.filter(o=>o.priority.higherThan(new Priority("normal")))
+```
+
+
+
+
+
+
+
+## 以查询取代临时变量
+
+> 用于处理那些只被计算一次且之后不再被修改的变量
+>
+> 应用内联变量手法移除临时变量
+
++ 重构名：以查询取代临时变量(Replace Temp with Query)
+
+### 演算
+
++ 将变量赋值的代码段提炼成函数
++ 应用内联变量手法移除临时变量
+
+### 操作
+
+```typescript
+class Order {
+    constructor(quantity: number, item: { price: number }) {
+        this.quantity = quantity;
+        this.item = item;
+    }
+    private quantity: number
+    private item: { price: number }
+
+    get price() {
+        let basePrice = this.quantity * this.item.price;
+        let discountFactory = 0.98;
+        if (basePrice > 1000) discountFactory -= 0.03;
+        return basePrice * discountFactory;
+    }
+}
+```
+
+```typescript
+class Order {
+    constructor(quantity: number, item: { price: number }) {
+        this.quantity = quantity;
+        this.item = item;
+    }
+    private quantity: number
+    private item: { price: number }
+
+    get basePrice() {
+        return this.quantity * this.item.price;
+    }
+    get discountFactory() {
+        return (this.basePrice > 1000) ? 0.98 - 0.03 : 0.98;
+    }
+    get price() {
+        return this.basePrice * this.discountFactory;
+    }
+}
+```
+
+
+
+## 提炼类
+
+> 一个类应该是一个清晰的抽象，只处理一些明确的责任
+>
+> 如果某些数据和某些函数总是关联出现，，那么可以考虑分离出去
+
++ 重构名：提炼类(Extract Class)
++ 反向重构: 内联类
++ ideas：设计模式原则—单一职责
+
+### 演算
+
++ 通过组合的手法解耦合
+
+### 操作
+
+```typescript
+class Person {
+    private _name: string;
+    private _officeAreaCode: string;
+    private _officeNumber: string;
+
+    public get name(): string {
+        return this._name;
+    }
+    public set name(v: string) {
+        this._name = v;
+    }
+    public get officeAreaCode(): string {
+        return this._officeAreaCode;
+    }
+    public set officeAreaCode(v: string) {
+        this._officeAreaCode = v;
+    }
+    public get officeNumber(): string {
+        return this._officeNumber;
+    }
+    public set officeNumber(v: string) {
+        this._officeNumber = v;
+    }
+    public get telephoneNumber(): string {
+        return `(${this.officeAreaCode}) ${this.officeNumber}`;
+    }
+}
+```
+
+```typescript
+class TelephoneNumber{
+    private _areaCode: string;
+    private _number: string;
+
+    public get areaCode(): string {
+        return this._areaCode;
+    }
+    public set areaCode(v: string) {
+        this._areaCode = v;
+    }
+    public get number(): string {
+        return this._number;
+    }
+    public set number(v: string) {
+        this._number = v;
+    }
+    public get toString(): string {
+        return `(${this.areaCode}) ${this.number}`;
+    }
+}
+
+class Person {
+    constructor(){
+        this._telephoneNumber = new TelephoneNumber();
+    }
+    private _name: string;
+    private _telephoneNumber:TelephoneNumber;
+
+    public get name(): string {
+        return this._name;
+    }
+    public set name(v: string) {
+        this._name = v;
+    }
+    public get officeAreaCode(): string {
+        return this._telephoneNumber.areaCode;
+    }
+    public set officeAreaCode(v: string) {
+        this._telephoneNumber.areaCode = v;
+    }
+    public get officeNumber(): string {
+        return this._telephoneNumber.number;
+    }
+    public set officeNumber(v: string) {
+        this._telephoneNumber.number = v;
+    }
+    public get telephoneNumber(): string {
+        return this._telephoneNumber.toString
+    }
+}
+```
+
+
+
+
+
+
+
+## 内联类
+
+> 如果一个类不再承担足够责任，不再有单独存在的道理，将萎缩类塞进另一个类中
+>
+> 如果是想重新安排它们的职责，先内联类再提炼类
+
++ 重构名：内联类(Inline Class)
++ 反向重构：提炼类
+
+### 演算
+
++ 先内联类再提炼类，重新组织类的关系
+
+### 操作
+
+```typescript
+class TrackingInfomation {
+    private _shippingCompany: string;
+    private _trackingNumber: string;
+
+    public get shippingCompany(): string {
+        return this._shippingCompany;
+    }
+    public set shippingCompany(v: string) {
+        this._shippingCompany = v;
+    }
+    public get trackingNumber(): string {
+        return this._trackingNumber;
+    }
+    public set trackingNumber(v: string) {
+        this._trackingNumber = v;
+    }
+
+    get display() {
+        return `${this.shippingCompany}: ${this.trackingNumber}`
+    }
+}
+
+class Shipment {
+    private _TrackingInfomation: TrackingInfomation;
+    public get TrackingInfomation(): TrackingInfomation {
+        return this._TrackingInfomation;
+    }
+    public set TrackingInfomation(v: TrackingInfomation) {
+        this._TrackingInfomation = v;
+    }
+    get trackingInfo() {
+        return this._TrackingInfomation.display;
+    }
+}
+```
+
+```typescript
+class Shipment {
+    private _shippingCompany: string;
+    private _trackingNumber: string;
+
+    public get shippingCompany(): string {
+        return this._shippingCompany;
+    }
+    public set shippingCompany(v: string) {
+        this._shippingCompany = v;
+    }
+    public get trackingNumber(): string {
+        return this._trackingNumber;
+    }
+    public set trackingNumber(v: string) {
+        this._trackingNumber = v;
+    }
+
+    get trackingInfo() {
+        return `${this.shippingCompany}: ${this.trackingNumber}`
+    }
+}
+```
+
+
+
+## 隐藏委托关系
+
+> 在服务对象上放置一个简单的委托函数，将委托关系隐藏起来。
+>
+> 隐藏自己的字段
+
++ 重构名：隐藏委托关系(Hide Delegate)
++ 反向重构：移除中间人
++ ideas: 设计模式-中介模式
+
+### 演算
+
++ 间接调用内部对象
+
+### 操作
+
+```typescript
+class Department {
+    private _chargeCode: string;
+    private _manager: string;
+
+    public get chargeCode(): string {
+        return this._chargeCode;
+    }
+    public set chargeCode(v: string) {
+        this._chargeCode = v;
+    }
+
+    public get manager(): string {
+        return this._manager;
+    }
+    public set manager(v: string) {
+        this._manager = v;
+    }
+}
+
+class Person {
+    constructor() {
+        this._department = new Department();
+    }
+    private _department: Department;
+    public get department(): Department {
+        return this._department;
+    }
+    public set department(v: Department) {
+        this._department = v;
+    }
+}
+
+const aPerson = new Person();
+let manger = aPerson.department.manager
+```
+
+
+
+``` typescript
+class Department {
+    private _chargeCode: string;
+    private _manager: string;
+    
+    public get chargeCode(): string {
+        return this._chargeCode;
+    }
+    public set chargeCode(v: string) {
+        this._chargeCode = v;
+    }
+    public get manager(): string {
+        return this._manager;
+    }
+    public set manager(v: string) {
+        this._manager = v;
+    }
+}
+
+class Person {
+    constructor() {
+        this._department = new Department();
+    }
+    private _department: Department;
+    public get department(): Department {
+        return this._department;
+    }
+    public set department(v: Department) {
+        this._department = v;
+    }
+	// 实现委托
+    public get manager(){
+        return this.department.manager
+    }
+}
+
+const aPerson = new Person();
+let manger = aPerson.manager;
+```
+
+
+
+## 移除中间人
+
+> 随着委托类的特征（功能）越来越多，更多的转发函数就会使人烦躁。
+>
+> 此时就应该让客户直接调用受托类
+
++ 重构名：移除中间人(Remove Middle Man)
+
+- 反向重构：隐藏委托关系(Hide Delegate)
+
+### 演算
+
++ 去除委托函数
+
+```typescript
+class Department {
+    private _chargeCode: string;
+    private _manager: string;
+    
+    public get chargeCode(): string {
+        return this._chargeCode;
+    }
+    public set chargeCode(v: string) {
+        this._chargeCode = v;
+    }
+    public get manager(): string {
+        return this._manager;
+    }
+    public set manager(v: string) {
+        this._manager = v;
+    }
+}
+
+class Person {
+    constructor() {
+        this._department = new Department();
+    }
+    private _department: Department;
+    public get department(): Department {
+        return this._department;
+    }
+    public set department(v: Department) {
+        this._department = v;
+    }
+	// 实现委托
+    public get manager(){
+        return this.department.manager
+    }
+}
+
+const aPerson = new Person();
+let manger = aPerson.manager;
+```
+
+```typescript
+class Department {
+    private _chargeCode: string;
+    private _manager: string;
+
+    public get chargeCode(): string {
+        return this._chargeCode;
+    }
+    public set chargeCode(v: string) {
+        this._chargeCode = v;
+    }
+
+    public get manager(): string {
+        return this._manager;
+    }
+    public set manager(v: string) {
+        this._manager = v;
+    }
+}
+
+class Person {
+    constructor() {
+        this._department = new Department();
+    }
+    private _department: Department;
+    public get department(): Department {
+        return this._department;
+    }
+    public set department(v: Department) {
+        this._department = v;
+    }
+}
+
+const aPerson = new Person();
+let manger = aPerson.department.manager
+```
+
+
+
+## 替换算法
+
+> 其中某些方法会比另一些简单，算法也是如此。
+>
+> 此时就需要改变原先的算法。
+
++ 重构名：替换算法(Substitute Algorithm)
+
+### 演变
+
++ 判断点：性能、简洁
+
+### 操作
+
+```typescript
+function foundPerson(people: string[]) {
+    for (let i = 0; i < people.length; i++) {
+        if (people[i] == "Don") {
+            return "Don"
+        }
+        if (people[i] == "John") {
+            return "John"
+        }
+        if (people[i] == "Kent") {
+            return "Kent"
+        }
+    }
+    return "";
+}
+```
+
+```typescript
+// 管道替换循环
+function foundPerson(people: string[]) {
+    const candidates = ["Don","John","Kent"];
+    return people.find(p =>candidates.includes(p)) || "";
+}
+```
+
+
+
+
+
 # Ⅲ 搬移特性
+
+## 搬移函数
+## 搬移字段
+## 搬移语句到函数
+## 搬移语句到调用者
+## 以函数调用取代内联代码
+## 移动语句
+## 拆分循环
+## 以管道取代循环
+## 移除死代码
+
+
 
 # Ⅳ 重新组织数据
 
