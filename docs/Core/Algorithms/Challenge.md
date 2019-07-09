@@ -11,8 +11,9 @@
 **Brute-Forc**
 
 + Sequential Search
-  + [find-pivot-index](#find-pivot-index)
-
+  + [Plus-One](#Plus-One)
++ [Find-pivot-index](#Find-pivot-index)
+  + [Largest Number At Least Twice of Others]()
 + Breadth-first Search
   + [number-of-islands](#number-of-islands)
   + [open-the-lock](#open-the-lock)
@@ -29,9 +30,50 @@
 
 ### Sequential Search
 
-#### find-pivot-index
+#### Plus-One
 
-> [724. 题目链接](https://leetcode.com/problems/find-pivot-index/)
+> 题目链接 [leetcode.66](https://leetcode.com/problems/plus-one/)
+>
+> 暴力法—顺序查找
+
+```javascript
+/**
+ * @param {number[]} digits
+ */
+function plusOne(digits) {
+    const solution = new Solution(digits);
+    return solution.plusOne()
+}
+
+class Solution {
+    constructor(digits) {
+        this.digits = digits;
+        this.len = digits.length;
+    }
+    carry() {
+        for (let i = this.len - 1; i >= 0; i--) {
+            if (this.digits[i] <= 9) return this.digits;
+
+            this.digits[i] = 0;
+            if (i == 0) this.digits.unshift(1)
+            else this.digits[i - 1]++;
+        }
+        return this.digits;
+    }
+    plusOne() {
+        this.digits[this.len - 1]++;
+        return this.carry();
+    }
+}
+```
+
+
+
+
+
+#### Find-pivot-index
+
+> 题目链接 [leetcode.724](https://leetcode.com/problems/find-pivot-index/)
 >
 > 暴力法—顺序查找
 
@@ -61,9 +103,9 @@ function arraySum(aArray, start, end) {
 
 #### Largest Number At Least Twice of Others
 
-> [题目链接](https://leetcode.com/problems/largest-number-at-least-twice-of-others/)
+> 题目链接 [leetcode.747](https://leetcode.com/problems/largest-number-at-least-twice-of-others/)
 >
-> 暴力法-顺序查找
+> ideas：暴力法-顺序查找、(变治法-预排序)
 
 ```javascript
 /**
@@ -118,7 +160,7 @@ class Solution {
 
 #### number-of-islands
 
->[200.题目链接](https://leetcode.com/problems/number-of-islands/)
+>题目链接 [leetcode.200](https://leetcode.com/problems/number-of-islands/)
 >
 >暴力法-广度优先搜索，队列。
 
@@ -222,7 +264,7 @@ function main() {
 
 #### open-the-lock
 
->[752.题目链接](https://leetcode.com/problems/open-the-lock/)
+>题目链接 [leetcode.752](https://leetcode.com/problems/open-the-lock/)
 >
 >暴力法-广度优先搜索
 
@@ -320,7 +362,7 @@ class Solution {
 
 #### perfect-squares
 
-> [279.题目链接](https://leetcode.com/problems/perfect-squares/)
+> 题目链接 [leetcode.279](https://leetcode.com/problems/perfect-squares/)
 >
 > 暴力法-广度优先搜索
 
@@ -357,7 +399,7 @@ class Solution:
 
 #### Number of Islands
 
->[200.原题链接](https://leetcode.com/problems/number-of-islands/)
+>题目链接 [leetcode.200](https://leetcode.com/problems/number-of-islands/)
 >
 >暴力法-深度优先搜索，栈。
 
@@ -406,7 +448,7 @@ function dfsTravelIsLands(grid, entrance) {
 
 #### target-sum
 
->[494.原题链接](https://leetcode.com/problems/target-sum/)
+>题目链接 [leetcode.494](https://leetcode.com/problems/target-sum/)
 >
 > 暴力法-深度优先搜索，栈。
 
@@ -441,7 +483,7 @@ class Solution {
 
 #### clone-graph
 
->[133.原题链接](https://leetcode.com/problems/clone-graph/)
+>题目链接 [leetcode.133](https://leetcode.com/problems/clone-graph/)
 >
 >暴力法-深度优先搜索
 
@@ -477,7 +519,7 @@ class Solution {
 
 #### keysAndRooms
 
-> [841.题目链接](https://leetcode.com/problems/keys-and-rooms/)
+> 题目链接 [leetcode.841](https://leetcode.com/problems/keys-and-rooms/)
 >
 > dfs、stack
 

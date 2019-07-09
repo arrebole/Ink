@@ -1,4 +1,4 @@
-# Refactoring
+Refactoring
 
 ## Introduction
 
@@ -43,6 +43,11 @@
   + [以管道取代循环](#以管道取代循环)
   + [移除死代码](#移除死代码)
 + 重新组织数据
+  + [拆分变量](#拆分变量)
+  + [字段改名](#字段改名)
+  + [以查询取代派生变量](#以查询取代派生变量)
+  + [将引用对象改为值对象](#将引用对象改为值对象)
+  + [将值对象改为引用对象](#将值对象改为引用对象)
 + 简化条件逻辑
 + 重构API
 + 处理继承关系
@@ -1285,18 +1290,445 @@ function foundPerson(people: string[]) {
 # Ⅲ 搬移特性
 
 ## 搬移函数
+
+> 任何函数都需要具备上下文环境才能存活
+>
+> 需要频繁调用一个别处的函数，会考虑搬移这个函数
+
++ 重构名：搬移函数(Move Function)
+
+### 演算
+
++ 检查函数上下文与目标上下文的区别
+
+```typescript
+class AccountType { }
+class Account {
+    private daysOverdrawn: number
+    private type: { isPremium: boolean }
+    get bankCharge() {
+        let result = 4.5;
+        if (this.daysOverdrawn > 0) result += this.overdraftCharge;
+        return result;
+    }
+    get overdraftCharge() {
+        if (this.type.isPremium) {
+            const baseCharge = 10;
+            if (this.daysOverdrawn <= 7) {
+                return baseCharge;
+            } else {
+                return baseCharge + (this.daysOverdrawn - 7) * 0.85;
+            }
+
+        }
+        else return this.daysOverdrawn * 1.75
+    }
+}
+```
+
+```typescript
+// 重构：搬移函数
+class Account {
+    daysOverdrawn: number;
+    isPremium: boolean;
+    type: AccountType;
+    get bankCharge() {
+        let result = 4.5;
+        if (this.daysOverdrawn > 0) result += this.overdraftCharge;
+        return result;
+    }
+    get overdraftCharge() {
+        return this.type.overdraftCharge(this)
+    }
+}
+class AccountType {
+    overdraftCharge(aAccount: Account) {
+        if (aAccount.isPremium) {
+            const baseCharge = 10;
+            if (aAccount.daysOverdrawn <= 7) {
+                return baseCharge;
+            } else {
+                return baseCharge + (aAccount.daysOverdrawn - 7) * 0.85;
+            }
+
+        }
+        else return aAccount.daysOverdrawn * 1.75
+    }
+}
+```
+
+
+
 ## 搬移字段
+
+> 良好的数据结构，会让代码变得简单
+>
+> 如果发现数据结构已经不适应于需求，就应该马上修缮它
+
++ 重构名：搬移字段(Move Field)
+
+### 演算
+
++ 移动裸记录
+
+### 操作
+
+```typescript
+class Customer{
+    constructor(name:string,discountRate:number){
+        this._name = name;
+        this._discountRate = discountRate;
+        this._contract = new CustomerContract(Date.now().toString())
+    }
+    private _name:string;
+    private _discountRate:number
+    private _contract:CustomerContract
+
+}
+class CustomerContract{
+    private _startData:string
+    constructor(startData:string){
+        this._startData = startData
+    }
+}
+```
+
+```typescript
+class Customer{
+    constructor(name:string,discountRate:number){
+        this._name = name;
+        this._contract = new CustomerContract(Date.now().toString())
+        this._setDiscountRate(discountRate);
+    }
+    private _name:string;
+    private _contract:CustomerContract
+    get discountRate(){return this._contract.discountRate}
+    _setDiscountRate(arg:number){this._contract.discountRate = arg}
+
+}
+class CustomerContract{
+    private _startData:string
+    private _discountRate:number;
+    constructor(startData:string){
+        this._startData = startData
+    }
+    set discountRate(arg:number){this._discountRate = arg}
+    get discountRate(){return this._discountRate}
+}
+```
+
+
+
 ## 搬移语句到函数
+
+> 调用某个函数时，总有一些相同的代码需要每次执行
+>
+> 会考虑将这些代码合并到函数里头
+
++ 重构名：搬移语句到函数(Move Statements into Function)
++ 反向重构; 移动语句到调用者
+
+### 演算
+
++ 如果调用有些距离、先用移动语句
+
+### 操作
+
+```typescript
+class Photo{
+    title:string
+    location:string
+    date:Date
+}
+class Person{
+    photo:Photo
+}
+function renderPerson(person:Person){
+    let result = new Array<string>();
+    result.push(`<p>title: ${person.photo.title}</p>`)
+    result.concat(photoData(person.photo))
+    return result.join("\n");
+}
+function photoData(aPhoto:Photo){
+    return[
+        `<p>location: ${aPhoto.location}</p>`,
+        `<p>date: ${aPhoto.date.toDateString()}</p>`
+    ]
+}
+```
+
+```typescript
+// 重构后
+class Photo{
+    title:string
+    location:string
+    date:Date
+}
+class Person{
+    photo:Photo
+}
+function renderPerson(person:Person){
+    let result = new Array<string>();
+    result.concat(photoData(person.photo))
+    return result.join("\n");
+}
+function photoData(aPhoto:Photo){
+    return[
+        `<p>title: ${aPhoto.title}</p>`,
+        `<p>location: ${aPhoto.location}</p>`,
+        `<p>date: ${aPhoto.date.toDateString()}</p>`
+    ]
+}
+```
+
+
+
+
+
 ## 搬移语句到调用者
+
+> 函数边界发生偏移，如今需要在某些调用点面前表现不同的行为
+>
+> 把不同的行为从函数里挪出，并搬移到其调用处
+
++ 重构名：搬移语句到调用者(Move Statements to Callers)
++ 反向重构: 搬移语句到函数
+
+### 演算
+
++ 若调用点不止一两个，需要把不需要搬移的代码提炼函数
+
+### 操作
+
+```typescript
+class Photo {
+    title: string
+    location: string
+    date: Date
+}
+class Person {
+    photo: Photo
+}
+function renderPerson(person: Person) {
+    let result = new Array<string>();
+    result.concat(photoData(person.photo))
+    return result.join("\n");
+}
+function photoData(aPhoto: Photo) {
+    return [
+        `<p>title: ${aPhoto.title}</p>`,
+        `<p>location: ${aPhoto.location}</p>`,
+        `<p>date: ${aPhoto.date.toDateString()}</p>`
+    ]
+}
+```
+
+```typescript
+class Photo {
+    title: string
+    location: string
+    date: Date
+}
+class Person {
+    photo: Photo
+}
+function renderPerson(person: Person) {
+    let result = new Array<string>();
+    result.push(`<p>title: ${person.photo.title}</p>`)
+    result.concat(photoData(person.photo))
+    return result.join("\n");
+}
+function photoData(aPhoto: Photo) {
+    return [
+        `<p>location: ${aPhoto.location}</p>`,
+        `<p>date: ${aPhoto.date.toDateString()}</p>`
+    ]
+}
+```
+
+
+
 ## 以函数调用取代内联代码
+
+> 将内联代码替代为对一个既有函数的调用
+
++ 重构名：以函数调用取代内联代码(Replace Inline code with Function Call)
+
+### 演算
+
++ 优先使用标准库内的函数
+
+### 操作
+
+```typescript
+function isAppliesToMass(states: string[]) {
+    let appliesToMass = false;
+    for (const s of states) {
+        if (s == "MA") appliesToMass = true;
+    }
+    return appliesToMass;
+}
+```
+
+```typescript
+function isAppliesToMass(states: string[]) {
+    return states.includes("MA");
+}
+```
+
+
+
 ## 移动语句
+
+> 让存在关联的东西一起出现，可以使代码更容易理解
+
++ 重构名：移动语句(Slide Statements)、合并重复的代码片段
+
+### 演算
+
++ 确定待移动的代码片段应该被搬往何处。
++ 条件逻辑的移动
+
+### 操作
+
+```typescript
+const pricingPlan = retrievePricingPlan()
+const order = retrieveOrder()
+let charge;
+const chargePerUnit = pricingPlan.unit;
+```
+
+```typescript
+const pricingPlan = retrievePricingPlan()
+const chargePerUnit = pricingPlan.unit;
+const order = retrieveOrder()
+let charge;
+```
+
+
+
 ## 拆分循环
+
+> 让一个循环只做一件事情
+
++ 重构名：拆分循环(Split Loop)
+
+### 演算
+
++ 循环拆分后，考虑对得到的循环提炼函数
+
+### 操作
+
+```typescript
+let youngest = people[0] ? people[0].age : Infinity;
+let totalSalary = 0;
+for (const p of people) {
+    if (p.age < youngest) youngest = p.age;
+    totalSalary += p.salary;
+}
+let result = `youngestAge:${youngest},totalSalary: ${totalSalary}`;
+```
+
+```typescript
+function totalSalary(){
+    let result = 0;
+    for(const p of people){
+        result += p.salary;
+    }
+    return result;
+}
+function youngest(){
+    let result = people[0]?people[0].age: Infinity;
+    for(const p of people){
+        if(p.age < result) result = p.age;
+    }
+    return result;
+}
+let result = `youngestAge:${youngest},totalSalary: ${totalSalary}`;
+```
+
+
+
 ## 以管道取代循环
+
+> 运用集合管道来处理循环
+
++ 重构名：以管道取代循环(Replace Loop with Pipeline)
+
+### 操作
+
++ 流式操作
+
+### 操作
+
+```typescript
+function totalSalary(){
+    let result = 0;
+    for(const p of people){
+        result += p.salary;
+    }
+    return result;
+}
+function youngest(){
+    let result = people[0]?people[0].age: Infinity;
+    for(const p of people){
+        if(p.age < result) result = p.age;
+    }
+    return result;
+}
+
+let result = `youngestAge:${youngest()},totalSalary: ${totalSalary()}`;
+```
+
+```typescript
+function totalSalary(){
+    return people.reduce((total,p)=>total+=p.salary,0)
+}
+function youngest(){
+    return Math.max(...people.map(p=>p.age))
+}
+
+let result = `youngestAge:${youngest()},totalSalary: ${totalSalary()}`;
+```
+
+
+
 ## 移除死代码
+
+> 一旦代码不再被使用，我们就该立马删除它
+
++ 重构名：移除死代码(Remove Dead Code)
+
+### 演算
+
++ 版本控制器
+
+### 操作
+
+```typescript
+let temp = 0;
+function doSomeThing(){}
+```
+
+```typescript
+
+```
 
 
 
 # Ⅳ 重新组织数据
+
+## 拆分变量
+
+## 字段改名
+
+## 以查询取代派生变量
+
+## 将引用对象改为值对象
+
+## 将值对象改为引用对象
+
+
 
 # Ⅴ 简化条件逻辑
 
