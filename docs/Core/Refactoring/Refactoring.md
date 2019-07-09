@@ -49,6 +49,12 @@ Refactoring
   + [将引用对象改为值对象](#将引用对象改为值对象)
   + [将值对象改为引用对象](#将值对象改为引用对象)
 + 简化条件逻辑
+  + [分解条件表达式](#分解条件表达式)
+  + [合并条件表达式](#合并条件表达式)
+  + [以卫语句取代嵌套条件表达式](#以卫语句取代条件表达式)
+  + [以多态取代条件表达式](#以多态取代条件表达式)
+  + [引入特例](#引入特例)
+  + [引入断言](#引入断言)
 + 重构API
 + 处理继承关系
 
@@ -1706,7 +1712,7 @@ let result = `youngestAge:${youngest()},totalSalary: ${totalSalary()}`;
 ### 操作
 
 ```typescript
-let temp = 0;
+let noUsed = 0;
 function doSomeThing(){}
 ```
 
@@ -1720,17 +1726,191 @@ function doSomeThing(){}
 
 ## 拆分变量
 
+> 某些用途会很自然地导致临时变量被多次赋值，多次赋值会催生多种bug
+>
+> 拆分变量用于拆解多次赋值的临时变量
+
++ 重构名：拆分变量(Split Variable)、分解临时变量
+
+### 演算
+
++ 对输入参数赋值
+
+### 操作
+
+```typescript
+let temp = 2 * (height + width)
+console.log(temp);
+temp = height * width;
+console.log(temp);
+```
+
+```typescript
+const perimeter = 2 * (height + width);
+console.log(perimeter);
+const area = height * width;
+console.log(area)
+```
+
+
+
 ## 字段改名
+
+> 记录结构中的字段可能需要改名，类的字段也一样
+
++ 重构名：字段改名(Rename Field)
+
+### 演算
+
++ 给字段改名
+
+### 操作
+
+```typescript
+class Organization{
+    name:string
+}
+```
+
+```typescript
+// 字段改名
+class Organization{
+    title:string
+}
+```
+
+
 
 ## 以查询取代派生变量
 
+> 对数据的修改常常导致代码的各个部分以丑陋的形式相互耦合
+>
+> 很多时候，完全可以去掉可变数据并不实现
+
++ 重构名：以查询取代临时变量(Replace Derived Variable with Query)
+
+### 演算
+
++ 引入断言
+
+### 操作
+
+```typescript
+class Production{
+    private _discountedTotal:number
+    private _discount:number
+    get discountedTotal(){
+        return this._discountedTotal;
+    }
+    set discountedTotal(aNumber:number){
+        const old = this._discount;
+        this._discount = aNumber;
+        this._discountedTotal += old - aNumber;
+    }
+}
+```
+
+```typescript
+class Production{
+    private _discount:number
+    private _baseTotal:number
+    get discountedTotal(){
+        return this._baseTotal - this._discount;
+    }
+    set discountedTotal(aNumber:number){
+        this._discount = aNumber;
+    }
+}
+```
+
+
+
 ## 将引用对象改为值对象
 
+> 位于内部的对象可以视为引用对象也可以视为值对象，值对象可以随意复制
+>
+> 其视为值对象，就会替换整个内部对象                                                                                                                                                                                                                        
+
++ 重构名：将引用对象改为值对象(Change Reference to Value)
++ 反向重构：将值对象改为引用对象
+
+### 演算
+
++ 分布式系统和并发系统常用
+
+### 操作
+
+```typescript
+class Product{
+    _price:Price
+    applyDiscount(arg:number){
+        this._price.amount -= arg;
+    }
+}
+```
+
+```typescript
+class Product{
+    _price:Price
+    applyDiscount(arg:number){
+        this._price = new Price(this._price.amount - arg)
+    }
+}
+```
+
+
+
 ## 将值对象改为引用对象
+
+> 位于内部的对象可以视为引用对象也可以视为值对象，引用对象用于共享对象
+>
+> 其视为应用对象，只更新其属性    
+
++ 重构名：将值对象改为引用对象(Change Value to Reference)
+
++ 反向重构：将引用对象改为值对象(Change Reference to Value)
+
+### 演算
+
++ 对象共享
+
+### 操作
+
+```typescript
+class Product{
+    _price:Price
+    applyDiscount(arg:number){
+        this._price = new Price(this._price.amount - arg)
+    }
+}
+```
+
+```typescript
+class Product{
+    _price:Price
+    applyDiscount(arg:number){
+        this._price.amount -= arg;
+    }
+}
+```
 
 
 
 # Ⅴ 简化条件逻辑
+
+## 分解条件表达式
+
+## 合并条件表达式
+
+## 以卫语句取代嵌套条件表达式
+
+## 以多态取代条件表达式
+
+## 引入特例
+
+## 引入断言
+
+
 
 # Ⅵ 重构API
 
