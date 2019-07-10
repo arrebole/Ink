@@ -56,6 +56,16 @@ Refactoring
   + [引入特例](#引入特例)
   + [引入断言](#引入断言)
 + 重构API
+  + [将查询函数与修改函数分离](#将查询函数与修改函数分离)
+  + [函数参数化](#函数参数化)
+  + [移除标记参数](#移除标记参数)
+  + [保持对象完整](#保持对象完整)
+  + [以查询取代参数](#以查询取代参数)
+  + [以参数取代查询](#以参数取代查询)
+  + [移除预设函数](#移除预设函数)
+  + [以工厂函数取代构造函数](#以工厂函数取代构造函数)
+  + [以命令取代函数](#以命令取代函数)
+  + [以函数取代命令](#以函数取代命令)
 + 处理继承关系
 
 
@@ -1896,19 +1906,364 @@ class Product{
 
 
 
+
+
 # Ⅴ 简化条件逻辑
 
 ## 分解条件表达式
 
+> 条件逻辑会使代码更难阅读。
+>
+> 将复杂的条件逻辑分解为多个独立的函数。它是提炼函数的一个应用场景
+
++ 重构名：分解条件表达式(Decompose Conditional)
+
+### 演算
+
++ 分支条件分解为新函数
+
+### 操作
+
+```typescript
+if (!aDate.isBefore(plan.summerStart) && aDate.isAfter(plan.summerEnd))
+    charge = quantity * plan.summerRate;
+else
+    charge = quantity * plan.regularRate + plan.regularServiceChargr;
+```
+
+```typescript
+// 重构后
+charge = summer() ? summerCharge() : regularCharge()
+
+function summer() {
+    return !aDate.isBefore(plan.summerStart) && aDate.isAfter(plan.summerEnd);
+}
+function summerCharge() {
+    return quantity * plan.summerRate;
+}
+function regularCharge() {
+    return quantity * plan.regularRate + plan.regularServiceChargr;
+}
+```
+
+
+
 ## 合并条件表达式
+
+> 检查条件各不相同，最终行为却一致，就应该用逻辑或、逻辑与
+>
+> 将它们合并为一个条件表达式
+
++ 重构名：合并条件表达式(Consolidate Conditional Expression)
+
+### 演算
+
++ 如果检查间彼此独立就不该合并
+
+### 操作
+
+```typescript
+function disabilityAmount() {
+    if (anEmployee.seniority < 2) return 0;
+    if (anEmployee.monthsDisabled > 12) return 0;
+    if (anEmployee.isPartTime) return 0;
+    return 1;
+}
+```
+
+```typescript
+// 重构后
+function disabilityAmount() {
+    if (isNotEligibleForDisability()) return 0;
+    return 1;
+}
+function isNotEligibleForDisability() {
+    return (anEmployee.seniority < 2)
+    || (anEmployee.monthsDisabled > 12)
+    || (anEmployee.isPartTime);
+}
+```
+
+
 
 ## 以卫语句取代嵌套条件表达式
 
+> 条件风格为、只有一条分支是正常行为，另一个是异常情况
+>
+> 如果某个条件极其罕见，就应该单独检查该条件，并在该条件为真时立即从函数中返回
+
++ 重构名：以卫语句取代嵌套条件表达式(Replace Nested Conditional with Guard Clauses)
+
+### 演算
+
+### 操作
+
+```typescript
+function adjustedCapital(anInstrument: Instrument) {
+    let result = 0;
+    if (anInstrument.capital > 0) {
+        if (anInstrument.interestRate > 0 && anInstrument.duration > 0) {
+            result = (anInstrument.income / anInstrument.duration) 
+                * anInstrument.adjusementFactor;
+        }
+    }
+    return result;
+}
+```
+
+```typescript
+// 重构后
+function adjustedCapital(anInstrument: Instrument) {
+    if ( anInstrument.capital          <= 0
+        || anInstrument.interestRate   <= 0
+        || anInstrument.duration       <= 0 ) return 0;
+    
+    return (anInstrument.income / anInstrument.duration) 
+        * anInstrument.adjusementFactor;
+}
+```
+
+
+
 ## 以多态取代条件表达式
+
+> 面对复杂条件逻辑，多态是改善这种情况的有力工具
+
++ 重构名：以多态取代条件表达式(Replace Conditional with Polymorphism)
+
+### 演算
+
++ 多态处理变体逻辑
+
+### 操作
+
+```typescript
+type birdData = {
+    type: string,
+    numberOfCocnuts: number,
+    voltage: number,
+    isNailed: boolean,
+    name:string
+}
+
+function plumages(birfs: birdData[]) {
+    return new Map(birfs.map(b => [b.name, plumage(b)]))
+}
+function speeds(birfs: birdData[]) {
+    return new Map(birfs.map(b => [b.name, airSpeedVelocity(b)]))
+}
+function plumage(birfs: birdData) {
+    switch (birfs.type) {
+        case "EuropeanSwallow":
+            return "average";
+        case "AfricanSwallow":
+            return (birfs.numberOfCocnuts > 2) ? "tired" : "average";
+        case "NorwegianBlueParrot":
+            return (birfs.voltage > 100) ? "scorched" : "beautiful";
+        default:
+            return "unknown";
+    }
+}
+function airSpeedVelocity(birfs: birdData) {
+    switch (birfs.type) {
+        case "EuropeanSwallow":
+            return 35;
+        case "AfricanSwallow":
+            return 40 - 2 * birfs.numberOfCocnuts;
+        case "NorwegianBlueParrot":
+            return (birfs.isNailed) ? 0 : 10 + birfs.voltage / 10;
+        default:
+            return null;
+    }
+}
+```
+
+
+
+```typescript
+// 重构后
+type birdData = {
+    type: string,
+    numberOfCocnuts: number,
+    voltage: number,
+    isNailed: boolean,
+    name:string
+}
+abstract class Bird {
+    constructor(birdObj: birdData) {
+        this.name = birdObj.name
+        this.type = birdObj.type
+        this.numberOfCocnuts = birdObj.numberOfCocnuts
+        this.voltage = birdObj.voltage
+    }
+    name: string;
+    type: string;
+    numberOfCocnuts: number;
+    voltage: number;
+    isNailed: boolean;
+    abstract get plumage(): string;
+    abstract get airSpeedVelocity(): number;
+}
+class EuropeanSwallow extends Bird {
+    get plumage(): string {
+        return "average";
+    }
+    get airSpeedVelocity(): number {
+        return 35;
+    }
+}
+class AfricanSwallow extends Bird {
+    get plumage(): string {
+        return (this.numberOfCocnuts > 2) ? "tired" : "average";
+    }
+    get airSpeedVelocity(): number {
+        return 40 - 2 * this.numberOfCocnuts;
+    }
+}
+class NorwegianBlueParrot extends Bird {
+    get plumage(): string {
+        return (this.voltage > 100) ? "scorched" : "beautiful";
+    }
+    get airSpeedVelocity(): number {
+        return (this.isNailed) ? 0 : 10 + this.voltage / 10;
+    }
+}
+
+function createBird(bird: birdData): Bird {
+    switch (bird.type) {
+        case "EuropeanSwallow":
+            return new EuropeanSwallow(bird);
+        case "AfricanSwallow":
+            return new AfricanSwallow(bird);
+        case "NorwegianBlueParrot":
+            return new NorwegianBlueParrot(bird);
+        default:
+            throw new Error("error");
+    }
+}
+
+function plumages(birds: birdData[]) {
+    return new Map(birds
+                   .map(b => createBird(b))
+                   .map(bird => [bird.name, bird.plumage]))
+}
+
+function speeds(birds: birdData[]) {
+    return new Map(birds
+                   .map(b => createBird(b))
+                   .map(bird => [bird.name, bird.airSpeedVelocity]))
+}
+```
+
+
 
 ## 引入特例
 
+> 代码中有对多处以同样方式应对同一个特殊值，使用特例模式
+>
+> 创建特例元素，用函数调用取代特例检查
+
++ 重构名: 引入特例(Introduce Special Case)
+
+### 演算
+
++ 使用对象字面量
++ 使用变换
+
+### 操作
+
+```typescript
+class Site {
+    customer: Customer
+}
+class Customer {
+    _name: string
+    get name() { return this._name }
+}
+
+let aCustomer = site.customer;
+if (aCustomer.name == "unknown") {
+
+}
+```
+
+```typescript
+function isUnkown(arg: { isUnkown(): boolean }) {
+        return arg.isUnkown()
+    }
+class Site {
+    customer: Customer
+}
+class Customer {
+    _name: string
+    get name() { return this._name }
+    isUnkown() {
+        return false;
+    }
+}
+function createUnkownCustomer() {
+    return {
+        name: "isUnkown",
+        isUnkown() {
+            return true;
+        }
+    }
+}
+
+let aCustomer = site.customer;
+if (isUnkown(aCustomer)) {
+    //...
+}
+```
+
+
+
+
+
 ## 引入断言
+
+> 断言是一个条件表达式，应该总是为真，
+>
+> 断言是帮助追踪bug的最后一招，在断言绝对不会失败的时候，才会使用
+
++ 重构名：引入断言(Introduce Assertion)
+
+### 演算
+
++ 使用断言明确标明这些假设
+
+### 操作
+
+```typescript
+class Customer {
+    private _discountRate: number
+    set discountRate(aNumber: number) {
+        this._discountRate = aNumber
+    }
+    applyDiscount(aNumber: number) {
+        return (this._discountRate)
+            ? aNumber - (this._discountRate * aNumber)
+        : aNumber
+    }
+}
+```
+
+```typescript
+class Customer {
+    private _discountRate: number
+    set discountRate(aNumber: number) {
+        console.assert(aNumber == null || aNumber >= 0, "assert fail")
+        this._discountRate = aNumber
+    }
+    applyDiscount(aNumber: number) {
+        console.assert(this._discountRate >= 0, "assert fail")
+        return aNumber - (this.discountRate * aNumber)
+
+    }
+}
+```
+
+
 
 
 
