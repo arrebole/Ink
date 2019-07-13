@@ -2269,5 +2269,476 @@ class Customer {
 
 # Ⅵ 重构API
 
+## 将查询函数与修改函数分离
+
+> 任何有返回值的函数，都不应该有看得到的副作用。
+>
+> 既有返回值又有副作用的函数，我们试图将查询动作从修改动作中分离
+
++ 重构名：将查询函数与修改函数分离(Separate Query from Modifier)
+
+### 演算
+
++ 去除所有造成副作用的语句
+
+### 操作
+
+```typescript
+function alertForMiscreant(people: string[]) {
+    for (const p of people) {
+        if (p == "Don") {
+            setOffAlarms();
+            return "Don";
+        }
+        if (p == "John") {
+            setOffAlarms();
+            return "John"
+        }
+    }
+    return "";
+}
+```
+
+```typescript
+// 重构后
+function alertForMiscreant(people: string[]) {
+    if (findMiscreant(people) != "") setOffAlarms();
+}
+function findMiscreant(people: string[]): string {
+    for (const p of people) {
+        if (p == "Don") return "Don";
+        if (p == "John") return "John"
+    }
+    return "";
+}
+```
+
+
+
+## 函数参数化
+
+> 如果发现两个函数逻辑非常相似，只是字面值不同，可以将其合并成一个函数。
+>
+> 以参数的形式传入不同的值，从而消除重复
+
++ 重构名: 函数参数化(Parameterize Function)、令函数携带参数
+
+### 演算
+
++ 从一组相似的函数中选择一个
+
+### 操作
+
+```typescript
+function baseCharge(usage: number) {
+    if (usage < 0) return -1
+    const amount =
+          bottomBand(usage) * 0.03
+    + middleBand(usage) * 0.05
+    + topBand(usage) * 0.07;
+    return amount;
+}
+
+function bottomBand(usage: number) {
+    return Math.min(usage, 100);
+}
+function middleBand(usage: number) {
+    return usage > 100 ? Math.min(usage, 200) - 100 : 0;
+}
+function topBand(usage: number) {
+    return usage > 200 ? usage - 200 : 0;
+}
+```
+
+```typescript
+// 重构后
+function baseCharge(usage: number) {
+    if (usage < 0) return -1
+    const amount =
+          withinBand(usage, 100) * 0.03
+    + withinBand(usage, 100, 200) * 0.05
+    + withinBand(usage, 200, Infinity) * 0.07;
+    return amount;
+}
+
+function withinBand(usage: number, bottom?: number, top?: number) {
+    return usage > bottom ? Math.min(usage, top) - bottom : 0;
+}
+```
+
+## 移除标记参数
+
+> 传入标记参数控制函数内部的控制流，会使代码混乱、应将其分解。
+
++ 重构名：(Remove Flag Argument)、以明确函数取代参数
+
+### 演算
+
++ 针对参数，新建明确的函数
+
+### 操作
+
+```typescript
+function deliveryDate(anOrder, isRush: boolean) {
+    if (isRush) {
+        let deliveryTime;
+        if (["MA", "CT"].includes(anOrder.deliveryState)) deliveryTime = 1;
+        else if (["NY", "NH"].includes(anOrder.deliveryState)) deliveryTime = 2;
+        else deliveryTime = 3;
+        return anOrder.placedOn.plusDays(1 + deliveryTime);
+    } else {
+        let deliveryTime;
+        if (["MA", "CT", "NY"].includes(anOrder.deliveryState)) deliveryTime = 2;
+        else if (["ME", "NH"].includes(anOrder.deliveryState)) deliveryTime = 3;
+        else deliveryTime = 4;
+        return anOrder.placedOn.plusDays(2 + deliveryTime);
+    }
+}
+```
+
+```typescript
+// 重构后
+function rushDeliveryDate(anOrder){
+    let deliveryTime;
+    if (["MA", "CT"].includes(anOrder.deliveryState)) deliveryTime = 1;
+    else if (["NY", "NH"].includes(anOrder.deliveryState)) deliveryTime = 2;
+    else deliveryTime = 3;
+    return anOrder.placedOn.plusDays(1 + deliveryTime);
+}
+function regularDeliveryDate(anOrder){
+    let deliveryTime;
+    if (["MA", "CT", "NY"].includes(anOrder.deliveryState)) deliveryTime = 2;
+    else if (["ME", "NH"].includes(anOrder.deliveryState)) deliveryTime = 3;
+    else deliveryTime = 4;
+    return anOrder.placedOn.plusDays(2 + deliveryTime);
+}
+```
+
+
+
+## 保持对象完整
+
+> 从一个记录结构中导出几个值，然后将这几个值一起传递给一个函数，不如直接将整条记录传递给这个函数。
+
++ 重构名：保持对象完整(Preserve Whole Object)
+
+### 演算
+
++ 会产生一定依赖性
+
+### 操作
+
+```typescript
+const low = aBoom.daysTempRange.low;
+const high = aBoom.daysTempRange.hight;
+if(aplan.withinRange(low,high)){
+    console.log("room temperature went outside range\n");
+}
+```
+
+```typescript
+if(aplan.withinRange(aBoom.daysTempRange)){
+    console.log("room temperature went outside range\n");
+}
+```
+
+
+
+## 以查询取代参数
+
+> 如果调用函数时传入了一个值，而这个值由函数自己来获得也是同样容易，这就是重复。
+>
+> 以查询取代零时变量的应用场景
+
++ 重构名：以查询取代参数(Replace Parameter with Query)
++ 反向重构：以参数取代查询
+
+### 演算
+
++ 从一个参数推导出另一个参数
+
+### 操作
+
+```typescript
+class Order {
+    quantity: number
+    itemPrice: number
+    get finalPrice() {
+        const basePrice = this.quantity * this.itemPrice;
+        let discountLevel;
+        if (this.quantity > 100) discountLevel = 2;
+        else discountLevel = 1;
+        return this.discountedPrice(basePrice, discountLevel)
+    }
+    discountedPrice(basePrice: number, discountLevel: number) {
+        switch (discountLevel) {
+            case 1: return basePrice * 0.95;
+            case 2: return basePrice * 0.9;
+        }
+    }
+}
+```
+
+```typescript
+class Order {
+    quantity: number
+    itemPrice: number
+    get finalPrice() {
+        const basePrice = this.quantity * this.itemPrice;
+        return this.discountedPrice(basePrice)
+    }
+    get discountLevel() {
+        return this.quantity > 100 ? 2 : 1;
+    }
+    discountedPrice(basePrice: number) {
+        switch (this.discountLevel) {
+            case 1: return basePrice * 0.95;
+            case 2: return basePrice * 0.9;
+        }
+    }
+}
+```
+
+
+
+## 以参数取代查询
+
+> 为了让目标函数不再依赖于某个元素，把这个元素的值以参数形式传递给该函数
+
++ 重构名：以参数取代查询(Replace Query with Parameter)
++ 反向重构：以查询取代参数
+
+### 演算
+
++ 会增加调用者的复杂度
+
+### 操作
+
+```typescript
+class HeatingPlan {
+    private _max: number
+    private _min: number
+    get targetTemperature() {
+        if (thermostat.selectedTemperature > this._max) return this._max
+        else if (thermostat.selectedTemperature < this._min) return this._min
+        else return thermostat.selectedTemperature;
+    }
+}
+```
+
+```typescript
+class HeatingPlan {
+    private _max: number
+    private _min: number
+    targetTemperature(selectedTemperature:number) {
+        if (selectedTemperature > this._max) return this._max
+        else if (selectedTemperature < this._min) return this._min
+        else return selectedTemperature;
+    }
+}
+```
+
+
+
+## 移除预设函数
+
+> 如果不希望在对象创建之后此字段还有机会被改变，那就不要为它提供设值函数
+
++ 重构名：移除设值函数(Remove Setting Method)
+
+### 演算
+
++ 将应用对象改为值对象
+
+### 操作
+
+```typescript
+class Person{
+    private _name: string
+    get name(){
+        return this._name;
+    }
+    set name(aName:string){
+        this._name = aName;
+    }
+}
+```
+
+```typescript
+class Person{
+    private _name: string
+    get name(){
+        return this._name;
+    }
+}
+```
+
+
+
+## 以工厂函数取代构造函数
+
+> 绕开new，实现松耦合
+
++ 重构名：以工厂函数取代构造函数(Replace Constructor with Factory Function)
+
+### 演算
+
++ 设计模式-工厂方法、抽象工厂
+
+### 操作
+
+```typescript
+class Employee {
+    private _name: string
+    private _typeCode: number
+    constructor(name: string, typeCode: number) {
+        this._name = name;
+        this._typeCode = typeCode
+    }
+    get name(){
+        return this._name;
+    }
+    get type(){
+        return this._typeCode;
+    }
+}
+```
+
+```typescript
+class Employee {
+    private _name: string
+    private _typeCode: string
+    constructor(name: string, typeCode: string) {
+        this._name = name;
+        this._typeCode = typeCode
+    }
+    get name(){
+        return this._name;
+    }
+    get type(){
+        return this._typeCode;
+    }
+}
+
+function createEngineer(name:string):Employee{
+    return new Employee(name,'E')
+}
+```
+
+
+
+## 以命令取代函数
+
+> 将函数封装成自己的对象，借助命令对象的方法和字段把复杂函数拆解开
+
++ 重构名：以命令取代函数(Replace Function with Command)
++ 反向重构：以函数取代命令
+
+### 演算
+
++ 函数柯里化
+
+### 操作
+
+```typescript
+function score(candidate, medicalExam, scoringGuide) {
+    let result = 0;
+    let healthLevel = 0;
+    let highMedicalRiskFlag = false;
+
+    if (medicalExam.isSmoker) {
+        healthLevel += 10;
+        highMedicalRiskFlag = true;
+    }
+
+    let certificationGrade = "regular"
+    if (scoringGuide.stateWithLowCertification(candidate.originState)) {
+        certificationGrade = "low";
+        result -= 5;
+    }
+    result -= Math.max(healthLevel - 5, 0);
+    return result;
+}
+```
+
+```typescript
+class Score {
+    private candidate;
+    private medicalExam;
+    private scoringGuide;
+    private healthLevel;
+    private result;
+    private highMedicalRiskFlag;
+    private certificationGrade;
+
+    constructor(candidate, medicalExam, scoringGuide) {
+        this.candidate = candidate;
+        this.medicalExam = medicalExam;
+        this.scoringGuide = scoringGuide;
+    }
+    scroeSmoking() {
+        if (this.medicalExam.isSmoker) {
+            this.healthLevel += 10;
+            this.highMedicalRiskFlag = true;
+        }
+    }
+    execute() {
+        this.result = 0;
+        this.healthLevel = 0;
+        this.highMedicalRiskFlag = false;
+
+        this.scroeSmoking()
+        this.certificationGrade = "regular"
+        if (this.scoringGuide.stateWithLowCertification(this.candidate.originState)) {
+            this.certificationGrade = "low";
+            this.result -= 5;
+        }
+        this.result -= Math.max(this.healthLevel - 5, 0);
+        return this.result;
+    }
+}
+
+function score(candidate, medicalExam, scoringGuide) {
+    return new Score(candidate, medicalExam, scoringGuide).execute()
+}
+```
+
+
+
+## 以函数取代命令
+
+> 如果这个函数不是太复杂，那么命令对象可能显得费而不惠
+
++ 重构名：以函数取代命令(Replace Command with Function)
++ 反向重构：以命令取代函数
+
+### 演算
+
++ 命令足够小，变为函数更适合
+
+### 操作
+
+```typescript
+class ChargeCalculator {
+    constructor(customer, usage) {
+        this.customer = customer;
+        this.usage = usage
+    }
+    private customer;
+    private usage;
+    execute() {
+        return this.customer.rate * this.usage;
+    }
+}
+```
+
+```typescript
+function chargeCalculator(customer, usage){
+    return customer.rate * usage;
+}
+```
+
+
+
 # Ⅶ 处理继承关系
 
