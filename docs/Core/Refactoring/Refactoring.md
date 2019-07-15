@@ -67,8 +67,17 @@ Refactoring
   + [以命令取代函数](#以命令取代函数)
   + [以函数取代命令](#以函数取代命令)
 + 处理继承关系
-
-
+  + [函数上移](#函数上移)
+  + [字段上移](#字段上移)
+  + [构造函数本体上移](#构造函数本体上移)
+  + [函数下移](#函数下移)
+  + [字段下移](#字段下移)
+  + [以子类取代类型码](#以子类取代类型码)
+  + [移除子类](#移除子类)
+  + [提炼超类](#提炼超类)
+  + [折叠继承体系](#折叠继承体系)
+  + [以委托取代子类](#以委托取代子类)
+  + [以委托取代超类](#以委托取代超类)
 
 
 
@@ -2741,4 +2750,497 @@ function chargeCalculator(customer, usage){
 
 
 # Ⅶ 处理继承关系
+
+## 函数上移
+
+> 如果某个函数在各个子类中的函数体都相同，这就是最显而易见的函数上移适用场合。
+
++ 重构名：函数上移(Pull Up Method)
++ 反向重构：函数下移
+
+### 演算
+
++ 子类重复定义
+
+### 操作
+
+```typescript
+abstract class Party {
+    protected monthlyCost: number
+}
+class Employee extends Party {
+    get annualCost() {
+        return this.monthlyCost;
+    }
+}
+class Department extends Party {
+    get totalAnnualCost() {
+        return this.monthlyCost * 12;
+    }
+}
+```
+
+```typescript
+abstract class Party {
+    protected monthlyCost: number
+    get annualCost() {
+        return this.monthlyCost;
+    }
+}
+class Employee extends Party {}
+class Department extends Party {}
+```
+
+
+
+## 字段上移
+
+> 将子类重复的字段移至父类，避免重复的特性
+
++ 重构名：字段上移(Pull Up Field)
++ 反向重构：字段下移
+
+### 演算
+
++ 没有父类可以提炼父类
+
+### 操作
+
+```typescript
+abstract class Party {}
+class Employee extends Party {
+    protected monthlyCost: number
+}
+class Department extends Party {
+    protected monthlyCost: number
+}
+```
+
+```typescript
+abstract class Party {
+    protected monthlyCost: number
+}
+class Employee extends Party {}
+class Department extends Party {}
+```
+
+
+
+## 构造函数本体上移
+
+> 将子类中的重复的构造函数行为，移到父类
+
++ 重构名：构造函数本体上移(Pull Up Constructor Body)
+
+### 演算
+
++ 没有父类可以提炼父类
+
+### 操作
+
+```typescript
+abstract class Party {
+    protected monthlyCost: number
+}
+class Employee extends Party {
+    constructor(aCost: number) {
+        super()
+        this.monthlyCost = aCost;
+    }
+}
+class Department extends Party {
+    constructor(aCost: number) {
+        super()
+        this.monthlyCost = aCost;
+    }
+}
+```
+
+```typescript
+// 重构后
+abstract class Party {
+    protected monthlyCost: number
+    constructor(aCost: number) {
+        this.monthlyCost = aCost;
+    }
+}
+class Employee extends Party {}
+class Department extends Party {}
+```
+
+
+
+## 函数下移
+
+> 如果超类中的某个函数只与少数几个子类有关系，那么最好将函数移到子类。
+
++ 重构名：函数下移 (Push Down Method)
++ 反向重构：函数上移
+
+### 演算
+
++ 超类明显知道哪些子类需要这些函数
+
+### 操作
+
+```typescript
+abstract class Party {
+    protected monthlyCost: number
+    get annualCost() {
+        return this.monthlyCost;
+    }
+}
+class Employee extends Party {}
+class Department extends Party {}
+```
+
+
+
+```typescript
+abstract class Party {
+    protected monthlyCost: number
+}
+class Employee extends Party {
+    get annualCost() {
+        return this.monthlyCost;
+    }
+}
+class Department extends Party {}
+```
+
+
+
+## 字段下移
+> 如果某个字段只被少数几个子类用到，就将其搬移到需要该字段的子类中
+
++ 重构名：字段下移(Push Down Field)
++ 反向重构：字段上移动
+
+### 演算
+
+### 操作
+
+```typescript
+abstract class Employee{
+    private quota: string
+}
+class Engineer extends Employee{}
+class Salesman extends Employee{}
+```
+
+
+```typescript
+abstract class Employee{}
+class Engineer extends Employee{}
+class Salesman extends Employee{
+    private quota: string
+}
+```
+
+
+
+## 以子类取代类型码
+
+> 表现分类关系
+
++ 重构名：以子类取代类型码(Replace Type Code With Subclass)
++ 反向重构：移除子类
+
+### 演算
+
++ 设计模式——策略模式
+
+### 操作
+
+```typescript
+class Employee{
+    constructor(name, type){}
+}
+function createEmployee(name,type){
+    return new Employee(name,type)
+}
+```
+
+```typescript
+class Employee{
+    constructor(name){}
+}
+class Engineer extends Employee{}
+class SaleSman extends Employee{}
+
+function createEmployee(name,type):Employee{
+    switch(type){
+        case "Engineer": return new Engineer(name)
+        case "SaleSman":return new SaleSman(name)
+        default: throw new Error()
+    }
+}
+```
+
+
+
+## 移除子类
+
+> 如果子类的用处太少，就不值得存在了
+
++ 重构名：移除子类(Remove Subclass)
++ 反向重构：以子类取代类型码
+
+### 演算
+
+### 操作
+
+```typescript
+abstract class Person {
+    abstract get genderCode(): string
+}
+class Male extends Person {
+    get genderCode(): string {
+        return "M"
+    }
+}
+class Female extends Person {
+    get genderCode(): string {
+        return "F"
+    }
+}
+```
+
+
+
+```typescript
+class Person {
+    private _genderCode: string
+    get genderCode(): string {
+        return this._genderCode
+    }
+}
+```
+
+
+
+## 提炼超类
+> 如果看到两个类在做相似的事，那么可以利用继承机制，把它们的相似之处提炼到超类
+
++ 重构名：提炼超类(Extract Superclass)
+
+### 演算
+
+### 操作
+
+```typescript
+class Department {
+    private _annualCost;
+    private _name;
+    private _headCount;
+    get totalAnnualCost() {
+        return this.totalAnnualCost;
+    }
+    get name() {
+        return this._name
+    }
+    get headCount() {
+        return this._headCount
+    }
+}
+class Employee {
+    private _id;
+    private _name;
+    private _annualCost;
+    get name() {
+        return this._name;
+    }
+    get id() {
+        return this._id
+    }
+    get annualCost() {
+        return this._annualCost
+    }
+}
+```
+
+
+
+```typescript
+abstract class Party {
+    private _name;
+    private _annualCost;
+    get name() {
+        return this._name;
+    }
+    get annualCost() {
+        return this._annualCost
+    }
+}
+class Department extends Party {
+    private _headCount;
+    get headCount() {
+        return this._headCount
+    }
+}
+class Employee extends Party {
+    private _id;
+    get id() {
+        return this._id
+    }
+}
+```
+
+
+
+## 折叠继承体系
+
+> 一个类与其超类已经没有多大区别，不值得再作为独立的类存在
+
++ 重构名：折叠继承体系(Collapse Hierarchy)
+
+### 演算
+
+### 操作
+
+```typescript
+abstract class Employee{}
+class Salesman extends Employee{}
+```
+
+
+
+```typescript
+class Employee{}
+```
+
+
+
+## 以委托取代子类
+
+> 继承给类之间引入了非常紧密的关系，对于不同的变化原因，我们可以委托给不同的类。
+
++ 重构名：以委托取代子类(Replace Subclass with Delegate)
+
+### 演算
+
++ 取代继承体系
+
+### 操作
+
+```typescript
+
+class Booking{
+    constructor(show,date){
+        this._show = show
+        this._date = date
+    }
+    protected _show;
+    protected _date;
+    protected isPeakDay;
+
+    get hasTalkback(){
+        return this._show.hasOwnProperty('talkback') && !this.isPeakDay;
+    }
+
+    get basePrice(){
+        let result = this._show.price;
+        if(this.isPeakDay) result +=Math.round(result *0.15);
+        return result;
+    }
+}
+
+class PremiumBooking extends Booking{
+    constructor(show,date,extras){
+        super(show,date);
+        this._extras = extras
+    }
+    private _extras;
+
+    get hasTalkback(){
+        return this._show.hasOwnProperty('talkback')
+    }
+
+    get basePrice(){
+        return Math.round(super.basePrice + this._extras.premiumFee);
+    }
+}
+```
+
+
+
+```typescript
+function createPremiumBooking(show,date,extras){
+    const result = new Booking(show,date)
+    result._bePremium(extras)
+    return result;
+}
+class Booking{
+    constructor(show,date){
+        this._show = show
+        this._date = date
+    }
+    _show;
+    protected _date;
+    protected isPeakDay;
+    protected _premiumDelegate:PremiumBookingDelegate;
+
+    _bePremium(extras){
+        this._premiumDelegate = new PremiumBookingDelegate(this,extras)
+    }
+    get hasTalkback(){
+        return (this._premiumDelegate)
+            ?this._premiumDelegate.hasTalkback
+        :this._show.hasOwnProperty('talkback') && !this.isPeakDay;
+    }
+
+    get basePrice(){
+        return (this._premiumDelegate)
+            ?this._premiumDelegate.basePrice
+        :this._privateBasePrice
+    }
+    get _privateBasePrice(){
+        let result = this._show.price;
+        if(this.isPeakDay) result += Math.round(result * 0.15)
+        return result;
+    }
+}
+class PremiumBookingDelegate{
+    constructor(hostBooking,extras){
+        this._host = hostBooking;
+        this._extras = extras
+    }
+    protected _host:Booking;
+    protected _extras;
+
+    get hasTalkback(){
+        return this._host._show.hasOwnProperty('talkback')
+    }
+    get basePrice(){
+        return Math.round(this._host._privateBasePrice + this._extras.premiumFee);
+    }
+}
+```
+
+
+
+## 以委托取代超类
+
+> 如果超类的一些函数对于子类并不使用，就不应该通过继承获得超类的功能
+
++ 重构名：以委托取代超类(Replace Superclass With Delegate)
+
+### 演算
+
+### 操作
+
+```typescript
+class List{}
+class Stack extends List{}
+```
+
+```typescript
+class List{}
+class Stack {
+    constructor(){
+        this.storage = new List()
+    }
+    private storage:List
+}
+```
 
