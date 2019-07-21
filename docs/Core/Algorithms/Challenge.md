@@ -8,31 +8,29 @@
 
 ## Table of Contents
 
-**Brute-Forc**
+#### Brute-Forc
 
-+ Sequential Search
-  + [Plus-One](#Plus-One)
++ [Plus-One](#Plus-One)
 + [Find-pivot-index](#Find-pivot-index)
-  + [Largest Number At Least Twice of Others]()
-+ Breadth-first Search
-  + [number-of-islands](#number-of-islands)
-  + [open-the-lock](#open-the-lock)
-  + [perfect-squares](#perfect-squares)
-+ Deepth-first Search
-  + [number-of-islands](#number-of-islands)
-  + [target-sum](#target-sum)
-  + [clone-graph](#clone-graph)
-  + [keysAndRooms](#keysAndRooms)
++ [Largest Number At Least Twice of Others]()
++ [DiagonalTraverse]()
+
++ [number-of-islands](#number-of-islands)
++ [open-the-lock](#open-the-lock)
++ [perfect-squares](#perfect-squares)
+
++ [number-of-islands](#number-of-islands)
++ [target-sum](#target-sum)
++ [clone-graph](#clone-graph)
++ [keysAndRooms](#keysAndRooms)
 
 
 
 ## Brute-Forc
 
-### Sequential Search
+### Plus-One
 
-#### Plus-One
-
-> 题目链接 [leetcode.66](https://leetcode.com/problems/plus-one/)
+> [leetcode.66](https://leetcode.com/problems/plus-one/)
 >
 > 暴力法—顺序查找
 
@@ -69,11 +67,105 @@ class Solution {
 
 
 
+### clone-graph
+
+> [leetcode.133](https://leetcode.com/problems/clone-graph/)
+>
+> 暴力法-深度优先搜索
+
+```c++
+class Solution {
+ public:
+  Node* cloneGraph(Node* node) { return this->clone(node); }
+
+ private:
+  unordered_map<int, Node*> seen;
+  Node* clone(Node* node) {
+    if (node == nullptr) return node;
+    if (seen.count(node->val)) return seen[node->val];
+
+    Node* newNode = createNode(node);
+    int size = node->neighbors.size();
+    for (int i = 0; i < size; i++) {
+      newNode->neighbors.push_back(clone(node->neighbors[i]));
+    }
+    return newNode;
+  }
+  Node* createNode(Node* node) {
+    Node* newNode = new Node();
+    newNode->val = node->val;
+    seen[node->val] = newNode;
+    return newNode;
+  }
+};
+```
 
 
-#### Find-pivot-index
 
-> 题目链接 [leetcode.724](https://leetcode.com/problems/find-pivot-index/)
+### Number of Islands
+
+> [leetcode.200](https://leetcode.com/problems/number-of-islands/)
+>
+> 暴力法-深度优先搜索，栈。
+
+```javascript
+/**
+ * @param {character[][]} grid
+ * @return {number}
+ */
+function numIslands(grid) {
+    const MAX_ROW = grid.length
+    if (MAX_ROW <= 0) return 0;
+    const MAX_COL = grid[0].length;
+    const ISLAND = "1"
+    let count = 0;
+
+    for (let i = 0; i < MAX_ROW; i++) {
+        for (let j = 0; j < MAX_COL; j++) {
+            if (grid[i][j] == ISLAND) {
+                dfsTravelIsLands(grid, [i, j])
+                count++;
+            }
+        }
+    }
+    return count;
+};
+
+/**
+ * @param {character[][]} grid
+ * @param {number[]} entrance
+ */
+function dfsTravelIsLands(grid, entrance) {
+    const SEA = "0";
+    let [i, j] = entrance;
+    if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] == "1") {
+        grid[i][j] = SEA;
+        dfsTravelIsLands(grid, [i + 1, j]);
+        dfsTravelIsLands(grid, [i - 1, j]);
+        dfsTravelIsLands(grid, [i, j + 1]);
+        dfsTravelIsLands(grid, [i, j - 1]);
+    }
+    return;
+}
+```
+
+
+
+### DiagonalTraverse
+
+> [leetcode.498](https://leetcode.com/problems/diagonal-traverse/)
+>
+> 暴力法—顺序查找
+
+```
+
+```
+
+
+
+### Find-pivot-index
+
+> [leetcode.724](https://leetcode.com/problems/find-pivot-index/)
 >
 > 暴力法—顺序查找
 
@@ -101,9 +193,11 @@ function arraySum(aArray, start, end) {
 }
 ```
 
-#### Largest Number At Least Twice of Others
 
-> 题目链接 [leetcode.747](https://leetcode.com/problems/largest-number-at-least-twice-of-others/)
+
+### Largest Number At Least Twice of Others
+
+> [leetcode.747](https://leetcode.com/problems/largest-number-at-least-twice-of-others/)
 >
 > ideas：暴力法-顺序查找、(变治法-预排序)
 
@@ -152,119 +246,9 @@ class Solution {
 
 
 
+### open-the-lock
 
-
-
-
-### Breadth-first search
-
-#### number-of-islands
-
->题目链接 [leetcode.200](https://leetcode.com/problems/number-of-islands/)
->
->暴力法-广度优先搜索，队列。
-
-```javascript
-/**
- * @param {String[][]} grid
- * @return {Number}
- */
-function numIslands(grid) {
-    if (grid.length <= 0) {
-        return 0;
-    }
-    const LAND = "1";
-    const MAX_COL = grid[0].length;
-    const MAX_ROW = grid.length;
-
-    let lands = 0;
-    for (let row = 0; row < MAX_ROW; row++) {
-        for (let col = 0; col < MAX_COL; col++) {
-            if (grid[row][col] == LAND) {
-                bfsTravelIsLands(grid, [row, col]);
-                lands++;
-            }
-        }
-    }
-    return lands;
-};
-
-
-/**
- * @param {String[][]} grid 地图
- * @param {landPoint} entrance 入口坐标
- * @description 广度优先搜索将 "1"一块搜索完并标记为"0"
- */
-function bfsTravelIsLands(grid, entrance) {
-    const MAX_COL = grid[0].length;
-    const MAX_ROW = grid.length;
-
-    let queue = [];
-    let row = 0, col = 0, coordinate = null;
-
-    const visit = (r, c) => {
-        grid[r][c] = '0';
-    }
-
-    const pushToQueue = (r, c) => {
-        queue.push([r, c]);
-    }
-
-    queue.push(entrance);
-    while (queue.length > 0) {
-        // 取出队列第一个
-        coordinate = queue.shift();
-        col = coordinate[1];
-        row = coordinate[0];
-
-        // 标记已访问
-        visit(row, col);
-
-        // 遍历周围
-        // 向右搜索
-        if (col + 1 < MAX_COL && grid[row][col + 1] == "1") {
-            visit(row, col + 1);
-            pushToQueue(row, col + 1);
-        }
-        // 向左搜索
-        if (col - 1 >= 0 && grid[row][col - 1] == "1") {
-            visit(row, col - 1);
-            pushToQueue(row, col - 1);
-        }
-        // 向上搜索
-        if (row - 1 >= 0 && grid[row - 1][col] == "1") {
-            visit(row - 1, col);
-            pushToQueue(row -1, col);
-        }
-        // 向下搜索
-        if (row + 1 < MAX_ROW && grid[row + 1][col] == "1") {
-            visit(row + 1, col);
-            pushToQueue(row + 1, col);
-        }
-    }
-}
-```
-
-
-
-```javascript
-function main() {
-    let m = [
-        ["1", "1", "1", "1", "1", "0", "1"],
-        ["0", "1", "1", "1", "1", "1", "1"],
-        ["1", "0", "1", "1", "1", "0", "0"],
-        ["1", "0", "1", "1", "0", "1", "1"],
-        ["1", "0", "0", "1", "1", "1", "1"],
-    ];
-     console.log(numIslands(m))
-}
-```
-
-
-
-#### open-the-lock
-
->题目链接 [leetcode.752](https://leetcode.com/problems/open-the-lock/)
+>[leetcode.752](https://leetcode.com/problems/open-the-lock/)
 >
 >暴力法-广度优先搜索
 
@@ -360,9 +344,9 @@ class Solution {
 
 
 
-#### perfect-squares
+### perfect-squares
 
-> 题目链接 [leetcode.279](https://leetcode.com/problems/perfect-squares/)
+> [leetcode.279](https://leetcode.com/problems/perfect-squares/)
 >
 > 暴力法-广度优先搜索
 
@@ -395,60 +379,9 @@ class Solution:
 
 
 
-### Deepth-first Search
+### target-sum
 
-#### Number of Islands
-
->题目链接 [leetcode.200](https://leetcode.com/problems/number-of-islands/)
->
->暴力法-深度优先搜索，栈。
-
-```javascript
-/**
- * @param {character[][]} grid
- * @return {number}
- */
-function numIslands(grid) {
-    const MAX_ROW = grid.length
-    if (MAX_ROW <= 0) return 0;
-    const MAX_COL = grid[0].length;
-    const ISLAND = "1"
-    let count = 0;
-
-    for (let i = 0; i < MAX_ROW; i++) {
-        for (let j = 0; j < MAX_COL; j++) {
-            if (grid[i][j] == ISLAND) {
-                dfsTravelIsLands(grid, [i, j])
-                count++;
-            }
-        }
-    }
-    return count;
-};
-
-/**
- * @param {character[][]} grid
- * @param {number[]} entrance
- */
-function dfsTravelIsLands(grid, entrance) {
-    const SEA = "0";
-    let [i, j] = entrance;
-    if (i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] == "1") {
-        grid[i][j] = SEA;
-        dfsTravelIsLands(grid, [i + 1, j]);
-        dfsTravelIsLands(grid, [i - 1, j]);
-        dfsTravelIsLands(grid, [i, j + 1]);
-        dfsTravelIsLands(grid, [i, j - 1]);
-    }
-    return;
-}
-```
-
-
-
-#### target-sum
-
->题目链接 [leetcode.494](https://leetcode.com/problems/target-sum/)
+> [leetcode.494](https://leetcode.com/problems/target-sum/)
 >
 > 暴力法-深度优先搜索，栈。
 
@@ -481,43 +414,7 @@ class Solution {
 
 
 
-#### clone-graph
-
->题目链接 [leetcode.133](https://leetcode.com/problems/clone-graph/)
->
->暴力法-深度优先搜索
-
-```c++
-
-class Solution {
- public:
-  Node* cloneGraph(Node* node) { return this->clone(node); }
-
- private:
-  unordered_map<int, Node*> seen;
-  Node* clone(Node* node) {
-    if (node == nullptr) return node;
-    if (seen.count(node->val)) return seen[node->val];
-
-    Node* newNode = createNode(node);
-    int size = node->neighbors.size();
-    for (int i = 0; i < size; i++) {
-      newNode->neighbors.push_back(clone(node->neighbors[i]));
-    }
-    return newNode;
-  }
-  Node* createNode(Node* node) {
-    Node* newNode = new Node();
-    newNode->val = node->val;
-    seen[node->val] = newNode;
-    return newNode;
-  }
-};
-```
-
-
-
-#### keysAndRooms
+### keysAndRooms
 
 > 题目链接 [leetcode.841](https://leetcode.com/problems/keys-and-rooms/)
 >

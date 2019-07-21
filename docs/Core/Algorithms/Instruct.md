@@ -14,64 +14,53 @@
 
 #### Ⅰ 暴力法
 
-+ 选择排序和冒泡排序
++ 暴力排序
    + [选择排序]()
    + [冒泡排序]()
-+ 顺序查找和蛮力字符串匹配
-   + [顺序查准]()
-   + [蛮力字符串匹配]()
-+ 最近对和凸包问题的蛮力算法
-   + [最近对问题]()
-   + [凸包问题]()
 + 穷举查找
-   + [旅行商问题]()
-   + [背包问题]()
-   + [分配问题]()
-+ 深度优先搜索和广度优先搜索
+   + [顺序查找]()
+   + [蛮力字符串匹配]()
    + [深度优先搜索]()
-   + [广度优先搜索]()
++ [广度优先搜索]()
 
 #### Ⅱ 减治法
 
-+ [直接插入排序]()
-+ [希尔排序]()
-+ [拓扑排序]()
-+ 生成组合对象算法
++ 减治排序
+  + [插入排序]()
+  + [希尔排序]()
+  + [拓扑排序]()
++ 生成组合对象
   + [生成排列]()
   + [生成子集]()
 + 减常因子算法
   + [折半查找]()
   + [俄式乘法]()
-  + [约瑟夫斯问题]()
 + 减可变规模算法
   + [计算中值和选择]()
   + [插值查找]()
   + [二叉查找树的查找与插入]()
-  + [NIM游戏]()
 
 #### Ⅲ 分治法
 
-+ 归并排序
-  + [原地归并]()
-  + [自上向下归并]()
-  + [自下而上归并]()
-+ 快速排序
-  + [基本快排]()
-  + [快排改进]()
-+ 二叉树遍历及其相关特性
-  + [二叉树的高度]()
++ 分治排序
+  + [归并排序]()
+  + [快速排序]()
++ 分而治之
   + [二叉树的遍历]()
-+ karatsuba大整数乘法和Strassen矩阵乘法
-  + [大整数乘法]()
+  
+  + [karatsuba大整数乘法]()
   + [strassen矩阵乘法]()
-+ 用分治法解最近对问题和凸包问题
+  
   + [最近对问题]()
   + [凸包问题]()
 
 #### Ⅳ 变治法
 
-+ 预排序
-  + [检验数组元素唯一性]()
++ 变治排序
+  + [堆排序]()
+
++ 预排序法
+  + [元素唯一性]()
   + [模式计算]()
   + [查找问题]()
 + 高斯消去法
@@ -79,30 +68,96 @@
   + [部分选主元法]()
   + [LU分解]()
   + [计算矩阵的逆]()
-+ [计算矩阵的行列式]()
+  + [计算矩阵的行列式]()
++ 霍纳法则和二进制幂
+  + [霍纳法则]()
+  + [二进制幂]()
 + 平衡查找树
   + [AVL 树]()
   + [2-3 树]()
   + [红黑树]()
-  + 
-Ⅴ 动态规划
-  
++ 问题化简
+  + [求最小公倍数]()
+  + [计算图中路径数量]()
+  + [优化问题的化简]()
+  + [线性规划]()
+  + [简化为图问题]()
+
+#### 时空权衡
+
++ 计数排序
+  + [桶排序]()
++ 输入增强
+  + [Horspool算法]()
+  + [Boyer-Moore算法]()
++ 散列法
+  + [开散列]()
+  + [闭散列]()
+
+#### Ⅴ 动态规划
+
++ [背包问题]()
++ [记忆化]()
++ [最优二叉树]()
++ [Warshall算法]()
++ [Floyd算法]()
 
 #### Ⅵ 贪婪技术
 
++ [Prim算法]()
++ [Kruskal算法]()
++ [Dijkstra算法]()
++ [哈夫曼树]()
+
 #### Ⅶ 迭代改进
+
++ [单纯形法]()
++ [最大流量问题]()
++ [二分图的最大匹配]()
++ [稳定婚姻问题]()
 
 #### Ⅷ 算法能力的极限
 
++ 如何求下界
+  + [平凡下界]()
+  + [信息论下界]()
+  + [敌手下界]()
+  + [问题化简]()
++ 决策树
+  + [排序决策树]()
+  + [查找有序数组的决策树]()
++ P、NP和NP完全问题
+  + [P和NP问题]()
+  + [NP完全问题]()
+
 #### Ⅸ 超越算法的极限
 
-<br />
++ 回溯法
+  + [n皇后问题]()
+  + [曼哈顿回路]()
+  + [子集]()
+  + [一般性说明]()
++ 分支界限法
+  + [分配问题]()
+  + [背包问题]()
+  + [旅行商问题]()
++ NP的近似算法
+  + [旅行商问题的近似算法]()
+  + [背包问题的近似算法]()
++ 解非线性方程的算法
+  + [平分法]()
+  + [试位法]()
+  + [牛顿法]()
 
 
 
 # Ⅰ 暴力法
 
-## 选择排序和冒泡排序
+> 蛮力法(brute force)是一种简单直接地解决问题的方法，常常直接基于问题的描述和所涉及的概念定义
+>
+> “力”指代计算机的计算能力。
+
+## 暴力排序
 
 
 ### 选择排序
@@ -119,13 +174,10 @@
  */
 void selection_sort(int arr[], int len)
 {
-    for (int i = 0; i < len - 1; i++)
-    {
+    for (int i = 0; i < len - 1; i++){
         int minKey = i;
-        for (int j = i + 1; j < len; j++)
-        {
-            if (arr[j] < arr[minKey])
-            {
+        for (int j = i + 1; j < len; j++){
+            if (arr[j] < arr[minKey]){
                 minKey = j;
             }
         }
@@ -146,24 +198,17 @@ void selection_sort(int arr[], int len)
 >
 > 原理：a[i]与a[i+1]比较 
 
-
-
 ```c++
 /**
  *  冒泡排序
  */
-void bubble_sort(int arr[], int len)
-{
-    for (int i = 0; i < len - 1; i++)
-    {
-        for (int j = 0; j < len - 1 - i; j++)
-        {           
-            if (arr[j] > arr[j + 1])
-            {
+void bubble_sort(int arr[], int len){
+    for (int i = 0; i < len - 1; i++){
+        for (int j = 0; j < len - 1 - i; j++){           
+            if (arr[j] > arr[j + 1]){
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
-                
             }
         }
     }
@@ -172,9 +217,9 @@ void bubble_sort(int arr[], int len)
 
 
 
- 
+## 线性查找
 
-## 顺序查找和蛮力字符串匹配
+> 在一个给定的列表中查准一个给定的值
 
 ### 顺序查找
 
@@ -185,28 +230,22 @@ void bubble_sort(int arr[], int len)
 ```c++
 // 暴力法——顺序查找
 // 时间复杂度：T(n) = θ(n)
-int SequentialSearch(int arr[], int len, int key)
-{
+int SequentialSearch(int arr[], int len, int key){
     // 创建一个新数组 比原来数组长度+1
     int newArr[len + 1];
-    for (int i = 0; i < len; i++)
-    {
+    for (int i = 0; i < len; i++){
         newArr[i] = arr[i];
     }
     // 新数组最后一项为传入的 key
     newArr[len] = key;
 
     int j = 0;
-    while (newArr[j] != key)
-    {
+    while (newArr[j] != key){
         j++;
     }
-
-    if (j == len)
-    {
+    if (j == len){
         return -1;
     }
-
     return j;
 }
 ```
@@ -224,14 +263,11 @@ int SequentialSearch(int arr[], int len, int key)
 // p_len: p字符长度，不包括字符串 '\0'
 int BruteForceStringMatch(char t[], int t_len, char p[], int p_len)
 {
-    for (int i = 0; t_len - p_len; i++)
-    {
+    for (int i = 0; t_len - p_len; i++){
         int j = 0;
-        while (j < p_len && p[j] == t[i + j])
-        {
+        while (j < p_len && p[j] == t[i + j]){
             j++;
-            if (j == p_len)
-                return i;
+            if (j == p_len)  return i;
         }
     }
     return -1;
@@ -242,177 +278,17 @@ int BruteForceStringMatch(char t[], int t_len, char p[], int p_len)
 
 
 
-## 最近对和凸包问题的蛮力算法
-
-### 最近对问题
-
-> 暴力法—蛮力求最近点
->
-> 时间复杂度：T(n) = θ(n^2)
-
-```c++
-/**
- *
- *  使用蛮力算法求平面中距离最近的两个点
- *  @params 点(x,y)的数组p,数组的长度len。
- *  @return 两个最近点的距离
- */
-double BruteForceClosestPoints(int p[][2],int len)
-{
-    int d = INT32_MAX;
-    for (int i = 0; i < len - 1;i++)
-    {
-        for (int j = i + 1; j < len;j++)
-        {
-            int temp = (p[i][0] - p[j][0])*(p[i][0] - p[j][0]) 
-                + (p[i][1]-p[j][1])*(p[i][1]-p[j][1]);
-            d > temp ? d = temp : d = d;
-        }
-    }
-
-    return sqrt(d);
-}
-```
-
-
-
-### 凸包问题
-
-> 暴力法—求凸包点
->
-> 时间复杂度：T(n) = O(n^3)
-
-```c++
-void BruteForceConvexPoint(double arr[][2], int len)
-{
-    for (int i = 0; i < len - 1; i++)
-    {
-        double x1 = arr[i][0];
-        double y1 = arr[i][1];
-        for (int j = i + 1; j < len; j++)
-        {
-            double x2 = arr[j][0];
-            double y2 = arr[j][1];
-            // 根据两点确定直线，在分析其他点和该直线的位置
-            // ax + by = c
-            double a = y2 - y1;
-            double b = x1 - x2;
-            double c = x1 * y2 - y1 * x2;
-
-            int above = 0; // 在直线上发
-            int below = 0; // 在直线下方
-            int on = 0;    // 在直线上
-            for (int k = 0; k < len; k++)
-            {
-                double temp = a * arr[k][0] + b * arr[k][1];
-                if (temp == c)
-                {
-                    on++;
-                }
-                else if (temp > c)
-                {
-                    above++;
-                }
-                else
-                {
-                    below++;
-                }
-            }
-            // 如果其余点都在这条直线的一侧
-            // 则这两点组成凸包线，为顶点
-            if (above == 0 || below == 0)
-            {
-                printf("point: p(%.0lf,%.0lf) p(%.0lf,%.0lf)\n"
-                       , arr[i][0], arr[i][1], arr[j][0], arr[j][1]);
-            }
-        }
-    }
-}
-```
-
-
-
-
-
 ## 穷举查找
 
-### 旅行商问题
+### 暴力枚举
 
-…
-
-### 背包问题
-
-…
-
-### 分配问题
-
-> 暴力法-穷举查找-分配问题
->
-> 时间复杂度：T(n) = O(n*n!)
-
-```c++
-/**
- *  通过矩阵穷举查找分配问题
- *  暴力法-穷举查找-分配问题
- *  以4*4为例
- * 
-*/
-void distribution(int a[4][4])
-{
-    int length = 4;
-    int height = 4;
-    for (int i = 0; i < height; i++)
-    {
-        int one = a[i][0];
-        for (int j = 0; j < height; j++)
-        {
-            int two = a[j][1];
-            for (int k = 0; k < height; k++)
-            {
-                int tree = a[k][2];
-                for (int l = 0; l < height; l++)
-                {
-                    int four = a[l][3];
-                    int res = one + two + tree + four;
-                    printf("%d+%d+%d+%d=%d\n", one, two, tree, four, res);
-                }
-            }
-        }
-    }
-}
-```
-
-
-
-
-
-## 深度优先搜索和广度优先搜索
+> 利用条件
 
 ### 深度优先搜索
 
 > 暴力法-深度优先搜索
 >
 > 时间复杂度：链表法 θ( |v| + |E| ) 矩阵法 θ( |v|^2 )
-
-
-
-#### 图的表示
-
-```c++
-// 邻接链表法，表示图。
-map<string, vector<string>> graph;
-graph["A"] = {"B", "C"};
-graph["B"] = {"A", "C", "D"};
-graph["C"] = {"A", "B", "D","E"};
-graph["D"] = {"B", "C", "E","F"};
-graph["E"] = {"C", "D"};
-graph["F"] = {"D"};
-
-```
-
-
-
-#### 直接通过栈实现
 
 ```c++
 /**
@@ -463,10 +339,6 @@ void dfs(map<string, vector<string>> graph, string s)
 >
 > 时间复杂度：链表法 θ( |v| + |E| ) 矩阵法 θ( |v|^2 )
 
-
-
-#### 队列实现广度优先搜索
-
 ```c++
 /**
  *  通过队列和邻接链表图实现 深度优先搜索
@@ -483,20 +355,17 @@ void bfs(map<string, vector<string>> graph, string s)
     qu.push(s);
     seen.insert(s);
 
-    while (!qu.empty())
-    {
+    while (!qu.empty()){
         // 取出队列头
         string vertex = qu.front();
         qu.pop();
         // 查询取出的元素
         vector<string> nodes = graph[vertex];
         // 遍历取出的元素
-        for (int i = 0; i < nodes.size(); i++)
-        {
+        for (int i = 0; i < nodes.size(); i++){
             // 判断元素是否已经查询过
             string node = nodes[i];
-            if (seen.find(node) == seen.end())
-            {
+            if (seen.find(node) == seen.end()){
                 // 如果没有查询过，则把该元素推入队列，并标记
                 qu.push(node);
                 seen.insert(node);
@@ -520,8 +389,6 @@ void bfs(map<string, vector<string>> graph, string s)
 > 注释：小数组每次长度+1进行排序。
 >
 > 性能：C<sub>worst</sub> = θ( n<sup>2</sup> ); C<sub>bast</sub> = θ( n ); C<sub>avg</sub> ≈ 1/4 n<sup>n</sup>  = θ ( n<sup>2</sup> )
-
-
 
 #### 迭代实现直接插入排序 
 
@@ -553,8 +420,6 @@ void insertionSort(int a[], int len)
 > 思想：基于直接插入排序
 >
 > 性能：优于直接插入排序
-
-
 
 #### (风格一)希尔排序实现
 

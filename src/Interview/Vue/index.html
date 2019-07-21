@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <span :title="message">
+            鼠标悬停几秒钟查看此处动态绑定的提示信息！
+        </span>
+        <ol>
+            <li v-for="todo in todos">
+                {{ todo.text }}
+            </li>
+        </ol>
+
+        <p>{{ message }}</p>
+        <button @click="reverseMessage">反转消息</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                message: "Hello Vue.js!",
+                todos: [
+                    { text: '学习 JavaScript' },
+                    { text: '学习 Vue' },
+                    { text: '整个牛项目' }
+                ]
+            },
+            methods:{
+                reverseMessage(){
+                    this.message = this.message.split('').reverse().join('')
+                }
+            }
+        })    
+    </script>
+</body>
+
+</html>
