@@ -4,29 +4,142 @@
 
 
 
-
-
-## Table of Contents
-
-#### Brute-Forc
-
-+ [Plus-One](#Plus-One)
-+ [Find-pivot-index](#Find-pivot-index)
-+ [Largest Number At Least Twice of Others]()
-+ [DiagonalTraverse]()
-
-+ [number-of-islands](#number-of-islands)
-+ [open-the-lock](#open-the-lock)
-+ [perfect-squares](#perfect-squares)
-
-+ [number-of-islands](#number-of-islands)
-+ [target-sum](#target-sum)
-+ [clone-graph](#clone-graph)
-+ [keysAndRooms](#keysAndRooms)
-
-
-
 ## Brute-Forc
+
+### Spiral Matrix
+
+> [leetcode.54](https://leetcode.com/problems/spiral-matrix/)
+>
+> 暴力法—穷举查找
+
+```javascript
+
+```
+
+
+
+### Two Sum II - Input array is sorted
+
+> [leetcode.167](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/)
+>
+> 暴力法—穷举查找
+
+```javascript
+/**
+ * @param {number[]} numbers
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function (numbers, target) {
+    return new Solution(numbers, target).twoSum()
+};
+
+// ideas: 暴力法—穷举查找、双指针
+class Solution {
+    constructor(nums, target) {
+        this.nums = nums;
+        this.target = target;
+        this.lo = 0;
+        this.hi = 0;
+    }
+    get lastIndex() {
+        return this.nums.length - 1;
+    }
+    get result() {
+        return [this.lo + 1, this.hi + 1]
+    }
+    isEqTarget() {
+        let sum = this.nums[this.lo] + this.nums[this.hi];
+        return sum == this.target;
+    }
+    twoSum() {
+        while (this.lo < this.nums.length) {
+            this.hi = this.lastIndex
+            while (this.hi > this.lo) {
+                if (this.isEqTarget()) return this.result;
+                this.hi--
+            }
+            this.lo++
+        }
+    }
+}
+```
+
+
+
+### Rotate Array
+
+> [leetcode.189](https://leetcode.com/problems/rotate-array/)
+>
+> 暴力法
+
+```javascript
+// 数组翻转问题
+// ideas: 队列操作
+class Solution {
+    constructor(nums, k) {
+        this.nums = nums;
+        this.target = k;
+    }
+    execult() {
+        for (let i = 0; i < this.target; i++) {
+            this.nums.unshift(this.nums.pop())
+        }
+        return this.nums
+    }
+}
+
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var rotate = function (nums, k) {
+    return new Solution(nums, k).execult();
+};
+```
+
+
+
+
+
+### Reverse String
+
+> [leetcode.344](https://leetcode.com/problems/reverse-string/)
+>
+> 暴力法—双指针翻转字符串
+
+```javascript
+/**
+ * @param {character[]} s
+ * @return {void} Do not return anything, modify s in-place instead.
+ */
+var reverseString = function (s) {
+    return new Solution(s).reverseString()
+};
+
+// ideas: 暴力法—顺序查找
+class Solution {
+    constructor(aStringArray) {
+        this._aStringArray = aStringArray
+    }
+    swap(i, j) {
+        let temp = this._aStringArray[i];
+        this._aStringArray[i] = this._aStringArray[j];
+        this._aStringArray[j] = temp
+    }
+    // 双指针翻转字符串
+    reverseString() {
+        let lo = 0, hi = this._aStringArray.length - 1;
+        while (lo < hi) {
+            this.swap(lo++, hi--);
+        }
+        return this._aStringArray;
+    }
+}
+```
+
+
 
 ### Plus-One
 
@@ -276,11 +389,9 @@ class Solution {
     }
 
     public int openLock(String[] deadends, String target) {
-
         if (!isUnableStart(deadends, target)) {
             return -1;
         }
-
         queue.offer("0000");
         seen.add("0000");
 
@@ -333,15 +444,6 @@ class Solution {
 
 ```
 
-```java
-    public static void main(String[] args) {
-        String[] deadends = { "0201", "0101", "0102", "1212", "2002" };
-        String target = "0202";
-        int ret = new Solution().openLock(deadends, target);
-        System.out.print(ret);
-    }
-```
-
 
 
 ### perfect-squares
@@ -361,7 +463,6 @@ class Solution:
         for i in range(1, int(math.sqrt(n))+1):
             sum: int = i**2
             basicList.append(sum)
-
         while bfsQueue:
             count += 1
             newQueue: set = set()
@@ -398,7 +499,6 @@ class Solution {
         dfsFindWays(0, 0);
         return this.waysCount;
     }
-
     private void dfsFindWays(int sum, int level) {
         if (level >= nums.length) {
             if (sum == target) {
@@ -469,5 +569,99 @@ class KeysAndRooms {
         return true;
     }
 }
+```
+
+
+
+## Reduce-Conquer
+
+### remove-element
+
+> [leetcode.27](https://leetcode.com/problems/remove-element/)
+>
+> ideas: 减治法-减常因子，插入排序
+
+```javascript
+class Solution {
+    constructor(nums, val) {
+        this.nums = nums;
+        this.val = val;
+    }
+    get count() {
+        let result = this.nums.length;
+        this.nums.forEach(e => {
+            if (e == this.val) result--;
+        });
+        return result;
+    }
+    // ideas: 减治法—减常因子，插入排序
+    removeVal() {
+        let len = nums.length;
+        for (let i = 0; i < len; i++) {
+            if (this.nums[i] != this.val) continue;
+            for (let j = i; j < len - 1; j++) {
+                this.nums[j] = this.nums[j + 1]
+            }
+            i--;
+            len--;
+        }
+    }
+    execult() {
+        let result = this.count;
+        this.removeVal();
+        return result;
+    }
+}
+
+/**
+ * @param {number[]} nums
+ * @param {number} val
+ * @return {number}
+ */
+var removeElement = function (nums, val) {
+    return new Solution(nums, val).execult()
+};
+```
+
+
+
+### Move Zeroes
+
+> [leetcode.283](https://leetcode.com/problems/move-zeroes/)
+>
+> ideas: 减治法-减常因子，插入排序
+
+```javascript
+class Solution {
+    constructor(nums) {
+        this.nums = nums;
+        this.count = 0
+    }
+    execlut(nums) {
+        for (let i = 0; i < this.nums.length - this.count; i++) {
+            if (this.nums[i] != 0) continue;
+            else {
+                this.insertion(i);
+                i--;
+            }
+        }
+    };
+    insertion(i) {
+        let j = i
+        while (j < this.nums.length - 1) {
+            this.nums[j] = this.nums[++j]
+        }
+        this.nums[this.nums.length - 1] = 0;
+        this.count++;
+    }
+}
+
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var moveZeroes = function (nums) {
+    new Solution(nums).execlut()
+};
 ```
 

@@ -4,22 +4,26 @@ class FindDiagonalOrder {
         this.matrix = matrix;
         this.result = new Array();
     }
-    isOver(x, y) {
-
+    isUpperRight(aNumber) {
+        if (aNumber % 2 == 0) {
+            return false;
+        }
+        return true
     }
-    traversing(x, y) {
-        this.result.push(this.matrix[y][x])
-        if (!this.isOver(x - 1, y + 1)) this.traversing(x - 1, y + 1);
-    }
-    execult() {
-
+    traversing() {
+        for (let i = 0; i < this.matrix.length; i++) {
+            if(this.isUpperRight(i)){
+                
+            }
+        }
     }
 }
+
 
 /**
  * @param {number[][]} matrix
  * @return {number[]}
  */
 function findDiagonalOrder(matrix) {
-    return new FindDiagonalOrder(matrix).execult()
+    return new FindDiagonalOrder(matrix).traversing()
 };
