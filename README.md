@@ -17,9 +17,9 @@
   + [Design Pattern](/docs/Core/DesignPattern/DesignPatterns.md)
   + [Refactoring](/docs/Core/Refactoring/Refactoring.md)
 + **Expansive** 
-  + [Shell Command](/docs/Expansive/Shell/Main.md)
+  + [Automation](/docs/Expansive/Automation/Main.md)
 + **Vertical and horizontal**
-  + [剑指offer]()
+  + [Sword to Offer]()
   + [Programming Pearls]()
 + **Battlefield**
   + [Interview]()
