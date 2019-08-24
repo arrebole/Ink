@@ -1,10 +1,10 @@
 #! /usr/bin/nodejs
 
 const sort = require("./sort")
-const RandomLen = 3_0000
-const RandomMax = 3_0000
+const RandomLen = 4_0000
+const RandomMax = 4_0000
 
-console.log("\033[0;31;1m排序测试，测试长度:%d \033[0m",RandomLen)
+console.log("\033[0;31;1m排序测试，测试长度:%d \033[0m", RandomLen)
 
 /**
  * @returns {number[]}
@@ -18,80 +18,54 @@ function randomArray() {
     return result;
 }
 
-/**
- * 
- * @param {number[]} nums
- * @description 检验数组是否有序 
- */
-function assets(nums,msg) {
-    for (let i = 0; i < nums.length - 1; i++) {
-        if (nums[i] > nums[i + 1]) {
-            console.log("\033[0;35;1m=>%s test fail!!! index = %d \033[0m", msg, i)
-            return false
+function assetsSorted(nums) {
+    return new Promise((resolve, reject) => {
+        resolve(assetsSorted.caller.name)
+    }).then((callName) => {
+        let flag = true;
+        for (let i = 0; i < nums.length - 1; i++) {
+            if (nums[i] > nums[i + 1]) {
+                flag = false;
+                break;
+            }
         }
-    }
-    return true;
+        let msg = flag ? "OK" : "Fail! not sorted"
+        console.log("test %s ... %s", callName, msg)
+    })
+
+}
+
+
+function test(fn) {
+    const data = randomArray()
+    let startTime = new Date()
+    fn(data)
+    let endTime = new Date()
+    console.log("bench %s %s ms", fn.name, endTime - startTime)
 }
 
 // 测试生成随机数组
-function TestRandomArray() {
-    const lable = "@RandomArray"
-    console.time(lable)
-    const testData = randomArray()
-    console.timeEnd(lable)
-}
-TestRandomArray()
+test(function TestRandomArray() {
+    randomArray()
+})
 
 // 测试冒泡排序
-function TestBubbleSort() {
-    const lable = "BubbleSort"
-    const testData = randomArray()
-
-    console.time(lable)
-    sort.bubbleSort(testData)
-    console.timeEnd(lable)
-    
-    assets(testData, lable)
-}
-TestBubbleSort()
-
-
+test(function TestBubbleSort(data) {
+    assetsSorted(sort.bubbleSort(data))
+})
 
 // 测试归并排序
-function TestMergeSort(){
-    const lable = "MergeSort";
-    const testData = randomArray()
-
-    console.time(lable)
-    sort.mergeSort(testData)
-    console.timeEnd(lable)
-    
-    assets(testData,lable)
-}
-TestMergeSort()
+test(function TestMergeSort(data) {
+    assetsSorted(sort.mergeSort(data))
+})
 
 
 // 测试堆排序
-function TestHeapSort(){
-    const lable = "HeapSort"
-    const testData = randomArray()
-
-    console.time(lable)
-    sort.heapSort(testData)
-    console.timeEnd(lable)
-
-    assets(testData, lable)
-}
-TestHeapSort()
+test(function TestHeapSort(data) {
+    assetsSorted(sort.heapSort(data))
+})
 
 // 测试快速排序
-function TestQuickSort(){
-    const lable = "QuickSort"
-    const testData = randomArray()
-
-    console.time(lable)
-    sort.quickSort(testData)
-    console.timeEnd(lable)
-    assets(testData, lable)
-}
-TestQuickSort()
+test(function TestQuickSort(data) {
+    assetsSorted(sort.quickSort(data))
+})

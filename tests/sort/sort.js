@@ -129,6 +129,7 @@ class Heap {
       this.exch(0, i);
       this.sink(0, i);
     }
+    return this.nums;
   }
 }
 
