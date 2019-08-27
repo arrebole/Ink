@@ -1,6 +1,10 @@
 package logs
 
-// Code ...
+import (
+	"fmt"
+)
+
+// Code ..
 type Code = string
 
 const (
@@ -19,3 +23,12 @@ const (
 	// Success 成功
 	Success Code = "[success]"
 )
+
+// Write ...
+func Write(code Code, host string, data ...string) {
+	var cache string
+	for _, s := range data {
+		cache += s
+	}
+	fmt.Println(code, host, cache)
+}
