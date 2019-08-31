@@ -34,7 +34,6 @@ func (p *Ping) Send() error {
 	}
 	defer conn.Close()
 
-	conn.SetReadDeadline((time.Now().Add(time.Second * 2)))
 	for i := 0; i < p.times; i++ {
 		p.write(conn)
 		p.recv(conn)
@@ -65,6 +64,7 @@ func (p *Ping) write(conn *net.IPConn) error {
 // 接受响应数据
 func (p *Ping) recv(conn *net.IPConn) error {
 	recvBuff := make([]byte, 1024)
+	conn.SetReadDeadline((time.Now().Add(time.Second * 2)))
 	recvLen, err := conn.Read(recvBuff)
 	if err != nil {
 		logs.Write(logs.IoReadFail, p.distAddr.String())

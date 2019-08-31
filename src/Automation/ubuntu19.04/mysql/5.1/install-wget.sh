@@ -20,6 +20,23 @@ sudo scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql-5.1 --data
 #启动 
 bin/mysqld_safe &
 
+// 修改权限 (注意这里用户名和密码替换成自己的)
+ GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'PASSWORD' WITH GRANT OPTION;
+ //更新缓存
+ FLUSH PRIVILEGES;
+
+# 修改配置
+#vi /etc/mysql/mysql.conf.d/mysqld.cnf
+
+#找到如下这一行，注释掉
+#bind-address = 127.0.0.1 //即前面加上#
+
+# 重启
+#service mysql restart
+
+# 修改字符集
+#ALTER DATABASE 数据库名 CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_general_ci';
+
 # 修改root密码
 #bin/mysqladmin -u root password 'password'
 #进入数据库
