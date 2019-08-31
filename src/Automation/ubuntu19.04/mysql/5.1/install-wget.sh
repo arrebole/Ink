@@ -25,6 +25,10 @@ bin/mysqld_safe &
  //更新缓存
  FLUSH PRIVILEGES;
 
+# 设置本机访问需要密码
+#select user,Host, plugin from mysql.user;
+#update mysql.user set plugin = 'mysql_native_password' where user = 'root' and host='localhost';
+
 # 修改配置
 #vi /etc/mysql/mysql.conf.d/mysqld.cnf
 
