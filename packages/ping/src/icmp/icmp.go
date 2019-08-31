@@ -5,6 +5,8 @@ import (
 	"encoding/binary"
 )
 
+const size = 65472
+
 // ICMP 报文头的结构
 type ICMP struct {
 	Type        uint8
@@ -12,6 +14,7 @@ type ICMP struct {
 	CheckSum    uint16
 	Identifier  uint16
 	SequenceNum uint16
+	options     [size]byte
 }
 
 // checkSum 计算检验码
@@ -52,13 +55,14 @@ func makeIcmpBuffer(pICMP *ICMP) bytes.Buffer {
 
 // New 创建一个icmp数据包
 // 传入 序号（sequence）
-func New(seq uint16) bytes.Buffer {
+func New() bytes.Buffer {
 	ping := ICMP{
 		Type:        8,
 		Code:        0,
 		CheckSum:    0,
 		Identifier:  0,
-		SequenceNum: seq,
+		SequenceNum: 1,
+		options:     [size]byte{0},
 	}
 
 	return makeIcmpBuffer(&ping)

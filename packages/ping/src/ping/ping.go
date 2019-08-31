@@ -14,15 +14,13 @@ import (
 type Ping struct {
 	icmpBuffer bytes.Buffer
 	distAddr   *net.IPAddr
-	times      int
 }
 
 // New 创建Ping
 func New(dist *net.IPAddr) *Ping {
 	return &Ping{
-		icmpBuffer: icmp.New(uint16(1)),
+		icmpBuffer: icmp.New(),
 		distAddr:   dist,
-		times:      3,
 	}
 }
 
@@ -34,11 +32,11 @@ func (p *Ping) Send() error {
 	}
 	defer conn.Close()
 
-	for i := 0; i < p.times; i++ {
+	for {
 		p.write(conn)
 		p.recv(conn)
 	}
-	return err
+	//return err
 }
 
 // 创建发送数据的socket
@@ -63,11 +61,11 @@ func (p *Ping) write(conn *net.IPConn) error {
 
 // 接受响应数据
 func (p *Ping) recv(conn *net.IPConn) error {
-	recvBuff := make([]byte, 1024)
+	recvBuff := make([]byte, 70000)
 	conn.SetReadDeadline((time.Now().Add(time.Second * 2)))
 	recvLen, err := conn.Read(recvBuff)
 	if err != nil {
-		logs.Write(logs.IoReadFail, p.distAddr.String())
+		logs.Write(logs.IoReadFail, err.Error(), p.distAddr.String())
 		return err
 	}
 	ttf := fmt.Sprintf("[TTL=%d]", recvBuff[8])
