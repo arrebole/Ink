@@ -5,9 +5,9 @@ cat << EOF
 |                                               |
 -------------------------------------------------
 EOF
-echo "验证签名"
-pacman-key -v archlinux-version-x86_64.iso.sig
 echo "更新系统时钟"
+hwclock --systohc --utc
+timedatectl set-timezone Asia/Shanghai
 timedatectl set-ntp true
 echo "磁盘格式化"
 mkfs.ext4 /dev/sda2
@@ -28,7 +28,9 @@ arch-chroot /mnt
 echo "设置时区"
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 echo "设置硬件时间"
-hwclock --systohc
+hwclock --systohc --utc
+timedatectl set-timezone Asia/Shanghai
+timedatectl set-ntp true
 echo "设置语言"
 cat << EOF >> /etc/locale.gen
 en_US.UTF-8 UTF-8
@@ -44,14 +46,15 @@ cat << EOF >> /etc/hosts
 ::1		    localhost
 127.0.1.1	archlinux.localdomain	archlinux
 EOF
-echo "安装网络"
-pacman -Syu
-pacman -S networkmanager
 echo "创建普通用户"
 pacman -S zsh
-useradd -m -g users -s /bin/zsh hacker
+useradd -m -g wheel -s /bin/zsh hacker
 pacman -S adobe-source-han-sans-cn-fonts
 echo "设置启动引导"
 pacman -S dosfstools grub efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
+# echo "安装网络"
+# pacman -S wpa_supplicant
+# systemctl enable wpa_supplicant
+# systemctl enable dhcpcd
