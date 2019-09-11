@@ -51,3 +51,7 @@ echo "创建普通用户"
 pacman -S zsh
 useradd -m -g users -s /bin/zsh hacker
 pacman -S adobe-source-han-sans-cn-fonts
+echo "设置启动引导"
+pacman -S dosfstools grub efibootmgr
+grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
