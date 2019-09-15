@@ -29,19 +29,17 @@ const (
 )
 
 type TCPHeader struct {
-	Source      uint16  // 16 bits 源端口号
-	Destination uint16  // 16 bits 目的端口号
-	SeqNum      uint32  // 32 bits 序列号
-	AckNum      uint32  // 32 bits 确认序号
-	
-	DataOffset  uint8   // 4 bits 数据偏移
-	Reserved    uint8   // 6 bits 保留
-	// URG ACK PSH RST SYN FIN 各占一位
-	Ctrl        uint8   // 6 bits
-	
-	Window      uint16  // 窗口大小， 控制对方发送的数据量
-	Checksum    uint16  // Kernel will set this if it's 0
-	Urgent      uint16  // 紧急指针
+	Source      uint16
+	Destination uint16
+	SeqNum      uint32
+	AckNum      uint32
+	DataOffset  uint8 // 4 bits
+	Reserved    uint8 // 3 bits
+	ECN         uint8 // 3 bits
+	Ctrl        uint8 // 6 bits
+	Window      uint16
+	Checksum    uint16 // Kernel will set this if it's 0
+	Urgent      uint16
 	Options     []TCPOption
 }
 
@@ -63,7 +61,8 @@ func NewTCPHeader(data []byte) *TCPHeader {
 	var mix uint16
 	binary.Read(r, binary.BigEndian, &mix)
 	tcp.DataOffset = byte(mix >> 12)  // top 4 bits
-	tcp.Reserved = byte(mix >> 6 & 0x3f) // 6 bits
+	tcp.Reserved = byte(mix >> 9 & 7) // 3 bits
+	tcp.ECN = byte(mix >> 6 & 7)      // 3 bits
 	tcp.Ctrl = byte(mix & 0x3f)       // bottom 6 bits
 
 	binary.Read(r, binary.BigEndian, &tcp.Window)
@@ -80,7 +79,7 @@ func (tcp *TCPHeader) String() string {
 	if tcp == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("Source=%v Destination=%v SeqNum=%v AckNum=%v DataOffset=%v Reserved=%v Ctrl=%v Window=%v Checksum=%v Urgent=%v", tcp.Source, tcp.Destination, tcp.SeqNum, tcp.AckNum, tcp.DataOffset, tcp.Reserved, tcp.Ctrl, tcp.Window, tcp.Checksum,tcp.Urgent)
+	return fmt.Sprintf("Source=%v Destination=%v SeqNum=%v AckNum=%v DataOffset=%v Reserved=%v ECN=%v Ctrl=%v Window=%v Checksum=%v Urgent=%v", tcp.Source, tcp.Destination, tcp.SeqNum, tcp.AckNum, tcp.DataOffset, tcp.Reserved, tcp.ECN, tcp.Ctrl, tcp.Window, tcp.Checksum,tcp.Urgent)
 }
 
 func (tcp *TCPHeader) Marshal() []byte {
@@ -92,9 +91,10 @@ func (tcp *TCPHeader) Marshal() []byte {
 	binary.Write(buf, binary.BigEndian, tcp.AckNum)
 
 	var mix uint16
-	mix = uint16(tcp.DataOffset) << 12 | // top 4 bits
-		  uint16(tcp.Reserved) << 6 | // middle 6 bits
-		  uint16(tcp.Ctrl) // bottom 6 bits
+	mix = uint16(tcp.DataOffset)<<12 | // top 4 bits
+		uint16(tcp.Reserved)<<9 | // 3 bits
+		uint16(tcp.ECN)<<6 | // 3 bits
+		uint16(tcp.Ctrl) // bottom 6 bits
 	binary.Write(buf, binary.BigEndian, mix)
 
 	binary.Write(buf, binary.BigEndian, tcp.Window)

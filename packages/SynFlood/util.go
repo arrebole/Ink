@@ -13,9 +13,10 @@ func makeTcpHeader(source, dest uint16) []byte {
 		Destination: dest,
 		SeqNum:      1,
 		AckNum:      0,
-		DataOffset:  0, 	    // 4 bits
-		Reserved:    0, 	    // 6 bits
-		Ctrl:        tcp.SYN,  // 6 bits
+		DataOffset:  0, 	   
+		Reserved:    0, 	   
+		ECN:		 0,
+		Ctrl:        tcp.SYN,  
 		Window:      0xaaaa,
 		Checksum:    0,         // Kernel will set this if it's 0
 		Urgent:      99,
