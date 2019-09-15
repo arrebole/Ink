@@ -27,5 +27,5 @@ func main() {
 	for i := 0; i < worker; i++ {
 		go ping.New(ip).Send()
 	}
-	time.Sleep(time.Second * 20)
+	time.Sleep(time.Second * 200)
 }

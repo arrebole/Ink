@@ -5,7 +5,8 @@ import (
 	"encoding/binary"
 )
 
-const size = 65472
+// max: 65472
+const size = 1462
 
 // ICMP 报文头的结构
 type ICMP struct {
