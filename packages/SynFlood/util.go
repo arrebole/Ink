@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"strings"
 	"strconv"
+	"net"
 	"./tcp"
 )
 
@@ -17,7 +17,7 @@ func makeTcpHeader(source, dest uint16) []byte {
 		Reserved:    0, 	   
 		ECN:		 0,
 		Ctrl:        tcp.SYN,  
-		Window:      0xaaaa,
+		Window:      0xaaaa,	// 响应数据大小限制
 		Checksum:    0,         // Kernel will set this if it's 0
 		Urgent:      99,
 	}
@@ -25,13 +25,13 @@ func makeTcpHeader(source, dest uint16) []byte {
 	return r.Marshal()
 }
 
-func addrToSource(addr string) uint16 {
-	source := strings.Split(addr, ":")
-	return  stringToUint16(source[1]) 
-}
+// func addrToSource(addr string) uint16 {
+// 	source := strings.Split(addr, ":")
+// 	return  stringToUint16(source[1]) 
+// }
 
 func stringToUint16(s string) uint16 {
-	u, err := strconv.ParseUint(s, 10, 16)
+	u, err := strconv.Atoi(s)
 	if err != nil{
 		panic("[stringToUint16]" + err.Error())
 	}
@@ -41,4 +41,13 @@ func stringToUint16(s string) uint16 {
 
 func printTCP(tcpData []byte){
 	fmt.Println(tcp.NewTCPHeader(tcpData).String())
+}
+
+// GetDistIP 获取参数中的host， 解析目标ip: host -> ip
+func ipAddr(host string) *net.IPAddr {
+	ip, err := net.ResolveIPAddr("ip", host)
+	if err != nil {
+		panic("fail ResolveIPAddr!")
+	}
+	return ip
 }
