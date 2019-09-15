@@ -4,7 +4,7 @@ import (
 	"flag"
 	//"os"
 	//"fmt"
-	"syscall"
+	"net"
 )
 
 var(
@@ -27,7 +27,7 @@ func main() {
 	// AF_INET: ip头和以太头由内核维护，我们只能操作读取，ip头之上的数据
 	// IPPROTO_TCP: 由内核维护的ip头，服务类型指定为TCP
 	// ip层没有端口，端口信息在tcp层
-	fd, err := syscall.Socket(syscall.AF_INET, syscall.SOCK_RAW, syscall.IPPROTO_TCP)
+	conn, err := net.Dial("ip4:tcp", "192.168.0.1")
 	if err != nil {
 		panic("[net.Dial] " + err.Error())
 	}
@@ -38,15 +38,15 @@ func main() {
 	payload := makeTcpHeader(stringToUint16("80"), stringToUint16(inputDisPort))
 	
 	// 3、将数据包写入socket fd，发送数据包
-	byteLen,err := syscall.Write(fd, payload)
+	byteLen,err := conn.Write(payload)
 	if err != nil {
 		panic("[conn.Write] " + err.Error())
 	}
 
 	// 4、接收返回的数据
 	buff := make([]byte, 1024)
-	byteLen, err = syscall.Read(fd, buff)
-	if err != nil || byteLen == 0{
+	byteLen, err = conn.Read(buff)
+	if err != nil || byteLen == 0 {
 		panic("[conn.Read] " + err.Error())
 	}
 
