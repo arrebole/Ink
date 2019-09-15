@@ -6,6 +6,7 @@ import (
 	"strings"
 	"net"
 	"./tcp"
+	
 )
 
 // local  为本地ip remote 为对方ip
@@ -58,7 +59,10 @@ func stringToUint16(s string) uint16 {
 }
 
 func printTCP(tcpData []byte){
-	fmt.Println("[recv]",tcp.NewTCPHeader(tcpData).String())
+	tcpheader := tcp.NewTCPHeader(tcpData[20:])
+	fmt.Println("[recv]", tcpheader)
+	fmt.Printf("\n\n")
+	fmt.Println(len(tcpData),tcpData)
 }
 
 // GetDistIP 获取参数中的host， 解析目标ip: host -> ip

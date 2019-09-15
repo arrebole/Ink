@@ -15,7 +15,7 @@ var(
 
 func init(){
 	flag.IntVar(&inputThread, "w", 1, "Thread number")
-	flag.StringVar(&inputDesHost, "host", "127.0.0.2", "dist host")
+	flag.StringVar(&inputDesHost, "host", "127.0.0.1", "dist host")
 	flag.StringVar(&inputDesPort, "port", "80", "Dist port")
 	flag.Parse()
 }
@@ -56,7 +56,7 @@ func main() {
 	}
 
 	// 4、接收返回的数据
-	buff := make([]byte, 1024)
+	buff := make([]byte, 1500)
 	byteLen, err := syscall.Read(fd, buff)
 	if err != nil || byteLen == 0 {
 		panic("[conn.Read] " + err.Error())
