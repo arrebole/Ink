@@ -7,13 +7,15 @@ import (
 	"./tcp"
 )
 
+// local  为本地ip remote 为对方ip
+// source 为本地端口 dest为对方端口
 func makeTcpHeader(source, dest uint16) []byte {
 	r := &tcp.TCPHeader{
 		Source:      source,
 		Destination: dest,
 		SeqNum:      1,
 		AckNum:      0,
-		DataOffset:  0, 	   
+		DataOffset:  5, 	   
 		Reserved:    0, 	   
 		ECN:		 0,
 		Ctrl:        tcp.SYN,  
@@ -21,7 +23,10 @@ func makeTcpHeader(source, dest uint16) []byte {
 		Checksum:    0,         // Kernel will set this if it's 0
 		Urgent:      99,
 	}
-	fmt.Println(r.String())
+
+    //r.Checksum = tcp.Csum(r.Marshal(), to4byte(local), to4byte(remote))
+	
+	fmt.Println("[build]",r.String())
 	return r.Marshal()
 }
 
@@ -40,7 +45,7 @@ func stringToUint16(s string) uint16 {
 }
 
 func printTCP(tcpData []byte){
-	fmt.Println(tcp.NewTCPHeader(tcpData).String())
+	fmt.Println("[recv]",tcp.NewTCPHeader(tcpData).String())
 }
 
 // GetDistIP 获取参数中的host， 解析目标ip: host -> ip
