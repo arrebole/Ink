@@ -45,12 +45,13 @@ func NewClient() *http.Client {
 func send(client *http.Client, request *http.Request){
 	resp, err := client.Do(request)
 	if err != nil{
-		fmt.Println("[Error]" + err.Error())
+		fmt.Println("[Error] " + err.Error())
 	}
 	defer resp.Body.Close()
 	
-	data, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(data))
+	// data, _ := ioutil.ReadAll(resp.Body)
+	ioutil.ReadAll(resp.Body)
+	fmt.Println("[success] ",time.Now().Format("2006-01-02 15:04:05"))
 }
 
 
