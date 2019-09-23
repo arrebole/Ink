@@ -24,11 +24,12 @@
 + **Battlefield**
   + [Interview]()
 + **Nuclear Reaction**
-  - [Graphics]()
-  - [Blockchain]()
-  - [Cryptography]()
-  - [Machine Learning]()
-  - [Compilation Principle]()
+  + [Graphics]()
+  + [Blockchain]()
+  + [Encode]()
+  + [Cryptography]()
+  + [Machine Learning]()
+  + [Compilation Principle]()
 + **Newborn**
   + [Hack](/docs/Newborn/Hack/Main.md)
   + [Architecture](/docs/Newborn/Architecture/Main.md)
