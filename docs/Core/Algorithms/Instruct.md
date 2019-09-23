@@ -1,12 +1,8 @@
-# 算法大纲
+<h1 style="text-align:center;">算法大纲</h1>
 
----
+**数据结构**：线性、树、图、集合和字典
 
 **重要的问题类型**：排序、查找、字符串处理、图问题、组合问题、几何问题、数值问题。
-
-**数据结构**：线性数据结构、树、图、集合和字典
-
-[刷题整理](/docs/Core/Algorithms/Explore.md) 
 
 
 
@@ -16,9 +12,11 @@
 + 暴力排序
    + [选择排序]()
    + [冒泡排序]()
-+ 穷举查找
++ 线性查找
    + [顺序查找]()
+   + [蛮力匹配]()
    + [双指针技巧]()
++ 穷举查找
    + [深度优先搜索]()
    + [广度优先搜索]()
 
@@ -146,58 +144,61 @@
 ## 暴力排序
 
 
-### 选择排序
+### 1.选择排序
 
 
-> 时间复杂度：θ(n^2)  但键的交换次数为 θ(n); 
+> 时间复杂度：θ(n^2)  但键的交换次数为 θ(n)；
 >
-> 原理：遍历比较，选择最小的交换。
+> 空间复杂度：1；
 
 ```c++
-/**
- *  选择排序 参数为需要排序的数组，数组的长度
- *  时间复杂度：θ(n^2) 键的交换次数为 θ(n); 
- */
-void selection_sort(int arr[], int len)
-{
+//  selection_sort 将输入的int数组进行选择排序
+//  时间复杂度：θ(n^2) 键的交换次数为 θ(n)
+//  空间复杂度：0
+void selection_sort(int * data, int len){
     for (int i = 0; i < len - 1; i++){
         int minKey = i;
         for (int j = i + 1; j < len; j++){
-            if (arr[j] < arr[minKey]){
-                minKey = j;
-            }
+            // find min key
+            if (data[j] < data[minKey]) minKey = j;
         }
-        int temp = arr[i];
-        arr[i] = arr[minKey];
-        arr[minKey] = temp;
+        swap(&data[i], &data[minKey]);
     }
+}
+
+// swap It swap two int
+void swap(int* a, int* b){
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 ```
 
 ​	
 
-
-
-### 冒泡排序
+### 2.冒泡排序
 
 > 时间复杂度：θ(n^2)  键的交换次数为 θ(n^2);
 >
-> 原理：a[i]与a[i+1]比较 
+> 空间复杂度：1；
 
 ```c++
-/**
- *  冒泡排序
- */
-void bubble_sort(int arr[], int len){
+// 冒泡排序 参数为需要排序的数组，数组的长度
+//  时间复杂度：θ(n^2) 键的交换次数为 θ(n^2); 
+void bubble_sort(int data[], int len){
     for (int i = 0; i < len - 1; i++){
         for (int j = 0; j < len - 1 - i; j++){           
-            if (arr[j] > arr[j + 1]){
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
+            if (data[j] > data[j + 1]) 
+                swap(&data[j], &data[j + 1]);
         }
     }
+}
+
+// swap It swap two int
+void swap(int* a, int* b){
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 ```
 
@@ -207,38 +208,43 @@ void bubble_sort(int arr[], int len){
 
 > 在一个给定的列表中查准一个给定的值
 
-### 顺序查找
+### 1.顺序查找
 
 > 时间复杂度：T(n) 最好Ω(1), 最差 O(n)
 >
 > 空间复杂度：S(n) = 1
 
 ```c++
-// 暴力法——顺序查找
+// SequentialSearch 简单的将给定列表的连续元素和给定查找键比较
+// trick：将查找键添加到列表的末尾，查准必定会成功，就不需要在循环时判断是否越界
 // 时间复杂度：T(n) = θ(n)
-int SequentialSearch(int arr[], int len, int key){
+int SequentialSearch(int* data, int len, int key)
+{
     // 创建一个新数组 比原来数组长度+1
-    int newArr[len + 1];
-    for (int i = 0; i < len; i++){
-        newArr[i] = arr[i];
-    }
-    // 新数组最后一项为传入的 key
-    newArr[len] = key;
+    int aux[len + 1];
+    copy(data, aux, len);
+    
+    // 新数组最后一项为传入的 key，就无需判断是否越界
+    aux[len] = key;
 
-    int j = 0;
-    while (newArr[j] != key){
-        j++;
+    int result = 0;
+    while (aux[result] != key) result++;
+
+    if (result == len) return -1;
+    return result;
+}
+
+// copy 将 a复制到b 个数为len
+void copy(int* a, int*b, int len){
+    for (int i = 0; i < len; i++) {
+        b[i] = a[i];
     }
-    if (j == len){
-        return -1;
-    }
-    return j;
 }
 ```
 
 
 
-### 蛮力法字符串匹配
+### 2.蛮力法字符串匹配
 
 > 时间复杂度：T(n)最差 O(mn)
 >
@@ -259,6 +265,10 @@ int BruteForceStringMatch(char t[], int t_len, char p[], int p_len)
     return -1;
 }
 ```
+
+
+
+### 3.双指针技巧
 
 
 

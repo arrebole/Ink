@@ -9,5 +9,5 @@
 ## Table of Contents
 
 + [Algoithms](/docs/Core/Algorithms/Instruct.md) 介绍算法类型   
-+ [Algorithms Explore](/docs/Core/Algorithms/Challenge.md)  刷题中整理的算法       
++ [Algorithms Explore](/src/Algorithms/Challenge/)  刷题中整理的算法       
 
