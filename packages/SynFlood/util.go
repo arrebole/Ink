@@ -17,7 +17,7 @@ func makeTcpHeader(local, remote string, source, dest uint16) []byte {
 		Destination: dest,
 		SeqNum:      25,
 		AckNum:      0,
-		DataOffset:  0, 	   
+		DataOffset:  5, 	   
 		Reserved:    0, 	   
 		ECN:		 0,
 		Ctrl:        tcp.SYN,  
