@@ -1,5 +1,4 @@
 <h1 style="text-align:center;">算法大纲</h1>
-
 **数据结构**：线性、树、图、集合和字典
 
 **重要的问题类型**：排序、查找、字符串处理、图问题、组合问题、几何问题、数值问题。
@@ -15,7 +14,9 @@
 + 线性查找
    + [顺序查找]()
    + [蛮力匹配]()
-   + [双指针技巧]()
++ 双指针技巧
+   + [反转字符串]()
+   + [最短子数组]()
 + 穷举查找
    + [深度优先搜索]()
    + [广度优先搜索]()
@@ -143,13 +144,11 @@
 
 ## 暴力排序
 
-
 ### 1.选择排序
 
-
-> 时间复杂度：θ(n^2)  但键的交换次数为 θ(n)；
+> 输入：无序数组； 输出：有序数组
 >
-> 空间复杂度：1；
+> 时间复杂度：θ(n^2)  但键的交换次数为 θ(n)；空间复杂度：1；
 
 ```c++
 //  selection_sort 将输入的int数组进行选择排序
@@ -178,12 +177,12 @@ void swap(int* a, int* b){
 
 ### 2.冒泡排序
 
-> 时间复杂度：θ(n^2)  键的交换次数为 θ(n^2);
+> 输入：无序数组； 输出：有序数组
 >
-> 空间复杂度：1；
+> 时间复杂度：θ(n^2)  键的交换次数为 θ(n^2);空间复杂度：1；
 
 ```c++
-// 冒泡排序 参数为需要排序的数组，数组的长度
+//  冒泡排序 参数为需要排序的数组，数组的长度
 //  时间复杂度：θ(n^2) 键的交换次数为 θ(n^2); 
 void bubble_sort(int data[], int len){
     for (int i = 0; i < len - 1; i++){
@@ -210,12 +209,13 @@ void swap(int* a, int* b){
 
 ### 1.顺序查找
 
-> 时间复杂度：T(n) 最好Ω(1), 最差 O(n)
+> 输入：字符串和待匹配**字符**； 输出：**字符**在字符串中的索引
 >
-> 空间复杂度：S(n) = 1
+> 时间复杂度：T(n) 最好Ω(1), 最差 O(n)；空间复杂度：S(n) = 1
 
 ```c++
-// SequentialSearch 简单的将给定列表的连续元素和给定查找键比较
+// SequentialSearch 查准数组中给定键的索引
+// 简单的将给定列表的连续元素和给定查找键比较
 // trick：将查找键添加到列表的末尾，查准必定会成功，就不需要在循环时判断是否越界
 // 时间复杂度：T(n) = θ(n)
 int SequentialSearch(int* data, int len, int key)
@@ -246,20 +246,19 @@ void copy(int* a, int*b, int len){
 
 ### 2.蛮力法字符串匹配
 
-> 时间复杂度：T(n)最差 O(mn)
+> 输入：字符串和待匹配**子串**； 输出：**子串**在字符串中的索引
 >
-> 空间复杂度： S（n）= 1
+> 时间复杂度：T(n)最差 O(mn)空间复杂度： S（n）= 1
 
 ```c++
-// t_len: t字符长度，不包括字符串 '\0'
-// p_len: p字符长度，不包括字符串 '\0'
-int BruteForceStringMatch(char t[], int t_len, char p[], int p_len)
-{
-    for (int i = 0; t_len - p_len; i++){
+// BruteForceStringMatch 在data中查准匹配模式的字串， 返回字串的首索引
+// 时间复杂度： 平均 Θ(n) 最差( data_len * pattern_len )
+int BruteForceStringMatch(char* data, int data_len, char* pattern, int pattern_len) {
+    for (int i = 0; i <= (data_len - pattern_len); i++) {
         int j = 0;
-        while (j < p_len && p[j] == t[i + j]){
+        while (j < pattern_len && pattern[j] == data[i + j]) {
             j++;
-            if (j == p_len)  return i;
+            if (j == pattern_len) return i;
         }
     }
     return -1;
@@ -268,7 +267,15 @@ int BruteForceStringMatch(char t[], int t_len, char p[], int p_len)
 
 
 
-### 3.双指针技巧
+
+
+## 双指针技巧
+
+> `同时使用两个指针`来进行迭代, 来解决问题
+
+### 1.反转字符串
+
+### 2.最短子数组
 
 
 
@@ -276,105 +283,63 @@ int BruteForceStringMatch(char t[], int t_len, char p[], int p_len)
 
 ## 穷举查找
 
-### 暴力枚举
+> 它要求生成问题域中的，每一个元素，选出其中满足问题约束的元素，然后找到一个期望的元素
 
-> 利用条件
+### 1.深度优先搜索
 
-### 深度优先搜索
-
-> 暴力法-深度优先搜索
+> 以栈的数据结构，系统的遍历图中的所有点和边
 >
 > 时间复杂度：链表法 θ( |v| + |E| ) 矩阵法 θ( |v|^2 )
 
-```c++
-/**
- *  通过栈和邻接链表图实现 深度优先搜索
- *  暴力法-深度优先搜索
- *  输入图和起始点
-*/
-void dfs(map<string, vector<string>> graph, string s)
-{
-    // 搜索栈
-    stack<string> st;
-    // 跟踪是否已经到过
-    set<string> seen;
+```python
+# Dfs 深度优先搜索， 输入邻接链表法表示的图, 第一个遍历的key
+# 象征勇气：直到找到最远的节点才返回
+class DFS():
+    def __init__(self, graph: dict):
+      self._graph: dict = graph
+      self._result: list[str] = []
 
-    st.push(s);
-    seen.insert(s);
-
-    while (!st.empty())
-    {
-        // 从栈中取一个元素
-        string vertex = st.top();
-        st.pop();
-        // 查询取出的元素
-        vector<string> nodes = graph[vertex];
-        // 遍历取出的元素
-        for (int i = 0; i < nodes.size(); i++)
-        {
-            // 判断元素是否已经查询过
-            string node = nodes[i];
-            if (seen.find(node) == seen.end())
-            {
-                // 如果没有查询过，则把该元素入栈，并标记
-                st.push(node);
-                seen.insert(node);
-            }
-            
-        }
-        cout << vertex << endl;
-    }
-}
+    def dfs(self, key: str):
+        self._dfs(key)
+        return self._result
+    
+    def _dfs(self, key: str):
+        self._result.append(key)
+        for nodes in self._graph[key]:
+            if nodes not in self._result:
+                self._dfs(nodes)
 ```
 
 
 
-### 广度优先搜索
+### 2.广度优先搜索
 
-> 暴力法-广度优先搜索
+> 以队列的数据结构，系统的遍历图中的所有点和边
 >
 > 时间复杂度：链表法 θ( |v| + |E| ) 矩阵法 θ( |v|^2 )
 
-```c++
-/**
- *  通过队列和邻接链表图实现 深度优先搜索
- *  暴力法-广度优先搜索
- *  输入图和起始点
-*/
-void bfs(map<string, vector<string>> graph, string s)
-{
-    // 搜索队列
-    queue<string> qu;
-    // 跟踪是否已经到过
-    set<string> seen;
+```python
+# Bfs 广度优先搜索， 输入邻接链表法表示的图, 第一个遍历的key
+# 象征谨慎：从最近的元素开始搜索
+class BFS():
+    def __init__(self, graph: dict):
+      self._graph: dict = graph
+      self._result: list[str] = []
 
-    qu.push(s);
-    seen.insert(s);
-
-    while (!qu.empty()){
-        // 取出队列头
-        string vertex = qu.front();
-        qu.pop();
-        // 查询取出的元素
-        vector<string> nodes = graph[vertex];
-        // 遍历取出的元素
-        for (int i = 0; i < nodes.size(); i++){
-            // 判断元素是否已经查询过
-            string node = nodes[i];
-            if (seen.find(node) == seen.end()){
-                // 如果没有查询过，则把该元素推入队列，并标记
-                qu.push(node);
-                seen.insert(node);
-            }
-        }
-        cout << vertex << endl;
-    }
-}
+    def bfs(self, key: str):
+        queue: list[str] = [key]
+        while(len(queue) > 0):
+            local = queue.pop(0)
+            for v in self._graph[local]:
+                if v not in self._result:
+                    self._result.append(v)
+                    queue.append(v)
+        return self._result
 ```
 
 
 
-<br />
+
 
 # Ⅱ 减治法
 
