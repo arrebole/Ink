@@ -1,1 +1,0 @@
-bool nim(int total, int limit);

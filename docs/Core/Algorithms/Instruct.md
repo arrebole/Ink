@@ -9,26 +9,21 @@
 
 #### Ⅰ 暴力法
 + 暴力排序
-   + [选择排序]()
-   + [冒泡排序]()
+   + [选择排序](#选择排序)
+   + [冒泡排序](#冒泡排序)
 + 线性查找
-   + [顺序查找]()
-   + [蛮力匹配]()
-+ 双指针技巧
-   + [反转字符串]()
-   + [最短子数组]()
+   + [顺序查找](#顺序查找)
+   + [蛮力匹配](#蛮力匹配)
 + 穷举查找
-   + [深度优先搜索]()
-   + [广度优先搜索]()
+   + [深度优先搜索](#深度优先搜索)
+   + [广度优先搜索](#广度优先搜索)
 
 #### Ⅱ 减治法
-+ 减治排序
++ 减常量
   + [插入排序]()
   + [希尔排序]()
   + [拓扑排序]()
-+ 生成组合对象
-  + [生成排列]()
-  + [生成子集]()
+  + [生成组合对象]()
 + 减常因子算法
   + [折半查找]()
   + [俄式乘法]()
@@ -36,6 +31,9 @@
   + [计算中值和选择]()
   + [插值查找]()
   + [二叉查找树的查找与插入]()
++ 双指针技巧
+  + [左右指针]()
+  + [快慢指针]()
 
 #### Ⅲ 分治法
 + 分治排序
@@ -267,20 +265,6 @@ int BruteForceStringMatch(char* data, int data_len, char* pattern, int pattern_l
 
 
 
-
-
-## 双指针技巧
-
-> `同时使用两个指针`来进行迭代, 来解决问题
-
-### 1.反转字符串
-
-### 2.最短子数组
-
-
-
-
-
 ## 穷举查找
 
 > 它要求生成问题域中的，每一个元素，选出其中满足问题约束的元素，然后找到一个期望的元素
@@ -343,46 +327,44 @@ class BFS():
 
 # Ⅱ 减治法
 
-## 直接插入排序
-
-> 思想：减治法-减常因子
+> 减治技术利用了一个问题给定实例的解和同样问题的较小实例的解之间的某种关系
 >
-> 注释：小数组每次长度+1进行排序。
+> 一旦建立了这种关系，我们可以自顶向下，或者自下而上的运用这种关系
+
+## 减常量
+
+### 1.直接插入排序
+
+> f (小数组长度+1) = f (小数组) 。
 >
 > 性能：C<sub>worst</sub> = θ( n<sup>2</sup> ); C<sub>bast</sub> = θ( n ); C<sub>avg</sub> ≈ 1/4 n<sup>n</sup>  = θ ( n<sup>2</sup> )
 
-#### 迭代实现直接插入排序 
-
 ```c++
-void insertionSort(int a[], int len)
-{
-    //从第二个元素开始，取出该元素，进行比较排序
-    //小数组递增
-    for (int i = 1; i < len; i++)
-    {
-        int v = a[i];
+// insertionSort 
+// f (array[n+1]) = f (array[n]) 
+// 时间复杂度  θ( n^2 ) - θ( n );
+void insertionSort(int* a, int len){
+    //小数组递增, 自下而上
+    for (int i = 1; i < len; i++){
+        //从第二个元素开始，取出该元素，进行比较排序
+        int loacl = a[i];
         int j = i - 1;
-        while (j >= 0 && a[j] > v)
-        {
+        while (j >= 0 && a[j] > loacl){
             a[j + 1] = a[j];
             j--;
         }
-        a[j + 1] = v;
+        a[j + 1] = loacl;
     }
 }
 ```
 
 
 
-
-
-## 希尔排序
+### 2.希尔排序
 
 > 思想：基于直接插入排序
 >
 > 性能：优于直接插入排序
-
-#### (风格一)希尔排序实现
 
 ```c++
 void shellSort(int a[], const int len)
@@ -412,36 +394,7 @@ void shellSort(int a[], const int len)
 
 
 
-#### (风格二)希尔排序实现
-
-```c++
-void shellSort(int a[], const int len)
-{
-    int N = len;
-    int h = 1;
-    while (h < N / 3)
-    {
-        h = 3 * h + 1;
-    }
-    while (h >= 1)
-    {
-        for (int i = h; i < N; i++)
-        {
-            for (int j = i; j >= h && a[j] < a[j - h]; j -= h)
-            {
-                int temp = a[j];
-                a[j] = a[j - h];
-                a[j - h] = temp;
-            }
-        }
-        h = h / 3;
-    }
-}
-```
-
-
-
-## 拓扑排序
+### 3.拓扑排序
 
 > 架构：1、基于减治法、源删除Kahn算法。2、基于暴力法-DFS,输出DFS的逆序
 >
@@ -451,24 +404,7 @@ void shellSort(int a[], const int len)
 >
 > 应用：有向图的排序
 
-
-
-##### 图的表示
-
-```python
-    graph = dict()
-    graph["A"] = ["C", "B"]
-    graph["B"] = ["G", "E"]
-    graph["C"] = ["F"]
-    graph["D"] = ["A", "B", "C", "G", "F"]
-    graph["E"] = []
-    graph["F"] = []
-    graph["G"] = ["F", "E"]
-```
-
-
-
-#### 减治法直接实现拓扑排序
+#### 减治拓扑排序
 
 ```python
 # 减治法——减源拓扑排序
@@ -504,7 +440,7 @@ def Kahn_topoSort(graph):
 
 
 
-#### 基于深度优先搜索实现拓扑排序
+#### DFS拓扑排序
 
 ```python
 import random
@@ -557,17 +493,15 @@ def DFS_topoSort(graph):
 
 ```
 
-## 生成组合对象的算法
 
-### 生成排列
+
+### 4.生成排列
+
+##### JohnsonTrotter
 
 > 输入n，生成1 - n 的所有序列组合。
 >
 > 架构：减治法-生成排序  n(n-1)! = n!
-
-
-
-#### JohnsonTrotter(生成无序)
 
 ```c++
 // 排列节点
@@ -642,9 +576,7 @@ void johnsonTrotter(int n)
 }
 ```
 
-
-
-#### LexicographicPermute（生成字典序）
+##### LexicographicPermute
 
 ```c++
 // 以字典序产生排序
@@ -725,7 +657,7 @@ void lexicographicPermute(int n)
 
 
 
-### 生成子集
+### 5.生成子集
 
 > 架构：减治法-生成子集-二进制反射格雷码算法
 >
@@ -734,6 +666,8 @@ void lexicographicPermute(int n)
 > 应用：分配问题(求最有价值的子集)
 >
 > 同类：暴力法-穷举查找
+>
+
 
 #### 二进制反射格雷码
 
@@ -791,10 +725,6 @@ list<struct bitsNode> BRGC(int n)
 
 
 
-#### 利用二进制反射格雷码生成所有子集
-
-
-
 ```c++
 void PowerSet(int a[], int len)
 {
@@ -823,34 +753,13 @@ void PowerSet(int a[], int len)
 }
 ```
 
-**测试输出**
 
-```c++
-int main()
-{
-    int a[3] = {6, 2, 3};
-    PowerSet(a,3);
-    return 0;
-}
-
-/******输出**********
-      3
-      23
-      2
-      63
-      623
-      62
-      6
-******************/
-```
 
 
 
 ## 减常因子算法
 
-
-
-#### 折半查找
+### 1.折半查找
 
 > 架构：减治法-减常因子-折半查找
 >
@@ -887,7 +796,7 @@ int binarySearch(int a[], int len, int k)
 
 
 
-#### 俄式乘法
+### 2.俄式乘法
 
 > 架构：减治法-减常因子-俄式乘法，位操作
 >
@@ -928,19 +837,11 @@ int RussianPeasant(int n, int m)
 
 
 
-#### 约瑟夫斯问题
-
-> J（ 2k ）= 2J( k ) -  1;
->
-> J ( 2k + 1 ) = 2J( k ) + 1;
-
-
-
 
 
 ## 减可变规模算法
 
-### 计算中值和选择问题
+### 1.计算中值和选择问题
 
 > 划分问题：将大于a的划分在右侧，小于a的划分在左侧
 >
@@ -948,7 +849,7 @@ int RussianPeasant(int n, int m)
 
 
 
-#### Lomuto 减治划分
+#### Lomuto划分
 
 ```python
 #
@@ -1011,7 +912,7 @@ def main():
 
 
 
-### 插值查找
+### 2.插值查找
 
 > 架构：查字典思想，通过增长率优化版本的二分查找，只适用于有序数组
 >
@@ -1072,7 +973,7 @@ int growthRate(int a, int b, int num)
 
 
 
-### 二叉查找树的查找和插入
+### 3.二叉查找树的查找和插入
 
 > 架构：减治法-减可变规模-二叉查找树的插入和查找
 >
@@ -1139,7 +1040,7 @@ BST_tree::~BST_tree()
 }
 ```
 
-#### 二叉查找树的插入
+#### 插入
 
 ```c++
 // 二叉查找树的插入
@@ -1183,7 +1084,7 @@ struct BST_node *BST_tree::inseart(int item)
 }
 ```
 
-#### 二叉查找树的查找
+#### 查找
 
 ```c++
 // 二叉查找树的查找
@@ -1215,28 +1116,15 @@ int BST_tree::search(int key)
 
 
 
-### 拈游戏
+## 双指针技巧
 
-> 重点：异或操作，nim和
+### 1.左右指针
 
-```c++
-// 输入：东西的总数和单次获取的限制数量
-// 输出：先手的胜负，true 是胜利
-bool nim(int total, int limit)
-{
-    int flag;
-    int remain = total % limit;
-    flag = limit ^ remain;
-
-    if (flag == 0)
-        return false;
-    return true;
-}
-```
+### 2.快慢指针
 
 
 
-<br />
+
 
 # Ⅲ 分治法
 
