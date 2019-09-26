@@ -282,16 +282,16 @@ class DFS():
     def __init__(self, graph: dict):
       self._graph: dict = graph
       self._result: list[str] = []
-
-    def dfs(self, key: str):
-        self._dfs(key)
-        return self._result
     
     def _dfs(self, key: str):
         self._result.append(key)
         for nodes in self._graph[key]:
             if nodes not in self._result:
                 self._dfs(nodes)
+                
+    def dfs(self, key: str):
+        self._dfs(key)
+        return self._result
 ```
 
 
@@ -367,25 +367,18 @@ void insertionSort(int* a, int len){
 > 性能：优于直接插入排序
 
 ```c++
-void shellSort(int a[], const int len)
-{
-    int gap = 1;
-    while (gap < len / 3)
-    {
-        gap = 3 * gap + 1;
-    }
-    while (gap >= 1)
-    {
-        for (int i = gap; i < len; i++)
-        {
-            int v = a[i];
-            int j = i - gap;
-            while (j >= 0 && a[j] > v)
-            {
+// shellSort 插入排序的一种缩小增量排序
+// 步长的选择是希尔排序的重要部分 T = θ(2^n) ~ θ(nlog^2n)
+void shellSort(int a[], const int len){
+    int gap = 1, j, temp;
+    while (gap < len / 3) gap = 3 * gap + 1;
+    while (gap >= 1){
+        for (int i = gap; i < len; i++){
+            temp = a[i];
+            // 将 a[j] 插入到 a[j-grap], a[i-2*gap], a[i-3*gap]中
+            for(j = i - gap; j >= 0 && a[j] > temp;  j -= gap)
                 a[j + gap] = a[j];
-                j -= gap;
-            }
-            a[j + gap] = v;
+            a[j + gap] = temp;
         }
         gap = gap / 3;
     }
@@ -396,45 +389,42 @@ void shellSort(int a[], const int len)
 
 ### 3.拓扑排序
 
-> 架构：1、基于减治法、源删除Kahn算法。2、基于暴力法-DFS,输出DFS的逆序
->
-> 区别：Kahn算法是从每个**入度为0**的顶点出发。基于dfs 是对每个**出度为0**的顶点进行dfs
+#### Kahn拓扑排序
+
+> 有向图的排序
 >
 > 性能：T(n) = O(n+e)
->
-> 应用：有向图的排序
-
-#### 减治拓扑排序
 
 ```python
-# 减治法——减源拓扑排序
-# 不断删除入度为0的点
-# Kahn算法是从每个入度为0的顶点出发
-def Kahn_topoSort(graph):
-    # 记录顶点的输入边数
-    nodes = dict()
-    # 初始化 顶点统计入nodes
-    for key in graph.keys():
-        nodes[key] = 0
-    # 统计边 输入边统计入nodes
-    for _, value_list in graph.items():
-        for vertex in value_list:
-            nodes[vertex] += 1
-    # 减源
-    # 如果不空循环删减
-    while (nodes):
-        for key in list(nodes.keys()):
-            # 从字典中删除入度为0的点并输出
-            # 并将这个点的输出点 -1
-            if nodes[key] == 0:
-                # 从统计字典中删除点
-                del nodes[key]
-                # 减少关联点的入度
-                reduceList = graph[key]
-                for i in reduceList:
-                    nodes[i] -= 1
-                # 输出这个被删除的点
-                print(key)
+# KahnTopoSort 基于减源的拓扑排序, -1策略
+class KahnTopo:
+    def __init__(self, graph):
+        self._graph = graph
+   
+    # 统计每个结点的边的数量
+    def _countEdge(self):
+        result = dict()
+        # 初始化点
+        for key in self._graph.keys():
+            result[key] = 0
+        # 统计节点的边数
+        for value_list in self._graph.values():
+            for vertex in value_list:
+                result[vertex] += 1
+        return result
+
+    def sort(self):
+        result = list()
+        edgeCount = self._countEdge()
+        while (edgeCount):
+            for key in list(edgeCount.keys()):
+                # 如果边数为0, 则减少关联点的入度并删除
+                if edgeCount[key] == 0:
+                    for i in self._graph[key]:
+                        edgeCount[i] -= 1
+                    result.append(key)
+                    del edgeCount[key]
+        return result
 
 ```
 
@@ -442,55 +432,39 @@ def Kahn_topoSort(graph):
 
 #### DFS拓扑排序
 
+> 有向图的排序
+>
+> 性能：T(n) = O(n+e)
+
 ```python
-import random
-
-# 基于dfs的拓扑排序
-def DFS_topoSort(graph):
-    # 结果栈
-    result_Stack = list()
-    # 图上的顶点不为空时，随机找点进行dfs
-    while (graph):
-        # vertex 为取出的顶点
-        # 随机一个字典中的key，第二个参数为限制个数
-        vertex = random.sample(graph.keys(), 1)[0]
-        # 创建dfs栈，跟踪set，
-        # 并把随机顶点放入栈中
-        stack = list()
-        seen = set()
-        stack.append(vertex)
-        seen.add(vertex)
-        # 标记深元素
-        deep = ""
-        # 当栈不空时继续搜索
-        while (len(stack) > 0):
-            # 从栈中取元素
-            v = stack.pop()
-            nodes = graph[v]
-            # 如果出度为0 则标记为最深点
-            if (len(nodes) == 0):
-                deep = v
-                continue
-            for node in nodes:
-                # 如果没见过 就标记并入栈
-                if node not in seen:
-                    stack.append(node)
-                    seen.add(node)
-
-        # 删除最深的元素
-        graph.pop(deep)
-        for key, value in graph.items():
-            for item in value:
-                if item == deep:
-                    graph[key].remove(deep)
-        # 最深的元素入结果栈
-        result_Stack.append(deep)
+# 基于dfs的拓扑排序 基于暴力法-DFS,输出DFS的逆序
+# graph 为 map 结构 邻接链表法表示图
+class DFSTopo:
+    def __init__(self, graph):
+        self._graph = graph
+        self._keys = set(graph.keys())
+        self._result = list()
+        
+    def sort(self):
+        while len(self._keys) > 0:
+            # 随机取一个元素进行dfs
+            self._dfs(self._keys.pop())
+        self._result.reverse()
+        return self._result
     
-    # 输出
-    print("dfs 拓扑结果")
-    while (result_Stack):
-        print(result_Stack.pop(), end=" ")
-
+    def _pushResult(self, value):
+        if value not in self._result:
+            self._keys.discard(value)
+            self._result.append(value)
+    
+    def _dfs(self, key):
+        if len(self._graph[key]) == 0:
+            return
+        for node in self._graph[key]:
+            self._dfs(node)
+            # 出栈时，构建dfs森林
+            self._pushResult(node)
+        self._pushResult(key)
 ```
 
 
