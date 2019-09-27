@@ -9,21 +9,23 @@
 
 #### Ⅰ 暴力法
 + 暴力排序
-   + [选择排序](#选择排序)
-   + [冒泡排序](#冒泡排序)
+   + [选择排序](#1.选择排序)
+   + [冒泡排序](#2.冒泡排序)
 + 线性查找
-   + [顺序查找](#顺序查找)
-   + [蛮力匹配](#蛮力匹配)
+   + [顺序查找](#1.顺序查找)
+   + [蛮力匹配](#2.蛮力匹配)
 + 穷举查找
-   + [深度优先搜索](#深度优先搜索)
-   + [广度优先搜索](#广度优先搜索)
+   + [深度优先搜索](#1.深度优先搜索)
+   + [广度优先搜索](#2.广度优先搜索)
 
 #### Ⅱ 减治法
 + 减常量
-  + [插入排序]()
-  + [希尔排序]()
-  + [拓扑排序]()
-  + [生成组合对象]()
+  + [插入排序](#1.插入排序])
+  + [希尔排序](#2.希尔排序)
+  + [拓扑排序](#3.拓扑排序)
+  + 生成组合对象
+    + [生成排列](#4.生成排列)
+    + [生成子集](#5.生成子集)
 + 减常因子算法
   + [折半查找]()
   + [俄式乘法]()
@@ -362,9 +364,9 @@ void insertionSort(int* a, int len){
 
 ### 2.希尔排序
 
-> 思想：基于直接插入排序
+> 分组插入排序，缩小增量排序
 >
-> 性能：优于直接插入排序
+> 性能：【非稳定】T = θ(2^n) ~ θ(nlog^2n)
 
 ```c++
 // shellSort 插入排序的一种缩小增量排序
@@ -473,80 +475,66 @@ class DFSTopo:
 
 ##### JohnsonTrotter
 
-> 输入n，生成1 - n 的所有序列组合。
+> 输入：数组，输出：数组的所有序列组合。
 >
-> 架构：减治法-生成排序  n(n-1)! = n!
+> 性能：T = n(n-1)! ≈ n!
 
-```c++
-// 排列节点
-struct jt_node
-{
-    int num;
-    bool flag; //标记方向，false指向右
-};
-```
+```go
+// JohnsonTrotter 全排列生成算法 邻位对换法
+func JohnsonTrotter(aux []int) []int {
+	result := make([]int, 0)
+	direc := make([]int, len(aux))
+	for i := range direc {
+		direc[i] = -1
+	}
 
+	for k := findMove(aux, direc); k != -1; k = findMove(aux, direc) {
+		result = append(result, toInt(aux))
+		// 交换
+		t := direc[k] + k
+		aux[t], aux[k] = aux[k], aux[t]
+		direc[t], direc[k] = direc[k], direc[t]
+		// 反转
+		reverse(aux, direc, t)
+	}
+	return result
+}
 
+// 数组转化成数字
+func toInt(a []int) int {
+	result := 0
+	for _, v := range a {
+		result *= 10
+		result += v
+	}
+	return result
+}
 
-```c++
-// 减治法 —— 生成排列
-//性能： 生成排列的最有效的算法之一,时间复杂度为O(n!)
-void johnsonTrotter(int n)
-{
-    // 初始化排列
-    jt_node *a = new jt_node[n + 1];
-    for (int i = 0; i <= n; i++)
-    {
-        a[i].num = i;
-        a[i].flag = false;
-    }
+//反转比移动项大的所有项的移动方向
+func reverse(aux []int, d []int, k int) {
+	max := aux[k]
+	for i := range aux {
+		if aux[i] > max {
+			d[i] = d[i] * -1
+		}
+	}
+}
 
-    int k = n;
-    jt_node temp;
-    // 存在一个移动元素
-    while (k != 0)
-    {
-        // @return 输出排序
-        for (int i = 1; i <= n; i++)
-        {
-            cout << a[i].num << " ";
-        }
-        cout << endl;
-
-        k = 0;
-        // 求最大移动元素k
-        for (int i = 1; i <= n; i++)
-        {
-            if (a[i].flag && a[i].num > a[i + 1].num && a[k].num < a[i].num && i < n)
-                k = i;
-            else if (i > 1 && !a[i].flag && a[i].num > a[i - 1].num && a[k].num < a[i].num)
-                k = i;
-        }
-        // 把k和它箭头指向的相邻元素互换
-        if (k != 0)
-        {
-            if (a[k].flag)
-            {
-                temp = a[k];
-                a[k] = a[k + 1];
-                a[k + 1] = temp;
-                k++;
-            }
-            else
-            {
-                temp = a[k - 1];
-                a[k - 1] = a[k];
-                a[k] = temp;
-                k--;
-            }
-        }
-        // 调转所有大于k元素的方向 并输出
-        for (int i = 1; i <= n; i++)
-        {
-            if (a[i].num > a[k].num)
-                a[i].flag = (a[i].flag ? false : true);
-        }
-    }
+//找到最大可移动项
+func findMove(aux []int, direction []int) int {
+	result := -1
+	max := -1
+	for i := range aux {
+		j := i + direction[i]
+		if j < 0 || j >= len(aux) {
+			continue
+		}
+		if aux[i] > max && aux[j] < aux[i] {
+			result = i
+			max = aux[i]
+		}
+	}
+	return result
 }
 ```
 
