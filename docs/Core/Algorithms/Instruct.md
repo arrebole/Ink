@@ -540,80 +540,79 @@ func findMove(aux []int, direction []int) int {
 
 ##### LexicographicPermute
 
-```c++
+```go
 // 以字典序产生排序
-// 输入：一个正整数 n
-// 输出：在字典序下{1,...,n} 所有排列的列表
-void lexicographicPermute(int n)
-{
-    // 初始化排列
-    int *a = new int[n + 1];
-    for (int i = 0; i <= n; i++)
-    {
-        a[i] = i;
-    }
-    // @return +++显示输出初始+++
-    for (int i = 1; i <= n; i++)
-    {
-        cout << a[i] << " ";
-    }
-    cout << endl;
+// Permute 生成字典序排列
+func LexicographicPermute(n int) []int {
+	var result = []int{}
+	var aux = createList(n)
+	for {
+		// 将排列添加到结果
+		result = append(result, aToInt(aux))
+		// 找到最大升序元素 aux[i] < aux[i+1]
+		i := findMaxOrdered(aux)
+		if i == -1 {
+			break
+		}
+		// 找到最大索引j使得 aux[i] < aux[j]
+		j := findMaxBigIndex(aux, aux[i])
+		// 交换 a[i],a[j]
+		aux[i], aux[j] = aux[j], aux[i]
+		// 反转 aux[i+1...n]
+		recover(aux, i+1, n-1)
+	}
+	return result
+}
 
-    bool isHaveAscend = true; //是否存在两个连续升序
-    while (isHaveAscend)
-    {
-        // 找到a(i)<a(i+1)的i最大值
-        int maxi = 0;
-        for (int i = 1; i < n; i++)
-        {
-            if (a[i] < a[i + 1] && maxi < i)
-                maxi = i;
-        }
-        // 找到a(i)<a(j) j的最大索引
-        int maxj = maxi;
-        for (int j = maxi; j <= n; j++)
-        {
-            if (a[j] > a[maxi])
-                maxj = j;
-        }
+// createList 输入n 输出[1,2..n]
+func createList(n int) []int {
+	var result = make([]int, n)
+	for i := 0; i < n; i++ {
+		result[i] = i + 1
+	}
+	return result
+}
 
-        // 交换ai和aj
-        int temp = a[maxi];
-        a[maxi] = a[maxj];
-        a[maxj] = temp;
+// aToInt 将数组转化为数字
+// {1，2，3} -> 123
+func aToInt(a []int) int {
+	var result = 0
+	for _, v := range a {
+		result *= 10
+		result += v
+	}
+	return result
+}
 
-        // 利用栈反序 a[i+1] - a[n]
-        stack<int> st;
-        for (int i = maxi + 1; i <= n; i++)
-        {
-            st.push(a[i]);
-        }
-        for (int i = maxi + 1; i <= n; i++)
-        {
-            a[i] = st.top();
-            st.pop();
-        }
+//  recover 反转数组
+func recover(a []int, lo, hi int) {
+	for lo < hi {
+		a[lo], a[hi] = a[hi], a[lo]
+		lo++
+		hi--
+	}
+}
 
-        // 判断是否存在两个连续升序
-        bool flag = true;
-        for (int i = 1; i < n; i++)
-        {
-            if (a[i + 1] > a[i])
-            {
-                flag = false;
-            }
-        }
-        if (flag)
-            isHaveAscend = false;
+// findMaxBigIndex 找到比n大的数的最大索引
+func findMaxBigIndex(a []int, n int) int {
+	var result = -1
+	for i, v := range a {
+		if v > n {
+			result = i
+		}
+	}
+	return result
+}
 
-        // @return +++显示输出+++
-        for (int i = 1; i <= n; i++)
-        {
-            cout << a[i] << " ";
-        }
-        cout << endl;
-    }
-    delete[] a
+// findMaxOrdered 寻找数组中最大升序
+func findMaxOrdered(a []int) int {
+	var result = -1
+	for i := 0; i < len(a)-1; i++ {
+		if a[i] < a[i+1] {
+			result = i
+		}
+	}
+	return result
 }
 ```
 
