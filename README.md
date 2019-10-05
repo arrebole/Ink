@@ -10,19 +10,22 @@
 
 ## Table of Contents
 
-+ **Core**
-  + [Algorithms](/docs/Core/Algorithms/Main.md)
-  + [Network](/docs/Core/Network/Main.md)
-  + [Operating System](/docs/Core/System/Main.md)
-  + [Design Pattern](/docs/Core/DesignPattern/DesignPatterns.md)
-  + [Refactoring](/docs/Core/Refactoring/Refactoring.md)
-+ **Expansive** 
-  + [Automation](/docs/Expansive/Automation/Main.md)
-+ **Vertical and horizontal**
++ **Start**
+  + [Language]()
++ **Warm-up**
   + [Sword to Offer]()
   + [Programming Pearls]()
-+ **Battlefield**
   + [Interview]()
+
++ **Profession**
+  + [Algorithms](/docs/Profession/Algorithms/Main.md)
+  + [Network](/docs/Profession/Network/Main.md)
+  + [Operating System](/docs/Profession/System/Main.md)
+
++ **Killer**
+  + [Devops](/docs/Killer/Devops/Main.md)
+  + [Design Pattern](/docs/Killer/DesignPattern/DesignPatterns.md)
+  + [Refactoring](/docs/Killer/Refactoring/Refactoring.md)
 + **Nuclear Reaction**
   + [Graphics]()
   + [Blockchain]()
@@ -30,10 +33,15 @@
   + [Cryptography]()
   + [Machine Learning]()
   + [Compilation Principle]()
-+ **Newborn**
-  + [Hack](/docs/Newborn/Hack/Main.md)
-  + [Architecture](/docs/Newborn/Architecture/Main.md)
-  + [Literature](/docs/Newborn/Literaturet/Main.md)
++ **Romantic**
+  + [Hack](/docs/Romantic/Hack/Main.md)
+  + [Architecture](/docs/Romantic/Architecture/Main.md)
+  + [Literary](/docs/Romantic/Literary/Main.md)
 + **Limit**
+  + [Relativity]()
+  + [Quantum theory]()
+  + [Psychology]()
 + **Beyond the limits**
+  + [Universal theory]()
+  + [Philosophy]()
 
