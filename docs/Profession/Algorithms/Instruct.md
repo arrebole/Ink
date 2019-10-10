@@ -626,8 +626,6 @@ func findMaxOrdered(a []int) int {
 >
 > 应用：分配问题(求最有价值的子集)
 >
-> 同类：暴力法-穷举查找
->
 
 
 #### 二进制反射格雷码
@@ -686,34 +684,20 @@ func recoverCode(a [][]byte) [][]byte {
 
 ### 1.折半查找
 
-> 架构：减治法-减常因子-折半查找
->
-> 应用：有序数组的查找
+> 有序数组中的的快速查找
 >
 > 性能：C<sub>avg</sub>( n ) = log<sub>2</sub>n
 
 ```c++
 // @params：一个有序数组和它的长度，需要查找的key
 // @retrun: key的index
-int binarySearch(int a[], int len, int k)
-{
-    int l = 0, r = len - 1;
-    int m;
-    while (l <= r)
-    {
-        m = ((l + r) / 2);
-        if (k == a[m])
-        {
-            return m;
-        }
-        else if (k < a[m])
-        {
-            r = m - 1;
-        }
-        else
-        {
-            l = m + 1;
-        }
+int binarySearch(int a[], int len, int k){
+    int lo = 0, hi = len - 1;
+    while (lo <= hi){
+        int m = (lo + hi) / 2;
+        if (k == a[m])      return m;
+        else if (k < a[m])  hi = m - 1;
+        else                lo = m + 1;
     }
     return -1;
 }
@@ -727,36 +711,30 @@ int binarySearch(int a[], int len, int k)
 >
 > 性能：极高，机器底层的基础操作。
 
-
-
 ```c++
 /**
  *  减治法-减常因子-俄式乘法
  *  n * m = n/2 * 2m
  *  n * m = (n-1)/2 * 2m + m 
 */
-int RussianPeasant(int n, int m)
-{
+int RussianPeasant(int n, int m){
     int sum = 0;
-    while (n > 0)
-    {
-        if (n % 2 == 0)
-        {
-            // n * m = n/2 * 2m
+    while (n > 1){
+        // n * m = n/2 * 2m
+        if (n % 2 == 0){
             n = n >> 1;
-            m = n << 1;
+            m = m << 1;
         }
-        else
-        {
-            //n * m = (n-1)/2 * 2m + m
-            // m为奇数时，先把 m 存放 sum 中
+        //n * m = (n-1)/2 * 2m + m
+        else{
+            // 先把 m 存放 sum 中
             // 当 m = 1 时 (n-1)/2 * 2m 被加入sum中
-            sum += m;
             n = (n - 1) >> 1;
+            sum += m;
             m = m << 1;
         }
     }
-    return sum;
+    return (sum + m);
 }
 ```
 
@@ -822,16 +800,6 @@ def quickSelect(a: list, k: int) -> int:
         return quickSelect(a[l:s], k)
     else:
         return quickSelect(a[s+1:r], l+k-1-s)
-
-```
-
-
-
-```c++
-def main():
-    a = [0, 27, 3, 6, 2, 1, 7, 8]
-    index = quickSelect(a, 5)
-    print(index)
 
 ```
 

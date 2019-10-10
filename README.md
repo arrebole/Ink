@@ -40,7 +40,7 @@
 + **Limit**
   + [Relativity]()
   + [Quantum theory]()
-  + [Psychology]()
+  + [Psychology](/docs/Limit/Psychology/main.md)
 + **Beyond the limits**
   + [Universal theory]()
   + [Philosophy]()
