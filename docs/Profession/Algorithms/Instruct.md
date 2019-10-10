@@ -30,7 +30,7 @@
   + [折半查找]()
   + [俄式乘法]()
 + 减可变规模算法
-  + [计算中值和选择]()
+  + [选择问题]()
   + [插值查找]()
   + [二叉查找树的查找与插入]()
 + 双指针技巧
@@ -744,15 +744,11 @@ int RussianPeasant(int n, int m){
 
 ## 减可变规模算法
 
-### 1.计算中值和选择问题
-
-> 划分问题：将大于a的划分在右侧，小于a的划分在左侧
->
-> 选择问题：寻找数列第k个最小元素的问题。
-
-
+### 1.选择问题
 
 #### Lomuto划分
+
+> 将大于a的划分在右侧，小于a的划分在左侧
 
 ```python
 #
@@ -760,18 +756,14 @@ int RussianPeasant(int n, int m){
 #   架构：减治法-减可变规模-lomuto划分
 #   @params l,r,需要规划的开始端和结束端
 #
-
 def lomutoPartition(a: list) -> int:
-    l = 0
-    r = len(a) - 1
-
-    p = a[l]
-    s = l
-    for i in range(l, r + 1):
+    p = a[0]
+    s = 0
+    for i in range(0, len(a)):
         if a[i] < p:
             s += 1
             a[s], a[i] = a[i], a[s]
-    a[l], a[s] = a[s], a[l]
+    a[0], a[s] = a[s], a[0]
     return s
 
 ```
@@ -790,16 +782,14 @@ def lomutoPartition(a: list) -> int:
 #   具有很好的平均时间复杂度，然而最坏时间复杂度则不理想.
 #   性能： 从O(n log n)至O(n)，不过最坏情况仍然是O(n2)。
 #
-def quickSelect(a: list, k: int) -> int:
-    l = 0
-    r = len(a)
+def quickSelect(a: list, k: int):
     s = lomutoPartition(a)
-    if s == (l + k - 1):
+    if s == (k - 1):
         return a[s]
-    elif s > (l + k - 1):
-        return quickSelect(a[l:s], k)
+    elif s > (k - 1):
+        return quickSelect(a[:s], k)
     else:
-        return quickSelect(a[s+1:r], l+k-1-s)
+        return quickSelect(a[s+1:], k-1-s)
 
 ```
 
@@ -818,39 +808,30 @@ def quickSelect(a: list, k: int) -> int:
  *  输出：key对应的索引，如果没有则返回-1；
  * 
 */
-int interpolationSearch(int a[], int len, int key)
-{
+int interpolationSearch(int a[], int len, int key){
 
     // 搜索的左右索引
     int l = 0, r = len - 1;
     // 选定的索引
     int index = 0;
 
-    while (a[index] != key && l != r)
-    {
+    while (a[index] != key && l != r){
         // 通过增长率求取近似索引
         int k = growthRate(a[l], a[r], r - l);
         index = (key - a[0]) / k;
+        
+        // 命中
+        if (a[index] == key) return index;
 
-        if (a[index] == key)
-        {
-            return index;
-        }
         // 判断正序还是负序
-        if (k >= 0)
-        {
+        if (k >= 0){
             // 缩减搜索范围
-            if (a[index] > key)
-                l = index;
-            else
-                r = index;
+            if (a[index] > key)  l = index;
+            else                 r = index;
         }
-        else
-        {
-            if (a[index] > key)
-                r = index;
-            else
-                l = index;
+        else{
+            if (a[index] > key)  r = index;
+            else                 l = index;
         }
     }
 
@@ -872,138 +853,49 @@ int growthRate(int a, int b, int num)
 >
 > 性能：查找 C<sub>avg</sub>= O( log 2 (n) )
 
-```c++
-// 二叉查找树节点
-struct BST_node
-{
-    int data;
-    BST_node *left;
-    BST_node *right;
-
-    BST_node(int _data);
-    ~BST_node();
-};
-
-BST_node::BST_node(int _data)
-{
-    data = _data;
-    left = nullptr;
-    right = nullptr;
-}
-
-BST_node::~BST_node()
-{
-    delete left;
-    delete right;
-}
-```
-
-#### 
-
-```c++
-// 二叉查找树类
-class BST_tree
-{
-  protected:
-    // 根节点
-    struct BST_node *root;
-
-  public:
-    // 构造和析构
-    BST_tree();
-    ~BST_tree();
-
-    // 二叉查找树添加节点
-    // item：需要添加的节点数据，t：插入位置，默认传入根节点自动匹配插入位置
-    struct BST_node *inseart(int item);
-    // 二叉查找树查找
-    int search(int key);
-};
-
-// 构造函数
-BST_tree::BST_tree()
-{
-    this->root = nullptr;
-}
-
-// 释放内存
-BST_tree::~BST_tree()
-{
-    delete root;
-}
-```
-
 #### 插入
 
-```c++
-// 二叉查找树的插入
-struct BST_node *BST_tree::inseart(int item)
-{
-    BST_node *local = this->root;
-    // 不存在根节点时 将数据创建为根节点
-    if (this->root == nullptr)
-    {
-        this->root = new BST_node(item);
-        local = this->root;
-        return local;
+```typescript
+// BSTtreeInsert 二叉查找树的插入 非递归版本
+export function BSTtreeInsert(root: TreeNode, node: TreeNode){
+    let local = root;
+    while(true){
+        if(local.Left == null && node.Value <= local.Value) {
+            local.Left = node;
+            return;
+        }
+        if (local.Right == null && node.Value > local.Value ) {
+            local.Right = node;
+            return;
+        }
+
+        if(local.Left != null && node.Value <= local.Value ){
+            local = local.Left;
+            continue;
+        }
+
+        if(local.Right != null && node.Value > local.Value){
+            local = local.Right;
+            continue;
+        } 
     }
-    // 迭代寻找合适的节点插入数据
-    while (true)
-    {
-        // 如果节点适合则插入
-        if (local->left == nullptr && item <= local->data)
-        {
-            local->left = new BST_node(item);
-            local = local->left;
-            return local;
-        }
-        if (local->right == nullptr && item >= local->data)
-        {
-            local->right = new BST_node(item);
-            local = local->right;
-            return local;
-        }
-        // 如果节点不适合则切换
-        if (local->left != nullptr && item <= local->data)
-        {
-            local = local->left;
-        }
-        else if (local->right != nullptr && item >= local->data)
-        {
-            local = local->right;
-        }
-    }
-    return local;
 }
 ```
 
 #### 查找
 
 ```c++
-// 二叉查找树的查找
-int BST_tree::search(int key)
-{
-    // 将当前节点指向根节点
-    BST_node *local = this->root;
-    while (local != nullptr)
-    {
-        // 匹配成功则返回数据
-        if (key == local->data)
-        {
-            return local->data;
-        }
-
-        // 不匹配则左右切换
-        if (key >= local->data)
-        {
-            local = local->right;
-        }
-        else if (key <= local->data)
-        {
-            local = local->left; 
-        }
+// BSTtreeInsert 二叉查找树的插入(递归版本)
+export function BSTtreeSearch(root: TreeNode, key: number){
+    if (root.Value == key) return true
+    
+    if( root.Left != null && key <= root.Value) {
+        return BSTtreeSearch(root.Left, key)
     }
-    return local->data;
+    else if( root.Right != null && key > root.Value) {
+        return BSTtreeSearch(root.Right, key)
+    }
+    else  return false
 }
 ```
 
