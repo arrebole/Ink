@@ -27,15 +27,15 @@
     + [生成排列](#4.生成排列)
     + [生成子集](#5.生成子集)
 + 减常因子算法
-  + [折半查找]()
-  + [俄式乘法]()
+  + [折半查找](#1.折半查找)
+  + [俄式乘法](#2.俄式乘法)
 + 减可变规模算法
-  + [选择问题]()
-  + [插值查找]()
-  + [二叉查找树的查找与插入]()
+  + [选择问题](#1.选择问题)
+  + [插值查找](#2.插值查找)
+  + [二叉查找树的查找与插入](#3.二叉查找树的查找与插入)
 + 双指针技巧
-  + [左右指针]()
-  + [快慢指针]()
+  + [左右指针](#1.左右指针)
+  + [快慢指针](#2.快慢指针)
 
 #### Ⅲ 分治法
 + 分治排序
@@ -894,7 +894,6 @@ export function BSTtreeSearch(root: TreeNode, key: number){
     }
     else if( root.Right != null && key > root.Value) {
         return BSTtreeSearch(root.Right, key)
-    }
     else  return false
 }
 ```
@@ -905,9 +904,46 @@ export function BSTtreeSearch(root: TreeNode, key: number){
 
 ### 1.左右指针
 
+> 左右指针主要解决数组（或者字符串）中的问题
+
+#### 数组翻转
+
+```go
+// Reverse 双指针反转selice
+func Reverse(slice []int) []int {
+	var lo, hi = 0, len(slice) - 1
+	for hi > lo {
+		slice[lo], slice[hi] = slice[hi], slice[lo]
+		hi--
+		lo++
+	}
+	return slice
+}
+```
+
+
+
 ### 2.快慢指针
 
+> 主要解决链表中的问题
 
+#### 链表环路
+
+```go
+// HasCycle 判断链表是否有环路
+func HasCycle(root *Node) bool {
+	var slow, fast = root, root
+
+	for fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+		if slow == fast {
+			return true
+		}
+	}
+	return false
+}
+```
 
 
 
@@ -917,7 +953,7 @@ export function BSTtreeSearch(root: TreeNode, key: number){
 
 > 架构：分治法-自上而下合并排序；分治法-自下而上合并排序
 >
-> 性能：C( n ) = n long<sub>2</sub>n; 需要额外内存空间
+> 性能：C( n ) = n long<sub>2</sub>n; 稳定排序，cpu缓存命中低
 
 ### 合并排序-自上而下
 
