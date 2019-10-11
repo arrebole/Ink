@@ -1085,32 +1085,22 @@ int HoarePartition(int a[], int lo, int hi){
 >
 > 性能： C(n) = 2n+1
 
-```c++
-struct node
-{
-    char data;
-    node *left;
-    node *right;
-    node(char ch) : data(ch)
-    {
-        this->left = nullptr;
-        this->right = nullptr;
-    };
-};
+```go
+// TreeHeight 分治法计算二叉树的高度
+func TreeHeight(root *BTNode) int {
+	if root == nil {
+		return -1
+	}
 
-int treeHeight(node *t)
-{
-    if (t == nullptr)
-        return -1;
-    else
-        return max(height(t->left), height(t->right)) + 1;
+	return Max(TreeHeight(root.Right), TreeHeight(root.Left)) + 1
 }
 
-int max(int a, int b)
-{
-    if (a > b)
-        return a;
-    return b;
+// Max 返回最大值
+func Max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 ```
 
@@ -1124,16 +1114,14 @@ int max(int a, int b)
 
 ##### 前序遍历
 
-```c++
+```go
 // 入栈时输出
-void preOrderTraversal(node *root)
-{
-    if (root != nullptr)
-    {
-        printf("%c\n", root->data);
-        preOrderTraversal(root->left);
-        preOrderTraversal(root->right);
-    }
+func preOrderTraversal(root *BTNode) {
+	if root != nil {
+		fmt.Println(root.Value)
+		preOrderTraversal(root.Left)
+		preOrderTraversal(root.Right)
+	}
 }
 ```
 
@@ -1141,17 +1129,15 @@ void preOrderTraversal(node *root)
 
 ##### 中序遍历
 
-```c++
+```go
 // 中序遍历
 // 用于二叉树排序
-void inOrderTraversal(node *root)
-{
-    if (root != nullptr)
-    {
-        inOrderTraversal(root->left);
-        printf("%c\n", root->data);
-        inOrderTraversal(root->right);
-    }
+func inOrderTraversal(root *BTNode) {
+	if root != nil {
+		preOrderTraversal(root.Left)
+		fmt.Println(root.Value)
+		preOrderTraversal(root.Right)
+	}
 }
 ```
 
@@ -1159,17 +1145,15 @@ void inOrderTraversal(node *root)
 
 ##### 后序遍历
 
-```c++
+```go
 // 后序遍历
 // 出栈时输出
-void postOrderTraversal(node *root)
-{
-    if (root != nullptr)
-    {
-        postOrderTraversal(root->left);
-        postOrderTraversal(root->right);
-        printf("%c\n", root->data);
-    }
+func postOrderTraversal(root *BTNode) {
+	if root != nil {
+		preOrderTraversal(root.Left)
+		preOrderTraversal(root.Right)
+		fmt.Println(root.Value)
+	}
 }
 ```
 
