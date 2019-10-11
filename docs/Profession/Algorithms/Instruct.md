@@ -39,14 +39,12 @@
 
 #### Ⅲ 分治法
 + 分治排序
-  + [归并排序]()
-  + [快速排序]()
+  + [归并排序](#1.归并排序)
+  + [快速排序](2,快速排序)
 + 分而治之
-  + [二叉树的遍历]()
-  + [karatsuba大整数乘法]()
-  + [strassen矩阵乘法]()
-  + [最近对问题]()
-  + [凸包问题]()
+  + [二叉树的高度](1.二叉树的高度)
+  + [二叉树的遍历](#2.二叉树的遍历)
+  + [karatsuba大整数乘法](#3.大整数乘法)
 
 #### Ⅳ 变治法
 + 变治排序
@@ -947,38 +945,35 @@ func HasCycle(root *Node) bool {
 
 
 
+
+
 # Ⅲ 分治法
 
-## 合并排序
+> 递推式 T(n) = a·T(n/b) + f(n)，f(n)是分解和合并需要的时间函数；当a=1，分治退化为减治
+
+## 分治排序
+
+### 1.合并排序
 
 > 架构：分治法-自上而下合并排序；分治法-自下而上合并排序
 >
 > 性能：C( n ) = n long<sub>2</sub>n; 稳定排序，cpu缓存命中低
 
-### 合并排序-自上而下
+#### 合并排序-自上而下
 
 ```c++
-/**
- * 分治法-自上而下合并排序
- * 
-*/
-void mergeSort(int a[], int l, int r)
-{
-    if (l == r)
-    {
-        return;
-    }
+// 分治法-自上而下合并排序
+void mergeSort(int a[], int l, int r){
+    if (l == r) return;
+    
     int m = (r + l) / 2;
     mergeSort(a, l, m);
     mergeSort(a, m + 1, r);
     merge(a, l, m + 1, r);
 }
-```
 
-```c++
 // 将数组的两段合并
-void merge(int a[], int l, int m, int r)
-{
+void merge(int a[], int l, int m, int r){
     int i, j, k;
 
     int LEFT_SINZE = m - l;
@@ -986,137 +981,93 @@ void merge(int a[], int l, int m, int r)
 
     // 将数组分割拷贝成两段
     int left[LEFT_SINZE], right[RIGHT_SINZE];
-    for (i = l; i < m; i++)
-    {
-        left[i - l] = a[i];
-    }
-    for (i = m; i <= r; i++)
-    {
-        right[i - m] = a[i];
-    }
+    for (i = l; i < m; i++)  left[i - l] = a[i];
+    for (i = m; i <= r; i++) right[i - m] = a[i];
 
     // 合并
     i = 0, j = 0, k = l;
-    while (i < LEFT_SINZE && j < RIGHT_SINZE)
-    {
-        if (left[i] < right[j])
-        {
-            a[k++] = left[i++];
-        }
-        else
-        {
-            a[k++] = right[j++];
-        }
+    while (i < LEFT_SINZE && j < RIGHT_SINZE){
+        if (left[i] < right[j]) a[k++] = left[i++];
+        else                    a[k++] = right[j++];
     }
 
     // 合并剩余
-    while (i < LEFT_SINZE)
-    {
-        
-        a[k++] = left[i++];
-        
-    }
-    while (j < RIGHT_SINZE)
-    {
-        a[k++] = right[j++];
-    }
+    while (i < LEFT_SINZE)   a[k++] = left[i++];
+    while (j < RIGHT_SINZE)  a[k++] = right[j++];
+
 }
 ```
 
 
 
-### 合并排序-自下而上
+#### 合并排序-自下而上
 
 ```c++
-/**
- * 自下而上归并排序
-*/
-void mergeBuSort(int a[], int len)
-{
+// 自下而上归并排序
+void mergeBuSort(int a[], int len){
     // 辅助数组aux；
-    int *aux = new int[len];
-    for (int sz = 1; sz < len; sz += sz)
-    {
-        for (int lo = 0; lo < len - sz; lo += sz + sz)
-        {
+    int *aux = (int *)malloc(sizeof(int) * len);
+    for (int sz = 1; sz < len; sz += sz){
+        for (int lo = 0; lo < len - sz; lo += sz + sz){
             int t = lo + sz + sz - 1;
             int min = t > len - 1 ? len - 1 : t;
             merge(a, aux, lo, lo + sz - 1, min);
         }
     }
 
-    delete[] aux;
+    free(aux);
 }
-```
 
-```c++
 // 将a[lo..mid]和 a[mid+1..hi]归并
-void merge(int a[], int aux[], int lo, int mid, int hi)
-{
+void merge(int a[], int aux[], int lo, int mid, int hi){
     int i = lo, j = mid + 1;
     // 将a[lo..hi]复制到aux[lo..hi]
-    for (int k = lo; k <= hi; k++)
-    {
-        aux[k] = a[k];
-    }
+    for (int k = lo; k <= hi; k++)  aux[k] = a[k];
+    
     // 归并到a[lo..hi]
-    for (int k = lo; k <= hi; k++)
-    {
-        // 当一个数组归并完毕
-        if (i > mid)
-            a[k] = aux[j++];
-        else if (j > hi)
-            a[k] = aux[i++];
-        // 将小的先归并
-        else if (aux[j] < aux[i])
-            a[k] = aux[j++];
-        else
-            a[k] = aux[i++];
+    for (int k = lo; k <= hi; k++){
+        if (i > mid)                a[k] = aux[j++];
+        else if (j > hi)            a[k] = aux[i++];
+        else if (aux[j] < aux[i])   a[k] = aux[j++];
+        else                        a[k] = aux[i++];
     }
 }
 ```
 
 
 
-## 快速排序
+### 2.快速排序
 
-> 架构：分治法-快速排序
+> 架构：分治法-快速排序， 通过不断的划分实现排序
 >
-> 性能：C<sub>avg</sub>=1.39*n*log<sub>2</sub>n
+> 性能：不稳定排序 C<sub>avg</sub>=1.39*n*log<sub>2</sub>n
 
 ```c++
 // 分治法 ->快速排序
 // 性能：C平均 = 1.39*n*log2*n
-void quickSort(int a[], int lo, int hi)
-{
-    if (lo < hi)
-    {
+// 性能：C平均 = 1.39*n*log2*n
+void quickSort(int a[], int lo, int hi){
+    if (lo < hi){
         int s = HoarePartition(a, lo, hi);
         quickSort(a, lo, s - 1);
         quickSort(a, s + 1, hi);
     }
 }
-```
 
-```c++
-int HoarePartition(int a[], int lo, int hi)
-{
+int HoarePartition(int a[], int lo, int hi){
 	// 以最左边的数(lo)为基准
 	int base = a[lo];
 	while (lo < hi) {
 		// 从序列右端开始，向左遍历，直到找到小于base的数
-		while (lo < hi && a[hi] >= base)
-			hi--;
+		while (lo < hi && a[hi] >= base)    hi--;
 		// 找到了比base小的元素，将这个元素放到最左边的位置
 		a[lo] = a[hi];
  
 		// 从序列左端开始，向右遍历，直到找到大于base的数
-		while (lo < hi && a[lo] <= base)
-			lo++;
+		while (lo < hi && a[lo] <= base)    lo++;
 		// 找到了比base大的元素，将这个元素放到最右边的位置
 		a[hi] = a[lo];
 	}
- 
 	// 最后将base放到lo位置。此时，lo位置的左侧数值应该都比lo小；
 	// 而lo位置的右侧数值应该都比lo大。
 	a[lo] = base;
@@ -1126,9 +1077,9 @@ int HoarePartition(int a[], int lo, int hi)
 
 
 
-## 二叉树遍历及其相关特性
+## 分而治之
 
-### 计算二叉树的高度
+### 1.二叉树的高度
 
 > 架构：分治法-二叉树高度搜索
 >
@@ -1165,13 +1116,13 @@ int max(int a, int b)
 
 
 
-### 二叉树的遍历
+### 2.二叉树的遍历
 
 > 架构：分治法-二叉树遍历
 >
 > 性能： C(n) = 2n+1
 
-#### 前序遍历
+##### 前序遍历
 
 ```c++
 // 入栈时输出
@@ -1188,7 +1139,7 @@ void preOrderTraversal(node *root)
 
 
 
-#### 中序遍历
+##### 中序遍历
 
 ```c++
 // 中序遍历
@@ -1206,7 +1157,7 @@ void inOrderTraversal(node *root)
 
 
 
-#### 后序遍历
+##### 后序遍历
 
 ```c++
 // 后序遍历
@@ -1224,9 +1175,7 @@ void postOrderTraversal(node *root)
 
 
 
-## 大整数乘法和Strassen矩阵乘法
-
-### karatsuba 大整数乘法
+### 3.大整数乘法
 
 > 思想：将大数分解为幂指数相加的形式
 >
@@ -1281,226 +1230,7 @@ def karatsuba(num1: int, num2: int)->int:
 
 
 
-### Strassen矩阵乘法
 
-> 
->
-
-。。。
-
-
-
-## 用分治法解最近对问题和凸包问题
-
-### 最近对问题
-
-> 
->
-
-```c++
-#pragma one
-#include <math.h>
-#include <stdio.h>
-#include <vector>
-#define DBL_MAX 1.7976931348623158e+308  // max value
-
-struct Point {
-  double x, y;
-};
-class CloestPair {
- private:
-  int size;
-  char flage;
-  Point* aux;     // 辅助函数
-  Point* axis_x;  // x轴排序
-  Point* axis_y;  // y轴排序
-
-  void clean() {
-    if (aux != nullptr) delete[] aux;
-    if (axis_x != nullptr) delete[] axis_x;
-    if (axis_y != nullptr) delete[] axis_y;
-  };
-
-  void merge(Point* a, int lo, int mid, int hi) {
-    int i = lo, j = mid + 1;
-    // copy to aux array
-    for (int k = lo; k <= hi; k++) {
-      this->aux[k] = a[k];
-    }
-    if (this->flage == 'x') {
-      for (int k = lo; k <= hi; k++) {
-        if (i > mid)
-          a[k] = aux[j++];
-        else if (j > hi)
-          a[k] = aux[i++];
-        else if (aux[j].x < aux[i].x)
-          a[k] = aux[j++];
-        else
-          a[k] = aux[i++];
-      }
-    } else if (this->flage == 'y') {
-      for (int k = lo; k <= hi; k++) {
-        if (i > mid)
-          a[k] = aux[j++];
-        else if (j > hi)
-          a[k] = aux[i++];
-        else if (aux[j].y < aux[i].y)
-          a[k] = aux[j++];
-        else
-          a[k] = aux[i++];
-      }
-    }
-  };
-  void MergeSort(Point* a, int lo, int hi) {
-    if (hi <= lo) return;
-    int mid = lo + (hi - lo) / 2;
-    MergeSort(a, lo, mid);
-    MergeSort(a, mid + 1, hi);
-    merge(a, lo, mid, hi);
-  };
-  void copy(Point* from, Point* to, int len) {
-    for (int i = 0; i < len; i++) {
-      to[i] = from[i];
-    }
-  };
-  double min(double a, double b) {
-    if (a > b) {
-      return b;
-    }
-    return a;
-  }
-  double EfficientClosestPair(Point* P, Point* Q, int _size) {
-    double dminsq = DBL_MAX;
-
-    if (_size <= 3) {
-      // copy to aux array a;
-      // 将点合并到一个辅助数组
-      int len = _size * 2;
-      Point* a = new Point[len];
-      for (int i = 0; i < _size; i++) {
-        a[i] = P[i];
-      }
-      for (int i = _size; i < len; i++) {
-        a[i] = Q[i];
-      }
-      // Brute force method for the shortest distance
-      // 蛮力法求最近距离
-      for (int i = 0; i < len - 1; i++) {
-        for (int j = i + 1; j < len; j++) {
-          double dis = pow(a[i].x - a[j].x, 2) + pow(a[i].y - a[j].y, 2);
-          if (dis != 0 && dis < dminsq) dminsq = dis;
-        }
-      }
-      delete[] a;
-
-    } else {
-      int mid = _size / 2;
-
-      Point* Pl = new Point[mid];
-      Point* Ql = new Point[mid];
-      Point* Pr = new Point[_size - mid];
-      Point* Qr = new Point[_size - mid];
-
-      copy(P, Pl, mid);
-      copy(Q, Ql, mid);
-      copy(P, Pr, _size - mid);
-      copy(Q, Qr, _size - mid);
-
-      double Dl = EfficientClosestPair(Pl, Ql, mid);
-      double Dr = EfficientClosestPair(Pr, Qr, _size - mid);
-
-      double d = min(Dl, Dr);
-      double m = P[(_size / 2) - 1].x;
-
-      std::vector<Point> vec;
-      for (int i = 0; i < _size; i++) {
-        if (abs(Q[i].x - m) < d) {
-          vec.push_back(Q[i]);
-        }
-      }
-      dminsq = pow(d, 2);
-
-      int num = vec.size();
-      for (int i = 0; i < num; i++) {
-        int k = i + 1;
-        while (k <= num - 1 && pow(vec[k].y - vec[i].y, 2) < dminsq) {
-          double t = pow(vec[k].x - vec[i].x, 2) + pow(vec[k].y - vec[i].y, 2);
-          dminsq = min(t, dminsq);
-          k++;
-        }
-      }
-    }
-
-    return sqrt(dminsq);
-  };
-
- public:
-  // 构造函数
-  CloestPair() {
-    this->aux = nullptr;
-    this->axis_x = nullptr;
-    this->axis_y = nullptr;
-  };
-
-  // 析构函数
-  ~CloestPair() { this->clean(); };
-
-  // 计算最近对
-  double solveCloestPair(Point* a, int _size) {
-    // 先清理内存
-    this->clean();
-
-    // 分配内存
-    size = _size;
-    aux = new Point[size]();
-    axis_x = new Point[size]();
-    axis_y = new Point[size]();
-
-    // 复制内容
-    for (int i = 0; i < _size; i++) {
-      axis_x[i] = a[i];
-      axis_y[i] = a[i];
-    }
-
-    // 排序
-    flage = 'x';
-    MergeSort(axis_x, 0, _size - 1);
-    flage = 'y';
-    MergeSort(axis_y, 0, _size - 1);
-
-    // 分治求最短距离
-    return EfficientClosestPair(axis_x, axis_y, this->size);
-  }
-};
-```
-
-测试
-
-```c++
-int main() {
-  int n = 20;
-
-  CloestPair* cp = new CloestPair();
-  Point a[] = {{1, 3}, {2, 7}, {1, 8}, {6, 0}};
-  double dis = cp->solveCloestPair(a, 4);
-  delete cp;
-  printf("min dist: %lf\n", dis);
-  return 0;
-}
-```
-
-
-
-### 凸包问题
-
-> 
->
-
-…
-
-
-
-<br />
 
 # Ⅳ 变治法
 
