@@ -1,9 +1,4 @@
 
-function main() {
-    let a = [3, 5, 6, 7, 8, 2, 8, 34, 6, 23, 12, 24, 6, 37, 7];
-    console.log(PresortElementUniqueness(a));
-}
-
 /**
  * @description 预排序检测数组唯一性
  * @param {array} a 
@@ -48,5 +43,4 @@ function mergeSort(a) {
     }
 }
 
-
-main();
+module.exports.PresortElementUniqueness = PresortElementUniqueness;

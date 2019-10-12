@@ -1,11 +1,4 @@
 
-function main() {
-    let a = [3, 5, 7, 1, 9, 2, 3, 5, 7, 8, 9, 9, 0, 3, 12, 1, 14, 20, 17, 10]
-    console.log(PresortSearch(a, 8));
-}
-
-main();
-
 /**
  * @description 变治法-预排序查找
  * @param {array} a  
@@ -17,14 +10,9 @@ function PresortSearch(a, key) {
     mergeSort(t);
     while (l <= r) {
         m = parseInt((l + r) / 2);
-        if (t[m] == key) {
-            return m;
-        }
-        if (key < a[m]) {
-            r = m - 1;
-        } else {
-            l = m + 1;
-        }
+        if (t[m] == key)    return m;
+        if (key < a[m])     r = m - 1;
+        else                l = m + 1;
     }
     return -1;
 }
@@ -59,3 +47,5 @@ function mergeSort(a) {
         }
     }
 }
+
+module.exports.PresortSearch = PresortSearch;

@@ -47,24 +47,20 @@
   + [karatsuba大整数乘法](#3.大整数乘法)
 
 #### Ⅳ 变治法
-+ 变治排序
-  + [堆排序]()
-+ 预排序法
-  + [元素唯一性]()
-  + [模式计算]()
-  + [查找问题]()
-+ 高斯消去法
-  + [部分选主元法]()
-  + [LU分解]()
-  + [计算矩阵的逆]()
-  + [计算矩阵的行列式]()
-+ 霍纳法则和二进制幂
+
++ 实例化简
+  + [预排序]()
+    + [元素唯一性]()
+    + [模式计算]()
+    + [查找问题]()
+  + [高斯消去]()
+    + [部分选主元]()
++ 改变表现
+  + [平衡查找树]()
+  + [堆和堆排序]()
   + [霍纳法则]()
   + [二进制幂]()
-+ 平衡查找树
-  + [AVL 树]()
-  + [2-3 树]()
-  + [红黑树]()
+
 + 问题化简
   + [求最小公倍数]()
   + [计算图中路径数量]()
@@ -72,36 +68,42 @@
   + [线性规划]()
   + [简化为图问题]()
 
-#### 时空权衡
-+ 计数排序
-  + [桶排序]()
+#### Ⅴ时空权衡
 + 输入增强
+  + [计数排序]()
   + [Horspool算法]()
   + [Boyer-Moore算法]()
-+ 散列法
++ 预构造
   + [开散列]()
   + [闭散列]()
+  + [B树作索引]()
 
-#### Ⅴ 动态规划
+#### Ⅵ 动态规划
+
++ 三个基本例子
+  + [币值最大化]()
+  + [找零]()
+  + [硬币收集]()
+
 + [背包问题]()
-+ [记忆化]()
++ [记忆功能]()
 + [最优二叉树]()
 + [Warshall算法]()
 + [Floyd算法]()
 
-#### Ⅵ 贪婪技术
+#### Ⅶ 贪婪技术
 + [Prim算法]()
 + [Kruskal算法]()
 + [Dijkstra算法]()
 + [哈夫曼树]()
 
-#### Ⅶ 迭代改进
+#### Ⅷ 迭代改进
 + [单纯形法]()
 + [最大流量问题]()
 + [二分图的最大匹配]()
 + [稳定婚姻问题]()
 
-#### Ⅷ 算法能力的极限
+#### Ⅸ 算法能力的极限
 + 如何求下界
   + [平凡下界]()
   + [信息论下界]()
@@ -114,7 +116,7 @@
   + [P和NP问题]()
   + [NP完全问题]()
 
-#### Ⅸ 超越算法的极限
+#### Ⅹ 超越算法的极限
 + 回溯法
   + [n皇后问题]()
   + [曼哈顿回路]()
@@ -1168,12 +1170,8 @@ func postOrderTraversal(root *BTNode) {
 > 性能：A( n ) ∈ Θ ( n<sup>long<sub>2</sub>3</sup>)
 
 ```python
-# Solve problem: 降低大数相乘的时间复杂度
-# Thought： 将大数分解为幂指数相加的形式
-# Architecture： 分治法-karatsuba乘法
-# performance： n**(long2 3)
-# @params {int,int} 需要相乘的两个大数
-# @return int 相乘的结果
+# karatsuba 将大数分解为幂指数相加的形式
+# ab = c10^n + d10^n/2 + d
 def karatsuba(num1: int, num2: int)->int:
 
     # 递归终止条件
@@ -1218,81 +1216,41 @@ def karatsuba(num1: int, num2: int)->int:
 
 # Ⅳ 变治法
 
-## 预排序
+>变换思想
 
->思想：有序列表更容易求解。
 
-### 检测数组中元素的唯一性
+
+## 实例化简
+
+>变换为同样问题的一个更简单的实例，我们称之为实例化简
+
+### 1.预排序
+
+>有序列表更容易求解。
+
+#### 元素的唯一性
 
 ```javascript
-/**
- * @description 预排序检测数组唯一性
- * @param {array} a 
- * @returns {boolean}
- */
+// PresortElementUniqueness 预排序检测数组唯一性
 function PresortElementUniqueness(a) {
     let t = a.concat();
-    mergeSort(t);
-    for (let i = 0; i <= t.length - 2; i++) {
+    mergeSort(t);// 先进行归并排序
+    for (let i = 0; i < t.length - 1; i++) {
         if (t[i] == t[i + 1]) return false;
     }
     return true;
 }
-
-/**
- * @description 分治法-自下而上的归并排序
- * @param {array} a 
- */
-function mergeSort(a) {
-    let n = a.length;
-    let aux = new Array(n);
-
-    let min = (m, n) => m > n ? n : m;
-
-    let merge = (a, lo, mid, hi) => {
-        let i = lo, j = mid + 1;
-        for (let k = lo; k <= hi; k++) {
-            aux[k] = a[k];
-        }
-        for (let k = lo; k <= hi; k++) {
-            if (i > mid)                a[k] = aux[j++];
-            else if (j > hi)            a[k] = aux[i++];
-            else if (aux[j] < aux[i])   a[k] = aux[j++];
-            else                        a[k] = aux[i++];
-        }
-    }
-
-    for (let sz = 1; sz < n; sz += sz) {
-        for (let lo = 0; lo < n - sz; lo += sz + sz) {
-            merge(a, lo, lo + sz - 1, min(lo + sz + sz - 1, n - 1));
-        }
-    }
-}
-```
-
-测试
-
-```javascript
-function main() {
-    let a = [3, 5, 6, 7, 8, 2, 8, 34, 6, 23, 12, 24, 6, 37, 7];
-    console.log(PresortElementUniqueness(a));
-}
 ```
 
 
 
-### 模式计算
+#### 模式计算
 
 ```javascript
-
-/**
- * @description 预排序检测数组频率出现最多的元素
- * @param {array} a 
- * @returns {boolean}
- */
+// PresortMod 预排序检测数组频率出现最多的元素
 function PresortMode(a) {
     let t = a.concat();
-    mergeSort(t);
+    mergeSort(t); // 进行归并排序
     let i = 0, modefrequency = 0, modevalue = null;
     while (i <= t.length - 1) {
         let runlength = 1, runvalue = t[i];
@@ -1307,169 +1265,110 @@ function PresortMode(a) {
     }
     return modevalue;
 }
-
-/**
- * @description 分治法-自下而上的归并排序
- * @param {array} a 
- */
-function mergeSort(a) {
-    let n = a.length;
-    let aux = new Array(n);
-
-    let min = (m, n) => m > n ? n : m;
-
-    let merge = (a, lo, mid, hi) => {
-        let i = lo, j = mid + 1;
-        for (let k = lo; k <= hi; k++) {
-            aux[k] = a[k];
-        }
-        for (let k = lo; k <= hi; k++) {
-            if (i > mid) a[k] = aux[j++];
-            else if (j > hi) a[k] = aux[i++];
-            else if (aux[j] < aux[i]) a[k] = aux[j++];
-            else a[k] = aux[i++];
-        }
-    }
-
-    for (let sz = 1; sz < n; sz += sz) {
-        for (let lo = 0; lo < n - sz; lo += sz + sz) {
-            merge(a, lo, lo + sz - 1, min(lo + sz + sz - 1, n - 1));
-        }
-    }
-}
-```
-
-测试
-
-```javascript
-function main() {
-    let a = [1, 1, 8, 5, 5, 6, 8, 8, 34, 6, 7, 5, 8, 6, 2, 5, 9, 10, 5];
-    console.log(PresortMode(a));
-}
 ```
 
 
 
-### 查找问题
+#### 查找问题
 
->架构:	先排序再进行折半查找。
+>先排序再进行折半查找，如果我们要在同一个列表中进行多次查找，在排序上花费一些时间是值得的。
 >
->性能: 	T<sub>sort</sub>( n ) + T<sub>search</sub> = Θ(n log n) + Θ(long n)
+>T<sub>sort</sub>( n ) + T<sub>search</sub> = Θ(n log n) + Θ(long n)
 >
-> 如果我们要在同一个列表中进行多次查找，在排序上花费一些时间是值得的。
 
 ```javascript
 
-/**
- * @description 变治法-预排序查找
- * @param {array} a  
- * @param {int} key 
- */
+// PresortSearch 先排序再进行折半查找
 function PresortSearch(a, key) {
     let t = a.concat();
     let l = 0, r = t.length - 1, m = 0;
     mergeSort(t);
     while (l <= r) {
         m = parseInt((l + r) / 2);
-        if (t[m] == key) {
-            return m;
-        }
-        if (key < a[m]) {
-            r = m - 1;
-        } else {
-            l = m + 1;
-        }
+        if (t[m] == key) 	return m;
+        if (key < a[m])  	r = m - 1;
+        else 				l = m + 1;
+
     }
     return -1;
 }
-
-
-/**
- * @description 分治法-自下而上的归并排序
- * @param {array} a 
- */
-function mergeSort(a) {
-    let n = a.length;
-    let aux = new Array(n);
-
-    let min = (m, n) => m > n ? n : m;
-
-    let merge = (a, lo, mid, hi) => {
-        let i = lo, j = mid + 1;
-        for (let k = lo; k <= hi; k++) {
-            aux[k] = a[k];
-        }
-        for (let k = lo; k <= hi; k++) {
-            if (i > mid) a[k] = aux[j++];
-            else if (j > hi) a[k] = aux[i++];
-            else if (aux[j] < aux[i]) a[k] = aux[j++];
-            else a[k] = aux[i++];
-        }
-    }
-
-    for (let sz = 1; sz < n; sz += sz) {
-        for (let lo = 0; lo < n - sz; lo += sz + sz) {
-            merge(a, lo, lo + sz - 1, min(lo + sz + sz - 1, n - 1));
-        }
-    }
-}
-
-```
-
-测试
-```javascript
-function main() {
-    let a = [3, 5, 7, 1, 9, 2, 3, 5, 7, 8, 9, 9, 0, 3, 12, 1, 14, 20, 17, 10]
-    console.log(PresortSearch(a, 8));
-}
 ```
 
 
 
-## 高斯消去法
+### 2.平衡查找树
 
-### 部分选主元法
+> 平衡树的自平衡是将实例化简的类型
+
+
+
+### 3.堆和堆排序
+
+> 堆的构建是实例化简的类型
+
+
+
+## 改变表现
+
+> 变换为同样实例的不同表现，我们称之为改变表现
+
+### 1.霍纳法则
+
+### 2.二进制幂
+
+
+
+## 问题化简
+
+>变换为另一个问题的实例，我们称之为问题化简。
+
+### 1.求最小公倍数
 
 ```python
-def betterForwardElimination(matrix:list,vector:list)->list:
-    lenth = len(matrix)
-    for i in range(lenth):
-        matrix[i].append(vector[i])
-    for i in range(lenth):
-        pivotrow = i
-        for j in range(i+1,lenth):
-            if abs(matrix[j][i])>abs(matrix[pivotrow][i]):
-                pivotrow = j
-        for k in range(i,lenth+1):
-            matrix[i][k],matrix[pivotrow][k] = matrix[pivotrow][k],matrix[i][k]
-        for j in range(i+1,lenth):
-            t = matrix[j][i]/matrix[i,i]
-            for k in range(i,lenth+1):
-                matrix[j][k] = matrix[j][k] - matrix[i][k]*t
-    return []
+# lcm 求最小公倍数
+# 问题化简为：lcm(m,n) = m*n/gcd(m,n)
+def lcm(m: int, n: int)->int:
+    return m*n / gcdEuclid(m,n)
+
+# gcd 欧几里得算法求最大公约数 
+def gcdEuclid(m, n):
+    while n != 0:
+        r = m % n
+        m = n
+        n = r
+    return m
 ```
 
 
 
-### LU分解
+### 2.计算图中路径数量
+
+### 3.优化问题的化简
+
+### 4.线性规划
+
+### 5.简化为图问题
 
 
 
-### 计算矩阵的逆
-
-
-
-### 计算矩阵的行列式
+## 
 
 
 
 
 
-## 平衡查找树
+# Ⅴ时空权衡
 
-### AVL 树
+> 时间与空间的权衡
 
-### 2-3 树
+## 输入增强
 
-### 红黑树
+> 这个思想是对问题的部分或全部输入做预处理，然后将获得的额外的信息进行存储，以加速后面的问题。
+>
+> 我们把这个方法称为输入增强
 
+
+
+## 预构造
+
+> 简单的使用额外的空间来实现更快的数据存储,强调存储结构

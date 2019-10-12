@@ -1,17 +1,4 @@
 
-
-
-
-
-
-
-function main() {
-    let a = [1, 1, 8, 5, 5, 6, 8, 8, 34, 6, 7, 5, 8, 6, 2, 5, 9, 10, 5];
-    console.log(PresortMode(a));
-}
-
-main();
-
 /**
  * @description 预排序检测数组频率出现最多的元素
  * @param {array} a 
@@ -51,10 +38,10 @@ function mergeSort(a) {
             aux[k] = a[k];
         }
         for (let k = lo; k <= hi; k++) {
-            if (i > mid) a[k] = aux[j++];
-            else if (j > hi) a[k] = aux[i++];
+            if (i > mid)              a[k] = aux[j++];
+            else if (j > hi)          a[k] = aux[i++];
             else if (aux[j] < aux[i]) a[k] = aux[j++];
-            else a[k] = aux[i++];
+            else                      a[k] = aux[i++];
         }
     }
 
@@ -64,3 +51,5 @@ function mergeSort(a) {
         }
     }
 }
+
+module.exports.PresortMode = PresortMode;

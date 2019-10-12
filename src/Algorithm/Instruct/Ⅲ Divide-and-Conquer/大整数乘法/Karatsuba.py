@@ -1,11 +1,8 @@
-
 # 分治法 - karatsuba大数相乘
 def karatsuba(num1: int, num2: int)->int:
-
     # 递归终止条件
     if (num1 < 10) or (num2 < 10):
         return num1 * num2
-
     # 计算拆分长度
     num1Str = str(num1)
     num2Str = str(num2)
