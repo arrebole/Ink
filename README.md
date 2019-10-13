@@ -34,9 +34,11 @@
   + [Literary](/docs/Romantic/Literary/Main.md)
 + **Limit**
   + [Psychology](/docs/Limit/Psychology/main.md)
+  + [Economics]()
   + [Relativity]()
   + [Quantum theory]()
 + **Beyond the limits**
-  + [Universal theory]()
+  + [math]()
   + [Philosophy]()
+  + [Universal theory]()
 
