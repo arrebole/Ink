@@ -1,4 +1,4 @@
-# 路漫漫其修远兮，吾将上下而求索。
+<h1 style="text-align:center"> 路漫漫其修远兮，吾将上下而求索。</h1>
 
 ## Introduction
 
@@ -12,16 +12,11 @@
 
 + **Start**
   + [Language]()
-+ **Warm-up**
-  + [Sword to Offer]()
-  + [Programming Pearls]()
   + [Interview]()
-
 + **Profession**
   + [Algorithms](/docs/Profession/Algorithms/Main.md)
   + [Network](/docs/Profession/Network/Main.md)
   + [Operating System](/docs/Profession/System/Main.md)
-
 + **Killer**
   + [Devops](/docs/Killer/Devops/Main.md)
   + [Design Pattern](/docs/Killer/DesignPattern/DesignPatterns.md)
@@ -38,9 +33,9 @@
   + [Architecture](/docs/Romantic/Architecture/Main.md)
   + [Literary](/docs/Romantic/Literary/Main.md)
 + **Limit**
+  + [Psychology](/docs/Limit/Psychology/main.md)
   + [Relativity]()
   + [Quantum theory]()
-  + [Psychology](/docs/Limit/Psychology/main.md)
 + **Beyond the limits**
   + [Universal theory]()
   + [Philosophy]()

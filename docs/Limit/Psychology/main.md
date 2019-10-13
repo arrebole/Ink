@@ -1,4 +1,4 @@
-<h1>Psychology</h1>
+<h1 style="text-align: center;">Psychology</h1>
 
 
 ## Table Of Contents
