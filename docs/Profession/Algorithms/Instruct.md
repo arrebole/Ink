@@ -1306,6 +1306,45 @@ function PresortSearch(a, key) {
 
 > 堆的构建是实例化简的类型
 
+#### 堆的构建
+
+```python
+# 堆的构建
+class Heap:
+    def __init__(self, data: list):
+        self.data = data
+        self._heapBottomUp()
+    
+    # heapBottomUp 自底向上构建最大堆
+    def _heapBottomUp(self):
+        for i in range(int(len(self.data)/2)-1, -1, -1):
+            self._heapify(len(self.data), i)
+    
+    # n 为堆节点个数， root为小堆的根节点
+    def _heapify(self, n: int, root: int):
+        c1 = 2 * root + 1
+        c2 = 2 * root + 2
+        max = root
+        # 将最大子节点与根节点做交换
+        if c1 < n and self.data[c1] > self.data[max]:
+            max = c1
+        if c2 < n and self.data[c2] > self.data[max]:
+            max = c2
+        if max != root:
+            self.data[max],self.data[root] = self.data[root],self.data[max]
+            self._heapify(n, max)
+```
+
+#### 堆排序
+
+```python
+def sort(self):
+    for i in range(len(self.data)-1, -1, -1):
+        self.data[i], self.data[0] = self.data[0],self.data[i]
+        self._heapify(i, 0)
+        return self.data
+```
+
 
 
 ## 改变表现
@@ -1348,10 +1387,6 @@ def gcdEuclid(m, n):
 ### 4.线性规划
 
 ### 5.简化为图问题
-
-
-
-## 
 
 
 
