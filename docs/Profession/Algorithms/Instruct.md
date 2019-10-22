@@ -1218,8 +1218,6 @@ def karatsuba(num1: int, num2: int)->int:
 
 >变换思想
 
-
-
 ## 实例化简
 
 >变换为同样问题的一个更简单的实例，我们称之为实例化简
@@ -1300,6 +1298,10 @@ function PresortSearch(a, key) {
 
 > 平衡树的自平衡是将实例化简的类型
 
+#### AVL Tree
+
+...
+
 
 
 ### 3.堆和堆排序
@@ -1349,11 +1351,27 @@ def sort(self):
 
 ## 改变表现
 
-> 变换为同样实例的不同表现，我们称之为改变表现
+> 变换为同样实例的不同表现，我们称之为改变表现，例如方程的变形
 
 ### 1.霍纳法则
 
+```python
+# Horner 霍纳法则计算多项式(改变表现技术的例子)
+# 例如 p(x) = 2x^4 + x^3 + 3x^2 + x-5
+# =>  x(x(x(2x - 1) + 3) + 1) - 5
+# p-> 多项式系数(从高到低排列)
+def Horner(P: list, x) ->int:
+    p = P[0]
+    for i in range(1, len(P)):
+        p = x*p + P[i]
+    return p
+```
+
+
+
 ### 2.二进制幂
+
+...
 
 
 
@@ -1402,8 +1420,151 @@ def gcdEuclid(m, n):
 >
 > 我们把这个方法称为输入增强
 
+### 1.计数排序
+
+#### 比较计数排序
+
+> 性能：C(n) = n(n-1)/2 => O(n) = n^2
+
+```go
+// ComparisonCountingSort 比较计数排序
+// 输入增强， 先算出列表中小于该元素的元素个数
+func ComparisonCountingSort(a []int) []int {
+	var result = make([]int, len(a))
+	var count = Comparison(a)
+
+	for i := 0; i < len(a); i++ {
+		result[count[i]] = a[i]
+	}
+	return result
+}
+
+// Comparison 算出一个列表，列表中小于该元素的个数
+func Comparison(a []int) []int {
+	var result = make([]int, len(a))
+	//计算小于该元素的元素个数
+	for i := 0; i < len(a)-1; i++ {
+		for j := i + 1; j < len(a); j++ {
+			if a[i] < a[j] {
+				result[j]++
+			} else {
+				result[i]++
+			}
+		}
+	}
+	return result
+}
+```
+
+
+
+#### 分布计数排序
+
+> 性能：O(n) = n; 线性复杂度
+
+```go
+// DistributionCountingSort 分布计数排序
+// 适用于排序连续的具有上下界的数组 l,u 为数组元素的上下界
+func DistributionCountingSort(a []int, l, u int) []int {
+	var result = make([]int, len(a))
+    
+	d := frequency(a, l, u)
+	d = distributed(d, l, u)
+
+	for i := len(a) - 1; i >= 0; i-- {
+		j := a[i] - l
+		result[d[j]-1] = a[i]
+		d[j] = d[j] - 1
+	}
+	return result
+}
+// 计算出频率值
+func frequency(a []int, l, u int) []int {
+	var result = make([]int, u-l+1)
+	for i := 0; i < len(a); i++ {
+		result[a[i]-l]++
+	}
+	return result
+}
+// 分布值表示的是最后一次出现的正确位置
+func distributed(a []int, l, u int) []int {
+	for i := 1; i < u-l+1; i++ {
+		a[i] = a[i-1] + a[i]
+	}
+	return a
+}
+```
+
+
+
+### 2.Horspool算法
+
+> 性能：O(n)~O(n*m)
+
+```python
+# horspoolMatching 时空权衡输入增强字符串匹配
+# 创建移动表来设置每次移动距离
+def horspoolMatching(p:str, t:str):
+    table = shiftTable(p, max(maxCode(t),maxCode(p)))
+    i = len(p)-1
+    while i <= len(t) - 1:
+        k = 0
+        while k <= len(p)-1 and p[len(p)-1-k] == t[i-k]:
+            k = k+1
+        if k == len(p):
+            return i-len(p)+1
+        else:
+            i = i+table[ord(t[i])]
+    return -1
+
+# shiftTable 构建移动表
+def shiftTable(p:str, maxSize:int)->list:
+    result = list()
+    for i in range(maxSize+1):
+        result.append(len(p))
+    for i, ch in enumerate(p):
+        result[ord(ch)] = len(p)-i-1
+    return result
+
+# maxCode 找到字符串最大的编码
+def maxCode(s:str)->int:
+    result = 0
+    for _, ch in enumerate(s):
+        if ord(ch) > result:
+            result = ord(ch)
+    return result
+```
+
+
+
+### 3.Boyer-Moore算法
+
+```python
+
+```
+
 
 
 ## 预构造
 
 > 简单的使用额外的空间来实现更快的数据存储,强调存储结构
+
+### 1.散列法
+
+#### 开散列(分离链)
+
+#### 闭散列(开式寻址)
+
+
+
+# Ⅵ 动态规划
+
+> 解决计算重复子问题
+
+## 三个基本例子
+
+#### 1.币值最大化
+
+#### 2.找零
+
+#### 3.硬币收集
