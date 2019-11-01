@@ -1499,6 +1499,8 @@ func distributed(a []int, l, u int) []int {
 
 ### 2.Horspool算法
 
+> horspoolMatching 字符串匹配算法
+>
 > 性能：O(n)~O(n*m)
 
 ```python
@@ -1537,14 +1539,6 @@ def maxCode(s:str)->int:
 
 
 
-### 3.Boyer-Moore算法
-
-```python
-
-```
-
-
-
 ## 预构造
 
 > 简单的使用额外的空间来实现更快的数据存储,强调存储结构
@@ -1553,7 +1547,186 @@ def maxCode(s:str)->int:
 
 #### 开散列(分离链)
 
+```go
+// 使用链表的解决碰撞
+type pair struct {
+	Key   string
+	Value int
+	next  *pair
+	pre   *pair
+}
+
+// HashTable 哈希表
+type HashTable struct {
+	data []*pair
+}
+
+// Set 哈希表插入
+func (p *HashTable) Set(key string, value int) {
+	it := p.find(p.hash(key), func(i *pair) bool {
+		return i.Key == key
+	})
+	// 如果元素不存在则正常插入
+	if it == nil {
+		item := &pair{
+			Key:   key,
+			Value: value,
+			next:  p.data[p.hash(key)],
+		}
+		if p.data[p.hash(key)] != nil {
+			p.data[p.hash(key)].pre = item
+		}
+		p.data[p.hash(key)] = item
+	} else {
+		it.Value = value
+	}
+}
+
+// Get 哈希表查询
+func (p *HashTable) Get(key string) (int, error) {
+	result := p.find(p.hash(key), func(i *pair) bool {
+		return i.Key == key
+	})
+
+	if result != nil {
+		return result.Value, nil
+	}
+	return 0, errors.New("not found")
+}
+
+// Delete 哈希表删除元素
+func (p *HashTable) Delete(key string) bool {
+	result := p.find(p.hash(key), func(i *pair) bool {
+		return i.Key == key
+	})
+
+	// 不存在则返回错误
+	if result == nil {
+		return false
+	}
+	// 删除元素是第一个 | 不是第一个
+	if result.pre == nil {
+		p.data[p.hash(key)] = result.next
+	} else {
+		result.pre.next = result.next
+	}
+	return true
+}
+
+func (p *HashTable) hash(data string) int {
+	result := 0
+	for _, v := range data {
+		result += int(v)
+	}
+	return result % 10
+}
+
+func (p *HashTable) find(index int, callback func(i *pair) bool) *pair {
+	for i := p.data[index]; i != nil; i = i.next {
+		if callback(i) {
+			return i
+		}
+	}
+	return nil
+}
+
+// New 开散列构造函数
+func New() HashTable {
+	return HashTable{
+		data: make([]*pair, 10),
+	}
+}
+```
+
+
+
 #### 闭散列(开式寻址)
+
+```go
+// 使用二维数组解决碰撞
+// HashTable 哈希表
+type HashTable struct {
+	data [][]*Pair
+}
+
+// Pair 哈希表内的元素
+type Pair struct {
+	Key   string
+	Value int
+}
+
+// Set 往哈希表中添加元素
+func (p *HashTable) Set(key string, value int) {
+	it := p.findIndex(p.hash(key), func(item *Pair) bool {
+		return item.Key == key
+	})
+	if it != -1 {
+		p.data[p.hash(key)][it].Value = value
+		return
+	}
+	for i, v := range p.data[p.hash(key)] {
+		if v == nil {
+			p.data[p.hash(key)][i] = &Pair{
+				Key:   key,
+				Value: value,
+			}
+		}
+	}
+
+}
+
+// Get 获取哈希表中元素的值
+func (p *HashTable) Get(key string) (int, error) {
+	it := p.findIndex(p.hash(key), func(item *Pair) bool {
+		return item.Key == key
+	})
+
+	if it == -1 {
+		return 0, errors.New("")
+	}
+
+	return p.data[p.hash(key)][it].Value, nil
+}
+
+// Del 删除哈希表中元素
+func (p *HashTable) Del(key string) {
+	it := p.findIndex(p.hash(key), func(item *Pair) bool {
+		return item.Key == key
+	})
+
+	p.data[p.hash(key)][it] = nil
+}
+
+func (p *HashTable) hash(data string) int {
+	result := 0
+	for _, v := range data {
+		result += int(v)
+	}
+	return result % 10
+}
+
+func (p *HashTable) findIndex(index int, callback func(item *Pair) bool) int {
+	list := p.data[index]
+	for i := 0; list[i] != nil; i++ {
+		if callback(list[i]) {
+			return i
+		}
+	}
+	return -1
+}
+
+// New 哈希表构造函数
+func New() HashTable {
+	table := make([][]*Pair, 10)
+	for i := range table {
+		table[i] = make([]*Pair, 10)
+	}
+
+	return HashTable{
+		data: table,
+	}
+}
+```
 
 
 
@@ -1565,6 +1738,140 @@ def maxCode(s:str)->int:
 
 #### 1.币值最大化
 
+```go
+// CoinRow 选择非相邻硬币，币值最大化
+// 包含最后一个硬币f(n-2), 不包含最后硬币f(n-1)
+func CoinRow(c []int) int {
+	opt := make([]int, len(c))
+    // opt[0]和opt[1] 为递归时的出口
+	opt[0], opt[1] = c[0], max(c[0], c[1])
+	for i := 2; i < len(c); i++ {
+        // 如果选择c[i]则 f(n) = c[i] + f(n-2)
+        // 不选择则 f(n) = f(n-1)
+        // 选择两种情况的最大情况
+		opt[i] = max(opt[i-2]+c[i], opt[i])
+	}
+	return opt[len(c)-1]
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+```
+
+
+
 #### 2.找零
 
+```go
+// DPChangeMaking 动态规划求解找零问题
+// f(n)为最小硬币数量
+// | f(0) = 0
+// | f(n) = min{ f(n-dj) } + 1
+func DPChangeMaking(d []int, n int) int {
+	opt := make([]int, n+1)
+	opt[0] = 0
+	for i := 1; i <= n; i++ {
+		temp := 99999
+		// i为表中的总价格，d[j-1] 单枚硬币的价格
+		// opt[i-d[j-1]]: 子问题的答案,
+		// 遍历子问题的答案与新加一枚硬币的组合
+		for j := 1; j <= len(d) && i >= d[j-1]; j++ {
+			temp = min(opt[i-d[j-1]], temp)
+		}
+		opt[i] = temp + 1
+	}
+	return opt[n]
+}
+
+func min(arg ...int) int {
+	result := arg[0]
+	for _, v := range arg {
+		if v < result {
+			result = v
+		}
+	}
+	return result
+}
+```
+
+
+
 #### 3.硬币收集
+
+```go
+// DPRobotCoinCollection 动态规划解决硬币收集问题
+func DPRobotCoinCollection(c [][]int) int {
+	f := createMatrix(len(c), len(c[0]))
+	// 先计算第一行子问题
+	f[0][0] = c[0][0]
+	for i := 1; i < len(c[0]); i++ {
+		f[0][i] = f[0][i-1] + c[0][i]
+	}
+	// 按照子问题递推
+	for i := 1; i < len(c); i++ {
+		f[i][1] = f[i-1][1] + c[i][1]
+		for j := 1; j < len(c[0]); j++ {
+			// 取上方和右边的最大值
+			f[i][j] = max(f[i-1][j], f[i][j-1]) + c[i][j]
+		}
+	}
+	return f[len(c)-1][len(c[0])-1]
+}
+
+func createMatrix(i, j int) [][]int {
+	result := make([][]int, i)
+	for k := 0; k < i; k++ {
+		result[k] = make([]int, j)
+	}
+	return result
+}
+```
+
+
+
+## 背包问题
+
+## 记忆功能
+
+## 最优二叉树
+
+## Warshall算法
+
+## Floyd算法
+
+
+
+
+
+# Ⅶ 贪婪技术
+
+> 通过一系列步骤来构造问题的解，每一步对目前构造的部分解做一个扩展，直到获得问题的完整解为止。
+>
+> 每一步必须满足条件：可行性；局部最优；不可取消；
+
+## Prim算法
+
+## Kruskal算法
+
+## Dijkstra算法
+
+## 哈夫曼树
+
+
+
+
+
+# Ⅷ 迭代改进
+
+## 单纯形法
+
+## 最大流量问题
+
+## 二分图的最大匹配
+
+## 稳定婚姻问题
+
