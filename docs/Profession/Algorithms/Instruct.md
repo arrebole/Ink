@@ -1855,6 +1855,41 @@ func createMatrix(i, j int) [][]int {
 
 ## Prim算法
 
+```python
+# Prim 贪婪技术加权图生成最小树
+def Prim(graph: dict, root: str):
+    result = list()
+    seen = set()
+    nodes = list(graph.keys())
+    
+    # 每次往树中添加[最短]的节点
+    # 添加初始节点
+    seen.add(root)
+    nodes.remove(root)
+    # 组成边的两点
+    pre = None
+    next = None
+    #每次找树中的点与最近的剩余点 
+    while nodes:
+        distance = float('inf')
+        for s in seen:
+            for d in graph[s]:
+                if d in seen or s == d:
+                    continue
+                # 找到距离树最近的点
+                if graph[s][d] < distance:
+                    distance = graph[s][d]
+                    pre = s
+                    next = d
+        result.append((pre,next))
+        seen.add(next)
+        nodes.remove(next)
+    
+    return result
+```
+
+
+
 ## Kruskal算法
 
 ## Dijkstra算法
@@ -1874,4 +1909,28 @@ func createMatrix(i, j int) [][]int {
 ## 二分图的最大匹配
 
 ## 稳定婚姻问题
+
+
+
+# Ⅸ 算法能力的极限
+
+## 如何求下界
+
+## 决策树
+
+## P、NP和NP完全问题
+
+
+
+# Ⅹ超越算法的极限
+
+## 回溯法
+
+> 每次构造解的一个分量，然后评估这个分量，如果无法接受则进行回溯。
+
+## 分支界限法
+
+## NP的近似算法
+
+## 解非线性方程的算法
 
