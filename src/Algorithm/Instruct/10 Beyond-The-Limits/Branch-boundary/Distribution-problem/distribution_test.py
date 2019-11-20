@@ -1,14 +1,8 @@
-import heapq
+from distribution import distribution
 
-def TestHeap():
-    heap = []
-    heapq.heappush(heap, 100)
-    heapq.heappush(heap, 10)
-    heapq.heappush(heap, 20)
-    heapq.heappush(heap, 150)
-    heapq.heappush(heap, 44)
-    heapq.heappush(heap, 90)
-    heapq.heappush(heap, 38)
-    print(heap)
 
-TestHeap()
+def TestDistribution():
+    data = [[9,2,7,8],[6,4,3,7],[5,8,1,8],[7,6,9,4]]
+    assert distribution(data) == 13
+
+TestDistribution()
