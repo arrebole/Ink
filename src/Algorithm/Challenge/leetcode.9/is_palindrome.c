@@ -34,9 +34,7 @@ bool isPalindrome(int x){
     // 双指针技巧
     int lo = 0, hi = len-1;
     while(lo < hi){
-        if (array[lo] != array[hi]) return false;
-        lo++;
-        hi--;
+        if (array[lo++] != array[hi--]) return false;
     }
     return true;
 }
