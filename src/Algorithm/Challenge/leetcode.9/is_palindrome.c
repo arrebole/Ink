@@ -22,6 +22,7 @@ int* intToArray(int x, int len){
 }
 
 // isPalindrome 判断回文数
+// C(n) = 1/2n ∈ Ω(n)
 bool isPalindrome(int x){
     
     int len = LenInt(x);
