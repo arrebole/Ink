@@ -12,15 +12,12 @@
 // 'CD': 400
 // 'CM': 900
 
-#include <string.h>
-
 int romanToInt(char* s) {
   int result = 0;
-  int len = (int)strlen(s);
-  for (int i = 0; i < len; i++) {
+  for (int i = 0; s[i] != '\0'; i++) {
     switch (s[i]) {
       case 'I':
-        if (i + 1 < len) {
+        if (s[i + 1] != '\0') {
           if (s[i + 1] == 'V') {
             result += 4;
             i++;
@@ -38,7 +35,7 @@ int romanToInt(char* s) {
         result += 5;
         break;
       case 'X':
-        if (i + 1 < len) {
+        if (s[i + 1] != '\0') {
           if (s[i + 1] == 'L') {
             result += 40;
             i++;
@@ -56,7 +53,7 @@ int romanToInt(char* s) {
         result += 50;
         break;
       case 'C':
-        if (i + 1 < len) {
+        if (s[i + 1] != '\0') {
           if (s[i + 1] == 'D') {
             result += 400;
             i++;
