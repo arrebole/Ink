@@ -2,10 +2,10 @@
 #include <stdio.h>
 
 // Coordinate 表示二维数组坐标的结构体
-typedef struct Coordinate{
+struct Coordinate{
   int row;
   int col;
-} Coordinate;
+};
 
 // 将一维数组的索引 转换为二维数组的索引
 struct Coordinate transform(int matrixColSize, int index) {
