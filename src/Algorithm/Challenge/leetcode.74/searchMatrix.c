@@ -1,5 +1,4 @@
 #include <stdbool.h>
-#include <stdio.h>
 
 // Coordinate 表示二维数组坐标的结构体
 struct Coordinate{
