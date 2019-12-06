@@ -20,8 +20,11 @@ void resize(){
 // newString 创建一个字符串对象
 char * newString(int size){
     if(pool == NULL) initPool();
+    
     if(ptr + size>= capacity) resize();
+
     for(int i = ptr; i < ptr+size+1; i++) pool[i] = '\0';
+    
     ptr+=(size+1);
     return &pool[ptr-size-1];
 }

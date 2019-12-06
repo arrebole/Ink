@@ -7,7 +7,7 @@ int main(){
     struct TokenSteam ts =  lex(data, strlen(data));
 
     for(int i = 0; i < ts.size; i++){
-        printf("(%d) \n", ts.data[i].type);   
+        printf("(%d %s) \n", ts.data[i].type, ts.data[i].value);   
     }
     return 0;
 }

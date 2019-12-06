@@ -4,6 +4,7 @@
 #include "../include/string.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 // isOperators 判断字符是否是运算符
 bool isOperators(char ch){
@@ -44,18 +45,28 @@ struct Token lexInt(char* ch, int size){
 // TokenSteamInitCap 初始化容量
 void TokenSteamInitCap(struct TokenSteam* tokenSteam){
     const int defaultCapacity = 6;
-    tokenSteam->data = (struct Token *)malloc(sizeof(struct Token) * defaultCapacity);
+    tokenSteam->data = (struct Token *)calloc(defaultCapacity, sizeof(struct Token));
     tokenSteam->capacity = defaultCapacity;
 }
 
 // TokenSteamResize 扩容
 void TokenSteamResize(struct TokenSteam* tokenSteam){
-    tokenSteam->data = realloc(tokenSteam->data, tokenSteam->capacity *2);
+    struct Token* array = (struct Token *)calloc(tokenSteam->capacity *2, sizeof(struct Token));
+
+    // 复制旧数据到新数组
+    memcpy(array, tokenSteam->data, tokenSteam->size * sizeof(struct Token));
+    
+    // 释放旧内存
+    free(tokenSteam->data);
+    
+    // 指针转移
+    tokenSteam->data = array;
     tokenSteam->capacity = tokenSteam->capacity * 2;
 }
 
 // push 往记号流中添加标记
 struct TokenSteam* push(struct TokenSteam* tokenSteam, struct Token token){
+
     if(tokenSteam->capacity == 0) TokenSteamInitCap(tokenSteam);
     if(tokenSteam->capacity <= tokenSteam->size) TokenSteamResize(tokenSteam);
     tokenSteam->data[tokenSteam->size++] = token;
