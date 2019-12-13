@@ -1,0 +1,6 @@
+
+
+
+int myAtoi(char * str){
+
+}

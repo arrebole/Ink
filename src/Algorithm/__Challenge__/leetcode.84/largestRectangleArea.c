@@ -31,7 +31,7 @@ int pop(struct Stack* stack){
 
 // 计算矩形面积
 int area(struct Stack* stack, int* heights,int i){
-    // 高 * 长
+    // 高(最低高) * 长
     return heights[pop(stack)] * (i - peek(stack) - 1);
 }
 
