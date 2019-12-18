@@ -16,5 +16,4 @@ f = ListNode(4)
 d.next = e
 e.next = f
 
-k = S.addTwoNumbers(a, d)
-print(k, k.next, k.next.next)
+print(S.parse(S.addTwoNumbers(a, d), []))

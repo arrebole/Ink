@@ -5,36 +5,43 @@ class ListNode:
         self.next = None
 
 class Solution:
-    def parse(self, node: ListNode) -> int:
-        result = 0
-        queue = list()
-        while True:
-            queue.append(node.val)
-            if node.next == None:
-                break
-            node = node.next
+    def parse(self, node: ListNode, out: list) -> list:
+        if node == None:
+            return out
+        out.append(node.val)
+        return self.parse(node.next, out)    
+    
+    def createListNode(self, src: list)->ListNode:
+        if src == None:
+            return None
+
+        queue = [ListNode(i) for i in src]
+        for i in range(0, len(queue)-1):
+            queue[i].next = queue[i+1]
+        return queue[0]
+
+    def add(self, a, b):
+        result = []
         
-        queue.reverse()
-        for i in queue:
-            result = result*10
-            result += i
-
-        return result    
-
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        sum = self.parse(l1) + self.parse(l2)
-        result = None
-        local = result
-
-        while sum > 0:
-            if result == None:
-                result = ListNode(sum%10)
-                local = result
-            else:
-                local.next = ListNode(sum%10)
-                local = local.next     
-            sum = int(sum/10)
+        if len(a) > len(b):
+            for i in range(len(a) - len(b)):
+                b.append(0)
+        elif len(a) < len(b):    
+            for i in range(len(b) - len(a)):
+                a.append(0)
         
-        if result == None:
-            result = ListNode(0)
+        flag = 0
+        for i in range(len(a)):
+            t = a[i] + b[i] + flag
+            flag = 0
+            if t >= 10:
+                flag+=1
+                t-=10
+            result.append(t)
+        if flag != 0:
+            result.append(flag)
         return result
+    
+    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+        numberSum = self.add(self.parse(l1, []), self.parse(l2, []))
+        return self.createListNode(numberSum)
