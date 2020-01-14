@@ -1914,6 +1914,8 @@ def Prim(graph: dict, root: str):
 
 
 
+
+
 # Ⅸ 算法能力的极限
 
 ## 如何求下界
@@ -2105,6 +2107,8 @@ def distribution(menu: list)->int:
 
 
 
+
+
 ## 近似算法
 
 
@@ -2113,13 +2117,53 @@ def distribution(menu: list)->int:
 
 #### 平分法
 
-```python
+```javascript
+// bisection 解非线性方程的平分算法
+// fn: 求fn的一个根
+// a,b: f(a)*f(b) < 0
+// eps: 绝对误差的上界
+// N： 迭代次数的上限
+function bisection(fn, a, b, eps, N) {
+    while (N-- > 0) {
+        // 寻找中点 = (x2 -x1)/2
+        let x0 = average(a, b)
+        // 如果误差精度足够 或者刚好为根 则返回结果 
+        if ((x0 - a) < eps || fn(x0) == 0) return x0;
+        // 往根处靠近
+        if (fn(x0) * fn(a) < 0) b = x0;
+        else                    a = x0;
+    }
+    return average(a, b);
+}
 
+function average(a, b) {
+    return (a + b) / 2;
+}
 ```
 
 
 
 #### 试位法
+
+```javascript
+// regulaFalsi 近似算法 试位法 求非线性方程的根
+function regulaFalsi(fn, {a, b, epx, N}){
+    while(N-- > 0){
+        // 寻找中点 = (x1,y1) (x2,y2) 在x轴上的截距
+        let x0 = (a*fn(b) - b*fn(a))/(fn(b)-fn(a))
+        if(fn(x0) == 0 || (x0 - a) < epx) return x0;
+        if(fn(x0) * fn(a) < 0)            b = x0;
+        else                              a = x0;
+    }
+    return average(a, b);
+}
+
+function average(a, b) {
+    return (a + b) / 2;
+}
+```
+
+
 
 #### 牛顿法
 
