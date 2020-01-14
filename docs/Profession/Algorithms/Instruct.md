@@ -2167,5 +2167,17 @@ function average(a, b) {
 
 #### 牛顿法
 
+```javascript
+// NewtownRaphson 牛顿法求非线性方程的根
+// dfn:(fn的导函数) x:(初始的临近根的点)
+function NewtownRaphson(fn, dfn,{x, epx, N}){
+    while (N-- > 0) {
+        if(fn(x) == 0 || fn(x) < epx) return x;
+        else                          x = x- fn(x)/dfn(x);
+    }
+    return x;
+}
+```
+
 
 
