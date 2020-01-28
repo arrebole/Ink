@@ -8,7 +8,7 @@
 
 ## Table of Contents
 
-+ [System](/docs/Core/System/System.md) 操作系统大体轮廓
++ [kernel](/docs/Core/System/Kernel.md) 零环内实现
++ [syscall](/docs/Core/System/Syscall.md) 系统调用
 + [I/O Module](/docs/Core/System/IO.md) 具体的IO模型实现
-+ [Thread](/docs/Core/System/Thead.md) 线程
 
