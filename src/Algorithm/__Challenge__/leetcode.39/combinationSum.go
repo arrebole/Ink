@@ -18,7 +18,7 @@ func backtrack(out *[][]int, candidates, curr []int, i, target int) {
 	}
 
 	for j := i; j < len(candidates); j++ {
-		if (target - candidates[i]) >= 0 {
+		if (target - candidates[j]) >= 0 {
 			backtrack(out, candidates, append(curr, candidates[j]), j, target-candidates[j])
 		}
 	}
