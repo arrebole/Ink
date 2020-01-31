@@ -6,9 +6,9 @@
 > win10_x64 参考第三方文档[《hfiref0x/SyscallTables》](https://github.com/hfiref0x/SyscallTables)
 
 ## table of contents
-| 调用号 | 函数名 | 入口点         | 源代码                                                       | 版本/平台   | 研究成果                               |
-| ------ | :----- | -------------- | ------------------------------------------------------------ | :---------- | :------------------------------------- |
-| 0      | read   | __x64_sys_read | [fs/read_write.c](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/fs/read_write.c) | all, x86_64 | [pass](./Ink/src/System/Syscall/Linux) |
-|        |        |                |                                                              |             |                                        |
-|        |        |                |                                                              |             |                                        |
+| code | 3-Ring | 0-Ring          | source                                                       | lib                 | 版本/平台   |
+| ---- | :----- | --------------- | ------------------------------------------------------------ | ------------------- | :---------- |
+| 0    | read   | __x64_sys_read  | [fs/read_write.c](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/fs/read_write.c) | <unistd.h>, libc.so | all, x86_64 |
+| 1    | write  | __x64_sys_write | [fs/read_write.c](https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/fs/read_write.c) | <unistd.h>, libc.so | all, x86_64 |
+|      |        |                 |                                                              |                     |             |
 
