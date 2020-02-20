@@ -1,5 +1,5 @@
-// DPBackpackProblem 背包问题的动态规划算法
-function DPBackpackProblem({ weights, values }, payload) {
+// DPNapsackProblem 背包问题的动态规划算法
+function DPNapsackProblem({ weights, values }, payload) {
     const itemNumb = weights.length;
     const dp = newMatrix(itemNumb + 1, payload + 1)
 
@@ -27,4 +27,4 @@ function newMatrix(row, col) {
     return result
 }
 
-module.exports.DPBackpackProblem = DPBackpackProblem
+module.exports.DPNapsackProblem = DPNapsackProblem
