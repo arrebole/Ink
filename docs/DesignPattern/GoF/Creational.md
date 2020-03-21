@@ -61,93 +61,88 @@
   + creator类是一个抽象类并且不提供它所声明的工厂方法的实现
   
   + creator是一个具体的类并且为工厂方法提供一个缺省的实现。
-
 + 参数化工厂方法
-
 + 特定语言的变化和问题
 
   + lazy initialization
-
 + 使用模板以避免创建子类
 
 
 
-#### 标准版(c++)
+#### 不使用模式
 
-```c++
-// 行星抽象接口
-class IPlanet {
- public:
-  virtual void rotation() = 0;
-  virtual ~IPlanet(){};
+```typescript
+// 直接使用new来创建对象, 会带来紧耦合的关系。
+// 😈Exploit：当要改用其他行星类时，就会出现问题。
+
+class Earth {
+    rotation() { // ... }
 };
 
-//工厂方法抽象接口
-class ICreator {
- public:
-  virtual IPlanet* createPlanet() = 0;
-  virtual ~ICreator(){};
-};
-```
-
-```c++
-// 具体的产品：地球
-class Earth : public IPlanet {
- public:
-  virtual void rotation() { 
-      printf("Earth rotation\n"); 
-  }
-};
-
-// 具体的产品：火星
-class Mars : public IPlanet {
- public:
-  virtual void rotation() { 
-      printf("Mars rotation\n"); 
-  }
-};
-
-// 具体的工厂方法
-class EarthCreator : public ICreator {
- public:
-  virtual IPlanet* createPlanet() { 
-      return new Earth(); 
-  };
-};
-
-// 具体的工厂方法
-class MarsCreator : public ICreator {
- public:
-  virtual IPlanet* createPlanet() { 
-      return new Mars(); 
-  }
-};
-```
-
-```c++
-// 仅仅依赖抽象类型
-void sample() {
-  ICreator* earthCreator = new EarthCreator();
-  ICreator* marsCreator = new MarsCreator();
-  
-  IPlanet* earth = earthCreator->createPlanet();
-  IPlanet* Mars = marsCreator->createPlanet();
-    
-  delete earthCreator;
-  delete marsCreator;
-    
-  delete earth;
-  delete mars;
+function sample() {
+    const earth = new Earth();
 }
+```
+
+#### 使用模式
+
+**interface.ts**
+
+```typescript
+// 行星抽象接口
+interface IPlanet {
+    rotation(): void
+}
+// 行星工厂方法抽象接口
+interface PlanetCreator{
+    create(): IPlanet
+}
+```
+**earth.ts**
+
+```typescript
+// 具体的产品：地球
+class Earth implements IPlanet {
+    rotation() { // ...  };
+};
+
+class EarthCreator implements PlanetCreator{
+    create():IPlanet{
+        return new Earth();
+    }
+}
+```
+
+**mars.ts**
+
+```typescript
+// 具体的产品：火星
+class Mars implements IPlanet {
+    rotation() { // ...  };
+};
+
+class MarsCreator implements PlanetCreator{
+    create():IPlanet{
+        return new Mars();
+    }
+}
+```
+
+**smple.ts**
+
+```typescript
+// 使得函数内或对象内不依赖具体类
+function sample(factory: PlanetCreator) {
+    const planet = factory.create();
+    planet.rotation()
+}
+sample(new MarsCreato())
+sample(new EarthCreator())
 ```
 
 
 
 [查看更多](/src/DesignPattern/Creational/FactoryMethod)
-
-
-
-
 
 ### Ⅵ 相关模式
 
@@ -158,11 +153,6 @@ void sample() {
 + Creator使用Initialize来初始化对象，而factory method不需要这样的操作。
 
 
-
-
-
-
-<br/>
 
 
 ## AbstractFactory
@@ -226,187 +216,63 @@ void sample() {
 
 
 
-#### 标准版(c++)
-
-```c++
-// 按钮接口
-class Button {
- public:
-  virtual void drawButton() = 0;
-  virtual ~Button(){};
-};
-
-// 菜单接口
-class Menu {
- public:
-  virtual void drawMenu() = 0;
-  virtual ~Menu(){};
-};
-
-// 抽象工厂接口
-class Factory {
- public:
-  virtual Button *createButton() = 0;
-  virtual Menu *createMenu() = 0;
-  virtual ~Factory(){};
-};
-```
-
-```c++
-// 具体的产品系列 linux
-class LinuxButton : public Button {
- public:
-  virtual void drawButton() { printf("LinuxButton\n"; }
-};
-
-class LinuxMenu : public Menu {
- public:
-  virtual void drawMenu() { printf("LinuxMenu"); }
-};
-
-// 具体的产品系列 windows
-class WindowsButton : public Button {
- public:
-  virtual void drawButton() { printf("WindowsButton\n"); }
-};
-
-class WindowsMenu : public Menu {
- public:
-  virtual void drawMenu() { printf("WindowsMenu"); }
-};
-```
-
-```c++
-// 具体的工厂1
-class LinuxFactory : public Factory {
- public:
-  Button *createButton() { return new LinuxButton(); }
-  Menu *createMenu() { return new LinuxMenu(); }
-};
-
-// 具体的工厂2
-class WindowsFactory : public Factory {
- public:
-  Button *createButton() { return new WindowsButton(); }
-  Menu *createMenu() { return new WindowsMenu(); }
-};
-```
+#### 不使用模式
 
 ```c++
 
-// Client仅使用由 AbstractFactory 和 AbstractProduct类声明的接口
-void Client(Factory* f) {
-  Button* button = f->createButton();
-  Menu* menu = f->createMenu();
+```
+#### 使用模式
 
-  button->drawButton();
-  menu->drawMenu();
-}
+**interface.ts**
 
-int main() {
-  Factory* linuxFactory = new LinuxFactory();
-  Client(linuxFactory);
-  return 0;
+```typescript
+interface Button{ }
+interface Menu{ }
+
+interface Factory{
+    createButton(): Button;
+    createMenu(): Menu;
 }
 ```
 
+**linuxFactory.ts**
 
-
-
-
-#### 单件+参数化(typeScript)
-
-```typescript
-// 人接口
-export interface IPeople {
-    yingyingying(): void;
-}
-// 衣服接口
-export interface IClothes {
-    beWearing(): void;
-}
-// 类型
-export enum HumanTypes {
-    Man,
-    Woman,
-}
-// 抽象工厂
-export interface HumanFactory {
-    createPeople(HumanTypes): IPeople;
-    createClothes(HumanTypes):IClothes;
-}
-```
-
-```typescript
-// 具体people
-class Man implements IPeople {
-    public yingyingying() {
-        console.log("man is yingyingying")
+```c++
+class LinuxButton implements Button{}
+class LinuxMenu implements Menu{}
+class LinuxFactory implements Factory{
+    createButton():Button{
+        return new LinuxButton();
     }
-}
-class Woman implements IPeople {
-    public yingyingying() {
-        console.log("Woman is yingyingying")
-    }
-}
-
-// 具体clothes
-class WomanClothing implements IClothes {
-    public beWearing() {
-        console.log("WomanClothing is beWearing")
-    }
-}
-class ManClothing implements IClothes {
-    public beWearing() {
-        console.log("ManClothing is beWearing")
+    createMenu():Menu{
+        return new LinuxMenu();
     }
 }
 ```
 
+**winFactory.ts**
+
 ```typescript
-// 设计模式：创建型——抽象工厂（参数化 + 单件）
-export class StandardHumanFactory implements HumanFactory {
-    protected constructor() { }
-    public createPeople(t: HumanTypes): IPeople {
-        switch (t) {
-            case HumanTypes.Man:
-                return new Man();
-            case HumanTypes.Woman:
-                return new Woman();
-        }
-        return null;
+class WinButton implements Button{}
+class WinMenu implements Menu{}
+class WinFactory implements Factory{
+    createButton():Button{
+        return new WinButton();
     }
-    public createClothes(t: HumanTypes): IClothes {
-        switch (t) {
-            case HumanTypes.Woman:
-                return new WomanClothing();
-            case HumanTypes.Man:
-                return new ManClothing();
-        }
-        return null;
-    }
-    private static _instance: StandardHumanFactory = null;
-    public static Instance(): StandardHumanFactory {
-        if (this._instance == null) {
-            this._instance = new StandardHumanFactory();
-        }
-        return this._instance;
+    createMenu():Menu{
+        return new WinMenu();
     }
 }
-
 ```
 
-```typescript
-// 描述：仅使用由 AbstractFactory 和 AbstractProduct类声明的接口
-function Client(f: HumanFactory,t:HumanTypes) {
-    f.createClothes(t).beWearing();
-    f.createPeople(t).yingyingying();
-}
+**smaple.ts**
 
-function main() {
-    Client(StandardHumanFactory.Instance(),HumanTypes.Man);
-    Client(StandardHumanFactory.Instance(),HumanTypes.Woman);
+```typescript
+function sample(factory: Factory){
+    const button = factory.createButton()
+    const menu = factory.createMenu()
 }
+sample(new WinFactory())
 ```
 
 
