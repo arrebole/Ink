@@ -10,35 +10,37 @@
 
 ## Table of Contents
 
-+ **Start**
-  + [Language]()
-  + [Interview]()
-+ **Profession**
-  + [Algorithms](/docs/Profession/Algorithms/Main.md)
-  + [Network](/docs/Profession/Network/Main.md)
-  + [Operating System](/docs/Profession/System/Main.md)
-+ **Killer**
-  + [Devops](/docs/Killer/Devops/Main.md)
-  + [Design Pattern](/docs/Killer/DesignPattern/DesignPatterns.md)
-  + [Refactoring](/docs/Killer/Refactoring/Refactoring.md)
-+ **Nuclear Reaction**
++ **Wander**
+  + [Remember](/docs/Remember/Main.md)
+
++ **Inner**
+  + [Algorithms](/docs/Algorithms/Main.md)
+  + [Network](/docs/Network/Main.md)
+  + [Operating System](/docs/System/Main.md)
+  + [Design Pattern](/docs/DesignPattern/Main.md)
+  + [Refactoring](/docs/Refactoring/Main.md)
+
++ **Bloom**
   + [Graphics]()
   + [Blockchain]()
   + [Protocol]()
-  + [Cryptography](/docs/Nuclear-Reaction/Cryptography/main.md)
+  + [Cryptography](/docs/Cryptography/main.md)
   + [Machine Learning]()
   + [Compilation Principle]()
-+ **Romantic**
-  + [Hack](/docs/Romantic/Hack/Main.md)
-  + [Architecture](/docs/Romantic/Architecture/Main.md)
-  + [Literary](/docs/Romantic/Literary/Main.md)
+
++ **Burst**
+  + [Hack](/docs/Hack/Main.md)
+  + [Architecture](/docs/Architecture/Main.md)
+  + [Literary](/docs/Literary/Main.md)
+
 + **Limit**
-  + [Psychology](/docs/Limit/Psychology/main.md)
+  + [Psychology](/docs/Psychology/main.md)
   + [Economics]()
   + [Relativity]()
   + [Quantum theory]()
+
 + **Beyond the limits**
-  + [math]()
+  + [Math]()
   + [Philosophy]()
   + [Universal theory]()
 
