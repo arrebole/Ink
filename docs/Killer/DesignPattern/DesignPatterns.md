@@ -82,7 +82,12 @@
   + [Template Method](#TemplateMethod)
   + [Visitor](#Visitor)
 
-<br/>
++ Extra
+  + ORM design
+    + active record
+    + data mapper
+
+
 
 # Creational 
 
@@ -90,10 +95,10 @@
 >
 > 特征： 1）它们将关于该系统使用那些**具体的类的信息封装起来**
 >
-> 		2）它们**隐藏了这些类的实例是如何被创建和放在一起的**。	
+> ​			2）它们**隐藏了这些类的实例是如何被创建和放在一起的**。	
 
 
-<br/>
+
 
 
 ## FactoryMethod
@@ -212,19 +217,18 @@ class MarsCreator : public ICreator {
 
 ```c++
 // 仅仅依赖抽象类型
-void rotation(ICreator* creator) {
-  IPlanet* planet = creator->createPlanet();
-  planet->rotation();
-  delete planet;
-}
-
-int main() {
-  ICreator* creator1 = new EarthCreator();
-  ICreator* creator2 = new MarsCreator();
-  rotation(creator1);
-  rotation(creator2);
-  delete creator1;
-  delete creator2;
+void sample() {
+  ICreator* earthCreator = new EarthCreator();
+  ICreator* marsCreator = new MarsCreator();
+  
+  IPlanet* earth = earthCreator->createPlanet();
+  IPlanet* Mars = marsCreator->createPlanet();
+    
+  delete earthCreator;
+  delete marsCreator;
+    
+  delete earth;
+  delete mars;
 }
 ```
 
