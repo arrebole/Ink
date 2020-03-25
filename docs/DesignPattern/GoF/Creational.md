@@ -136,7 +136,7 @@ function sample(factory: PlanetCreator) {
     const planet = factory.create();
     planet.rotation()
 }
-sample(new MarsCreato())
+sample(new MarsCreator())
 sample(new EarthCreator())
 ```
 
@@ -287,10 +287,6 @@ sample(new WinFactory())
 
 
 
-
-
-<br/>
-
 ## Builder
 
 ### Ⅰ 模式意图
@@ -346,37 +342,30 @@ sample(new WinFactory())
 
 
 
-#### 标准版(c++)
+#### 使用设计模式
 
-```c++
+```typescript
 /* "Product" */
 class Pizza {
- public:
-  string dough = "";
-  string sauce = "";
-  string topping = "";
+    dough: string;
+    sauce: string;
+    topping: string;
 };
-```
 
-```c++
 /* "Abstract Builder" */
-class PizzaBuilder {
- protected:
-  Pizza* pizza;
+abstract class PizzaBuilder {
+    protected pizza: Pizza;
 
- public:
-  // 返回对象
-  Pizza* getResult() { 
-      return pizza; 
-  }
-  // 创建对象
-  void createNewPizzaProduct() { 
-      pizza = new Pizza(); 
-  }
-  virtual void buildDough() = 0;
-  virtual void buildSauce() = 0;
-  virtual void buildTopping() = 0;
-  virtual ~PizzaBuilder(){};
+    getResult(): Pizza {
+        return this.pizza;
+    }
+    // 创建对象
+    createNewPizzaProduct() {
+        this.pizza = new Pizza();
+    }
+    abstract buildDough();
+    abstract buildSauce();
+    abstract buildTopping();
 };
 ```
 
@@ -385,81 +374,66 @@ class PizzaBuilder {
 
 ```c++
 /* "ConcreteBuilder" */
-class HawaiianPizzaBuilder : public PizzaBuilder {
- public:
-  void buildDough() { 
-      pizza->dough = "cross"; 
-  }
-  void buildSauce() { 
-      pizza->sauce = "mild"; 
-  }
-  void buildTopping() { 
-      pizza->topping = "ham+pineapple"; 
-  }
+class HawaiianPizzaBuilder extends PizzaBuilder {
+    buildDough() {
+        super.pizza.dough = "cross";
+    }
+    buildSauce() {
+        super.pizza.sauce = "mild";
+    }
+    buildTopping() {
+        super.pizza.topping = "ham+pineapple";
+    }
 };
 
-class SpicyPizzaBuilder : public PizzaBuilder {
- public:
-  void buildDough() { 
-      pizza->dough = "pan baked"; 
-  }
-  void buildSauce() { 
-      pizza->sauce = "hot"; 
-  }
-  void buildTopping() { 
-      pizza->topping = "pepperoni+salami"; 
-  }
+class SpicyPizzaBuilder extends PizzaBuilder {
+    buildDough() {
+        super.pizza.dough = "pan baked";
+    }
+    buildSauce() {
+        super.pizza.sauce = "hot";
+    }
+    buildTopping() {
+        super.pizza.topping = "pepperoni+salami";
+    }
 };
 
-```
-
-
-
-```c++
 /* "Director" */
 class Director {
- private:
-  PizzaBuilder* pizzaBuilder;
+    private pizzaBuilder: PizzaBuilder;
 
- public:
-  void setPizzaBuilder(PizzaBuilder* pb) { 
-      pizzaBuilder = pb; 
-  }
-
-  Pizza* getPizza() { 
-      return pizzaBuilder->getResult(); 
-  }
-
-  void constructPizza() {
-    pizzaBuilder->createNewPizzaProduct();
-    pizzaBuilder->buildDough();
-    pizzaBuilder->buildSauce();
-    pizzaBuilder->buildTopping();
-  }
+    setPizzaBuilder(pb: PizzaBuilder) {
+        this.pizzaBuilder = pb;
+    }
+    getPizza() {
+        return this.pizzaBuilder.getResult();
+    }
+    constructPizza() {
+        this.pizzaBuilder.createNewPizzaProduct();
+        this.pizzaBuilder.buildDough();
+        this.pizzaBuilder.buildSauce();
+        this.pizzaBuilder.buildTopping();
+    }
+}
 ```
 
 
 
 ```c++
-int main() {
-  // 1、创建Director对象
-  Director waiter;
+function main() {
+    // 1、创建Director对象
+    const waiter = new Director();
 
-  // 2、创建具体的builder
-  PizzaBuilder* hawaiianPizzabuilder = new HawaiianPizzaBuilder();
-  PizzaBuilder* spicyPizzaBuilder = new SpicyPizzaBuilder();
+    // 2、创建具体的builder
+    const hawaiianPizzabuilder = new HawaiianPizzaBuilder();
+    const spicyPizzaBuilder = new SpicyPizzaBuilder();
 
-  // 3、生成pizza对象
-  waiter.setPizzaBuilder(hawaiianPizzabuilder);
-  waiter.constructPizza();
-  Pizza* pizza = waiter.getPizza();
+    // 3、生成pizza对象
+    waiter.setPizzaBuilder(hawaiianPizzabuilder);
+    waiter.constructPizza();
+    const pizza = waiter.getPizza();
 
-  cout << pizza->dough << pizza->sauce << pizza->topping << endl;
-
-  //清理内存
-  delete hawaiianPizzabuilder;
-  delete spicyPizzaBuilder;
-  delete pizza;
+    console.log(pizza.dough, pizza.sauce, pizza.topping);
 }
 ```
 
@@ -470,16 +444,10 @@ int main() {
 ### Ⅵ 相关模式
 
 + 与 `Abstract Factory`目的相同，用于创建复杂对象
-
 + `Builder`模式着重构造**一个复杂对象**；`Abstract Factory`模式着重于创建**多个系列的产品对象**.
-
 + `Builder`模式着重于**一步步**构建对象，并在**最后一步返回**；`Abstract Factory`模式里对象是**立即返回**的。
 
-  
 
-
-
-<br/>
 
 ## Prototype
 
@@ -530,50 +498,40 @@ int main() {
 
 
 
-#### 标准版
+#### 使用设计模式
 
-```c++
+```typescript
 // Prototype 接口
-class IImage {
- public:
-  IImage() {}
-  virtual int getData() = 0;
-  virtual ~IImage() {}
-  virtual IImage* Clone() = 0;
+interface Image {
+    getData(): number;
+    Clone(): Image;
 };
 ```
 
-```c++
+```typescript
 // 具体的原型类
-class ConcreteImage : public IImage {
- private:
-  int data;
+class ConcreteImage implements Image {
+    private data: number
 
- public:
-  ConcreteImage(int data) { 
-      this->data = data; 
-  }
-  // 拷贝构造函数,进行数据复制
-  ConcreteImage(const ConcreteImage& p) { 
-      this->data = p.data; 
-  }
-  virtual int getData() { 
-      return this->data; 
-  }
-  virtual IImage* Clone() { 
-      return new ConcreteImage(*this); 
-  }
+    constructor(data: number) {
+        this.data = data;
+    }
+    Clone() {
+        return new ConcreteImage(this.data);
+    }
+    getData(): number {
+        return this.data;
+    }
 };
 ```
 
 ```c++
-int main() {
-  IImage* img = new ConcreteImage(17);
-  IImage* imgClone = img->Clone();
+function main() {
+    const img = new ConcreteImage(17);
+    const imgClone = img.Clone();
 
-  printf("%d\n", img->getData());
-  printf("%d\n", imgClone->getData());
-  return 0;
+    console.log(img.getData());
+    console.log(imgClone.getData());
 }
 ```
 
@@ -640,36 +598,33 @@ int main() {
 
 
 
-#### 懒汉式-线程不安全(c++)
+#### 使用设计模式
 
-```c++
+**懒汉式-线程不安全(c++)**
+
+```typescript
 class Singleton {
- private:
-  Singleton(){};
-  Singleton(const Singleton& other);
-
-  static Singleton* uniqueInstance;
-  char _data[4] = {'x', 'x', 'x', '\0'};
-
- public:
-  char* data() { return _data; };
-  // 线程不安全的单例模式
-  static Singleton* Instance() {
-    if (uniqueInstance == nullptr) {
-      uniqueInstance = new Singleton();
+    private _data: string;
+    data(): string {
+        return this._data;
     }
-    return uniqueInstance;
-  }
+    private constructor() {
+        this._data = "hello world";
+    }
+    // 线程不安全的单例模式
+    private static uniqueInstance: Singleton;
+    static Instance(): Singleton {
+        if (Singleton.uniqueInstance == null) {
+            Singleton.uniqueInstance = new Singleton();
+        }
+        return this.uniqueInstance;
+    }
 };
-
-Singleton* Singleton::uniqueInstance = nullptr;
 ```
 
 ```c++
-int main(）{
-  Singleton* sing = Singleton::Instance();
-  printf("%s", sing->data();
-  return 0;
+function main(){
+    console.log(Singleton.Instance().data())
 }
 ```
 
@@ -680,3 +635,4 @@ int main(）{
 ### Ⅵ 相关模式
 
 + 很多模式可以使用Singleton模式实现，Abstract Factory，Builder、Prototype。
+
