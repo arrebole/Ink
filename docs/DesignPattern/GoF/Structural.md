@@ -45,54 +45,37 @@
 
 ### Ⅴ 模式实现
 
-```c++
-// 转换的目标接口
-class ITarget {
- public:
-  virtual int request() = 0;
-  virtual ~ITarget(){};
-};
+```typescript
+interface Cat{
+    miaomiao(): string
+}
+
+interface Dog{
+    wangwang(): string
+}
+
+class Tomcat implements Cat{
+    miaomiao(){
+        return "miao miao miao!"
+    }
+}
+
+// 将猫适配成狗
+class Asaptee implements Dog{
+    private cat: Cat
+    constructor(cat: Cat){
+        this.cat = cat;
+    }
+    wangwang(){
+        return this.cat.miaomiao()
+    }
+}
+
+function main(){
+    const dog = new Asaptee(new Tomcat());
+    console.log(dog.wangwang())
+}
 ```
-
-```c++
-// 需要转换的对象类接口
-class IAdaptee {
- public:
-  virtual int SpecificRequest() = 0;
-  virtual ~IAdaptee(){};
-};
-```
-
-```c++
-// 需要转换的具体类
-class Asaptee : public IAdaptee {
- private:
-  int data = 12;
-
- public:
-  virtual int SpecificRequest() { 
-      return this->data; 
-  }
-};
-```
-
-```c++
-// 进行转换的适配器
-class Adapter : public ITarget {
- private:
-  IAdaptee* pAdaptee;
-    
- public:
-  Adapter(IAdaptee* adaptee) { 
-      this->pAdaptee = adaptee; 
-  }
-  virtual int request() { 
-      return pAdaptee->SpecificRequest() + 100; 
-  }
-};
-```
-
-
 
 
 
@@ -149,84 +132,7 @@ class Adapter : public ITarget {
 
 ### Ⅴ 模式实现
 
-#### 仅有一个Implementor(cc)
-
-当仅有一个实现时，没有必要创建一个抽象的Implementor类；
-
-```c++
-// 抽象类
-class Abstraction {
- protected:
-  // 维护一个指向Implementor类型对象的指针
-  Implementor* implementor;
-
- public:
-  virtual int OperatorA() = 0;
-  virtual int OperatorB() = 0;
-  virtual ~Abstraction(){};
-};
-```
-
-```c++
-// 实现Implementor接口并定义它的具体实现
-// 当仅有一个实现时，没有必要创建一个抽象的Implementor类；
-class Implementor {
- public:
-  int getColor() { return 0x12; }
-  int getShap() { return 0x14; }
-};
-```
-
-```c++
-// 扩充由Abstraction定义的接口
-class RefinedAbstraction : public Abstraction {
- public:
-  RefinedAbstraction(Implementor* implementor) {
-    this->implementor = implementor;
-  }
-  virtual int OperatorA() {
-    int color = implementor->getColor();
-    return color;
-  }
-  virtual int OperatorB() {
-    int shap = implementor->getShap();
-    return shap;
-  }
-  ~RefinedAbstraction() {
-    if (implementor != nullptr) {
-      delete implementor;
-    }
-  }
-};
-```
-
-```c++
-// 利用简单工厂创建
-class AbstractionFactory {
- public:
-  static Abstraction* createAbstraction() {
-    return new RefinedAbstraction(new Implementor());
-  }
-};
-
-int main() {
-  Abstraction* Abstraction = AbstractionFactory::createAbstraction();
-  printf("%d\n", Abstraction->OperatorA());
-  printf("%d\n", Abstraction->OperatorB());
-  return 0;
-}
-```
-
-
-
-#### 创建正确Implementor(ts)
-
 ```typescript
-interface Implementor {
-    basePrice(): number
-    name(): string
-}
-
 abstract class Abstraction {
     protected impl: Implementor;
     abstract getStd(): string;
@@ -246,24 +152,27 @@ class RefinedAbstraction extends Abstraction {
     }
 }
 
+interface Implementor {
+    basePrice(): number
+    name(): string
+}
+
 // 具体的实现类
 class ConcreteImplementorWin implements Implementor {
     public basePrice(): number {
-        return 10
+        return 10;
     }
-
     public name(): string {
-        return "win"
+        return "win";
     }
 }
 
 class ConcreteImplementorLinux implements Implementor {
     public basePrice(): number {
-        return 5
+        return 5;
     }
-
     public name(): string {
-        return "Linux"
+        return "Linux";
     }
 }
 
@@ -343,25 +252,25 @@ export function NewBridgeWin():Abstraction{
 
 
 ```typescript
-export abstract class Component {
+abstract class Component {
     protected data: number;
     abstract Print();
     abstract Increase();
-    abstract Add(compl:Component);
+    abstract Add(compl: Component);
 }
 
-export class Composite extends Component {
+class Composite extends Component {
     private Components: Array<Component>;
     constructor(n: number) {
         super()
         this.data = n;
         this.Components = new Array<Component>();
     }
-    public Add(compl:Component){
+    public Add(compl: Component) {
         this.Components.push(compl);
     }
     public Print() {
-        console.log("Composite %d",this.data);
+        console.log("Composite %d", this.data);
         for (const iterator of this.Components) {
             iterator.Print();
         }
@@ -374,38 +283,40 @@ export class Composite extends Component {
     }
 }
 
-export class Leaf extends Component{
-    constructor(n:number){
+class Leaf extends Component {
+    constructor(n: number) {
         super()
         this.data = n;
     }
-    public Add(compl:Component){
+    public Add(compl: Component) {
         throw "叶子类无法添加子类";
     }
-    public Increase(){
+    public Increase() {
         this.data++;
     }
-    public Print(){
-        console.log("Leaf %d",this.data);
+    public Print() {
+        console.log("Leaf %d", this.data);
     }
 }
 ```
 
 ```typescript
-const root: Component = new Composite(0);
-root.Add(new Leaf(1))
-root.Add(new Leaf(2))
-let compl = () => {
-    let p = new Composite(12);
-    p.Add(new Leaf(19));
-    p.Add(new Leaf(67));
-    return p;
-}
-root.Add(compl());
+function main() {
+    const root = new Composite(0);
+    root.Add(new Leaf(1))
+    root.Add(new Leaf(2))
+    let compl = () => {
+        let p = new Composite(12);
+        p.Add(new Leaf(19));
+        p.Add(new Leaf(67));
+        return p;
+    }
+    root.Add(compl());
 
-root.Print();
-root.Increase();
-root.Print();
+    root.Print();
+    root.Increase();
+    root.Print();
+}
 ```
 
 
@@ -465,68 +376,55 @@ root.Print();
 
 ### Ⅴ 模式实现
 
-```c++
-class Component {
- public:
-  virtual ~Component(){};
-  virtual int Count() = 0;
+```typescript
+interface Component {
+    Count(): number
 };
 
 // 具体的执行对象
-class ConcreteComponent : public Component {
- public:
-  virtual int Count() {
-    std::cout << "std 10" << std::endl;
-    return 10;
-  }
+class ConcreteComponent implements Component {
+    Count(): number {
+        console.log("std 10")
+        return 10;
+    }
 };
 
 // 装饰器类
-class Decoretor : public Component {
- public:
-  Decoretor(Component* component) : _component(component){};
-  virtual ~Decoretor(){};
-  virtual int Count() { 
-    return this->_component->Count(); 
-  };
-
- protected:
-  Component* _component;
+abstract class Decoretor implements Component {
+    private component: Component
+    constructor(component: Component) {
+        this.component = component
+    }
+    Count(): number {
+        return this.component.Count();
+    }
 };
 
 // 具体的类
-class ConcreteDecoratorA : public Decoretor {
- public:
-  ConcreteDecoratorA(Component* component) : Decoretor(component){};
-  virtual int Count() {
-    std::cout << "add price 5" << std::endl;
-    return 5 + Decoretor::Count();
-  };
+class ConcreteDecoratorA extends Decoretor {
+    Count(): number {
+        console.log("add price 5")
+        return 5 + super.Count();
+    };
 };
 
 // 具体的类
-class ConcreteDecoratorB : public Decoretor {
- public:
-  ConcreteDecoratorB(Component* component) : Decoretor(component){};
-  virtual int Count() {
-    std::cout << "add price 8" << std::endl;
-    return 8 + Decoretor::Count();
-  };
+class ConcreteDecoratorB extends Decoretor {
+    Count(): number {
+        console.log("add price 8")
+        return 8 + super.Count();
+    };
 };
 ```
 
-```c++
-int main() {
-  Component* s1 = new ConcreteComponent();
-  // 使用上层层包裹
-  Component* dec = new ConcreteDecoratorA(s1);
-  Component* dec2 = new ConcreteDecoratorB(dec);
-
-  std::cout << dec2->Count() << std::endl;
-
-  delete s1;
-  delete dec;
-  delete dec2;
+```typescript
+function main(){
+    const s1 = new ConcreteComponent();
+    // 使用上层层包裹
+    const dec1 = new ConcreteDecoratorA(s1);
+    const dec2 = new ConcreteDecoratorB(dec1);
+  
+    console.log("final", dec2.Count())
 }
 ```
 
@@ -545,8 +443,6 @@ int main() {
 
 
 <br/>
-
-
 
 ## Facade
 
@@ -692,65 +588,50 @@ int main() {
 + 删除外部状态
 + 管理共享对象
 
-```c++
+```typescript
 // 享元抽象类
-class Flyweight {
- protected:
-  char value;
-
- public:
-  virtual char getValue() = 0;
-  virtual ~Flyweight(){};
+abstract class Flyweight {
+    protected value: string
+    public abstract getValue(): string
 };
 
 // 享元具体类
-class ConcreteFlyweight : public Flyweight {
- public:
-  ConcreteFlyweight(char val) { this->value = val; }
-  virtual char getValue() { return this->value; }
+class ConcreteFlyweight extends Flyweight {
+    constructor(v: string) {
+        super()
+        this.value = v;
+    }
+    public getValue(): string {
+        return this.value;
+    }
 };
 
 // 享元工厂
 class FlyweightFactory {
- private:
-  std::map<char, Flyweight*> cache;
-
- public:
-  Flyweight* GetFlyweight(char sign) {
-    std::map<char, Flyweight*>::iterator it;
-    it = this->cache.find(sign);
-
-    if (it == this->cache.end()) {
-      Flyweight* item = new ConcreteFlyweight(sign);
-      this->cache.insert(std::pair<char, Flyweight*>(sign, item));
-      return item;
+    private cache: Map<string, Flyweight>
+    public GetFlyweight(sign: string): Flyweight {
+        if (!this.cache.has(sign)) {
+            this.cache.set(sign, new ConcreteFlyweight(sign));
+        }
+        return this.cache.get(sign);
     }
-    return cache[sign];
-  };
-
-  void Clear() {
-    for (auto it = cache.begin(); it != cache.end(); it++) {
-      auto item = it->second;
-      delete item;
+    public Clear() {
+        this.cache.clear();
     }
-    this->cache.clear();
-  }
 };
 
 ```
 
-```c++
-int main(){
-    auto f = new FlyweightFactory();
-    auto item1 = f->GetFlyweight('a');
-    auto item2 = f->GetFlyweight('a');
-    auto item3 = f->GetFlyweight('b');
-    printf("%d %p\n",item1->getValue(),item1);
-    printf("%d %p\n",item2->getValue(),item2);
-    printf("%d %p\n",item3->getValue(),item3);
-
-    f->Clear();
-    delete f;
+```typescript
+function sample() {
+    const f = new FlyweightFactory();
+    const item1 = f.GetFlyweight('a');
+    const item2 = f.GetFlyweight('a');
+    const item3 = f.GetFlyweight('b');
+    console.log("%d %p", item1.getValue(), item1);
+    console.log("%d %p", item2.getValue(), item2);
+    console.log("%d %p", item3.getValue(), item3);
+    f.Clear();
 }
 ```
 
@@ -818,38 +699,30 @@ int main(){
 
 ### Ⅴ 模式实现
 
-```c++
-class Subject {
- public:
-  virtual void TouchFile() = 0;
-  virtual ~Subject(){};
+```typescript
+interface Subject {
+    TouchFile();
 };
-
-class RealSubject : public Subject {
- public:
-  virtual void TouchFile() {
-    std::ofstream outfile("a.txt");
-    if (!outfile) exit(0);
-
-    outfile << "touch file a.txt\n";
-    outfile.close();
-  }
+   
+class RealSubject implements Subject {
+    TouchFile() {
+        console.log("touch File")    
+    }
 };
-
-class Proxy : public Subject {
- public:
-  virtual void TouchFile() {
-    Subject* realSubject = new RealSubject();
-    realSubject->TouchFile();
-    delete realSubject;
-  }
+   
+class SubjectProxy implements  Subject {
+    TouchFile() {
+       const realSubject = new RealSubject();
+       realSubject.TouchFile();
+        realSubject.TouchFile();
+     }
 };
 ```
 
-```c++
-int main(){
-    Subject* handle = new Proxy();
-    handle->TouchFile();
+```typescript
+function sample(){
+    const handle = new SubjectProxy();
+    handle.TouchFile();
 }
 ```
 
