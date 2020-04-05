@@ -48,8 +48,69 @@
 
 ### Ⅴ 模式实现
 
+创建抽象的记录器类。
+
+```typescript
+// 1、创建抽象的记录器类。
+abstract class AbstractLogger {
+    protected level: number = 0;
+
+    //责任链中的下一个元素
+    protected nextLogger: AbstractLogger | null = null;
+
+    public setNextLogger(nextLogger: AbstractLogger): void {
+        this.nextLogger = nextLogger;
+    }
+    public logMessage(level: number, message: string): void {
+        if (this.level == level) this.write(message);
+        if (this.nextLogger != null) {
+            this.nextLogger.logMessage(level, message);
+        }
+    }
+    protected abstract write(message: string): void;
+}
 ```
 
+警告记录器
+
+```typescript
+class WarnLogger extends AbstractLogger {
+    constructor(level: number) {
+        super()
+        this.level = level
+    }
+    protected write(message: string) {
+        console.log("[warn]: %s", message);
+    }
+}
+```
+
+危险记录器
+
+```typescript
+class DangerLogger extends AbstractLogger {
+    constructor(level: number) {
+        super()
+        this.level = level
+    }
+    protected write(message: string) {
+        console.log("[Danger]: %s", message);
+    }
+}
+```
+
+使用
+
+```typescript
+function main() {
+    const logger = new WarnLogger(1);
+    const dangerLogger = new DangerLogger(2);
+
+    logger.setNextLogger(dangerLogger);
+
+    logger.logMessage(1, "hello world");
+    logger.logMessage(2, "hello world");
+}
 ```
 
 
@@ -110,8 +171,67 @@
 
 ### Ⅴ 模式实现
 
+```typescript
+interface Command {
+    execute()
+}
+
+class Stock {
+    private name = "ABC";
+    private quantity = 10;
+
+    buy() {
+        console.log("Stock [ Name: " 
+                    + this.name 
+                    + ", Quantity: " 
+                    + this.quantity 
+                    + " ] bought");
+    }
+    
+    sell() {
+        console.log("Stock [ Name: " 
+                    + this.name 
+                    + ", Quantity: "
+                    + this.quantity 
+                    + " ] sold");
+    }
+}
+
+class BuyStock implements Command {
+    private abcStock: Stock;
+
+    constructor(abcStock: Stock) {
+        this.abcStock = abcStock
+    }
+
+    execute() {
+        this.abcStock.buy();
+    }
+}
+
+class SellStock implements Command {
+    private abcStock: Stock;
+
+    constructor(abcStock: Stock) {
+        this.abcStock = abcStock
+    }
+
+    execute() {
+        this.abcStock.sell();
+    }
+}
 ```
 
+```typescript
+function main() {
+    const abcStock = new Stock();
+
+    const buyStockOrder = new BuyStock(abcStock);
+    const sellStockOrder = new SellStock(abcStock);
+    
+    buyStockOrder.execute();
+    sellStockOrder.execute()
+}
 ```
 
 
@@ -797,58 +917,44 @@ int main(){
 
 ### Ⅴ 模式实现
 
-```c++
-class Sort {
- public:
-  virtual int* solve(int* arr, int len) = 0;
+```typescript
+interface Sort {
+    solve(arr: number[]): number[];
 };
 
-class Context {
- private:
-  Sort* _strategy;
-
- public:
-  Context* selectAlg(Sort* strategy) {
-    this->_strategy = strategy;
-    return this;
-  }
-  int* exec(int* arr, int len) { 
-      return this->_strategy->solve(arr, len); 
+class BubbleSort implements Sort {
+    solve(arr: number[]) {
+        //....
+        return arr;
     }
 };
 
-class BubbleSort : public Sort {
- public:
-  virtual int* solve(int* arr, int len) {
-    //.....
-  }
-};
-
-class MergerSort : public Sort {
- public:
-  virtual int* solve(int* arr, int len) {
-    //.....
-  }
+class MergerSort implements Sort {
+    solve(arr: number[]) {
+        //.....
+        return arr
+    }
 };
 ```
 
-```c++
-void print(int* p, int len) {
-  for (int i = 0; i < len; i++) printf("%d ", p[i]);
-}
+```typescript
+class Context {
+    private strategy: Sort;
+    constructor(strategy: Sort) {
+        this.strategy = strategy
+    }
+    exec(arr: number[]) {
+        return this.strategy.solve(arr);
+    }
+};
+```
 
-int main() {
-  const int arrayLen = 10;
-  Sort* sort = new BubbleSort();
-  Context* context = new Context();
-
-  int* array = new int[10]{2, 4, 5, 6, 1, 2, 79, 0, 25, 70}; 
-  
-  array = context->selectAlg(sort)->exec(array, arrayLen);
-  print(array, arrayLen);
-
-  delete sort;
-  delete context;
+```typescript
+function main() {
+    const c1 = new Context(new BubbleSort());
+    const c2 = new Context(new MergerSort());
+    c1.exec([2, 1, 3]);
+    c2.exec([2, 3, 2]);
 }
 ```
 
@@ -900,37 +1006,36 @@ int main() {
 
 ### Ⅴ 模式实现
 
-```c++
-class AbstractClass {
- public:
-  void TemplateMethod() {
-    this->step1();
-    this->step2();
-    this->step3();
-  }
-  virtual ~AbstractClass(){};
-
- protected:
-  void step1() { printf("step1 \n"); }
-  void step3() { printf("step 3\n"); }
-  virtual void step2() = 0;
-};
-```
-
-```c++
-class ConcreteClass : public AbstractClass {
-  virtual void step2() { 
-      printf("xxxx\n"); 
-  }
+```typescript
+abstract class AbstractClass {
+    TemplateMethod() {
+       this.step1();
+       this.step2();
+       this.step3();
+     }
+   
+    protected step1() { 
+        console.log("step1 \n"); 
+    }
+    protected step3() { 
+         console.log("step 3\n"); 
+    }
+    protected abstract step2();
 };
 
-int main() {
-  auto t = new ConcreteClass();
-  t->TemplateMethod();
-  delete t;
-  return 0;
+class ConcreteClass extends AbstractClass {
+    protected step2() { 
+        console.log("xxxx\n");
+    }
+}
+  
+function main() {
+    const t = new ConcreteClass();
+    t.TemplateMethod();
 }
 ```
+
+
 
 
 
