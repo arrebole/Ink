@@ -23,5 +23,3 @@ echo "pacstrap /mnt base"
 pacstrap /mnt base
 echo "genfstab -U /mnt >> /mnt/etc/fstab"
 genfstab -U /mnt >> /mnt/etc/fstab
-echo "arch-chroot /mnt"
-arch-chroot /mnt
