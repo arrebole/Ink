@@ -18,7 +18,7 @@ mkdir -p /mnt/boot/EFI
 mount /dev/sda1 /mnt/boot/EFI
 echo "config mirr"
 sed -i '/China/!{n;/Server/s/^/#/};t;n' /etc/pacman.d/mirrorlist
-echo "pacstrap /mnt base linux"
-pacstrap /mnt base linux
+echo "pacstrap /mnt base linux linux-firmware"
+pacstrap /mnt base linux linux-firmware
 echo "genfstab -U /mnt >> /mnt/etc/fstab"
 genfstab -U /mnt >> /mnt/etc/fstab
