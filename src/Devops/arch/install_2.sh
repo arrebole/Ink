@@ -7,7 +7,7 @@ timedatectl set-ntp true
 echo "config locale.gen"
 cat << EOF >> /etc/locale.gen
 en_US.UTF-8 UTF-8
-zh_CN.UTF-8 UTE-8
+zh_CN.UTF-8 UTF-8
 zh_TW.UTF-8 UTF-8
 EOF
 locale-gen
@@ -17,7 +17,7 @@ echo universe > /etc/hostname
 cat << EOF >> /etc/hosts
 127.0.0.1	localhost
 ::1		    localhost
-127.0.1.1	universe.localdomain	archlinux
+127.0.1.1	universe.localdomain	universe
 EOF
 echo "add user"
 pacman -S zsh
