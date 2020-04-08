@@ -13,11 +13,11 @@ EOF
 locale-gen
 echo LANG=en_US.UTF-8  > /etc/locale.conf
 echo "config hostname"
-echo archlinux > /etc/hostname
+echo universe > /etc/hostname
 cat << EOF >> /etc/hosts
 127.0.0.1	localhost
 ::1		    localhost
-127.0.1.1	archlinux.localdomain	archlinux
+127.0.1.1	universe.localdomain	archlinux
 EOF
 echo "add user"
 pacman -S zsh
@@ -27,9 +27,9 @@ echo "grub efi"
 pacman -S dosfstools grub efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
-echo "install gui"
-pacman -S nvidia nvidia-utils
-pacman -S gnome
+# echo "install gui"
+# pacman -S nvidia nvidia-utils
+# pacman -S gnome
 # echo "安装网络"
 # pacman -S wpa_supplicant
 # systemctl enable wpa_supplicant
