@@ -23,6 +23,9 @@ echo "add user"
 pacman -S zsh
 useradd -m -g wheel -s /bin/zsh hacker
 pacman -S adobe-source-han-sans-cn-fonts
+echo "network"
+pacman -S dhcpcd
+systemctl enable dhcpcd
 echo "grub efi"
 pacman -S dosfstools grub efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
