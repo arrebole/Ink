@@ -402,79 +402,67 @@ function main() {
 
 ### Ⅴ 模式实现
 
-```c++
-class Mediator {
- public:
-  virtual void use1() = 0;
-  virtual void use2() = 0;
-  virtual void setC1(Colleague* _c1) = 0;
-  virtual void setC2(Colleague* _c2) =0;
-  virtual ~Mediator(){};
+```typescript
+interface Mediator {
+    use1();
+    use2();
+    setC1(Colleague): Colleague;
+    setC2(Colleague): Colleague;
 };
 
-class Colleague {
- protected:
-  Mediator* mediator;
-
- public:
-  virtual void use() = 0;
-  virtual ~Colleague(){};
+abstract class Colleague {
+    protected mediator: Mediator
+    abstract use()
 };
 
-class ConcreteColleague1 : public Colleague {
- public:
-  ConcreteColleague1(Mediator* mediator) { 
-    this->mediator = mediator; 
-  }
+class ConcreteColleague1 extends Colleague {
+    constructor(mediator: Mediator) {
+        super()
+        this.mediator = mediator;
+    }
 
-  virtual void use() {
-    printf("use Colleague 1\n");
-    mediator->use2();
-  }
+    use() {
+        console.log("use Colleague 1");
+        this.mediator.use2();
+    }
 };
 
-class ConcreteColleague2 : public Colleague {
- public:
-  ConcreteColleague2(Mediator* mediator) { 
-    this->mediator = mediator; 
-  }
-  virtual void use() { 
-    printf("use Colleague 2\n"); 
-    //mediator->use1();
-  }
+class ConcreteColleague2 extends Colleague {
+    constructor(mediator: Mediator) {
+        super()
+        this.mediator = mediator;
+    }
+    use() {
+        console.log("use Colleague 2\n");
+    }
 };
 
-class ConcreteMediator : public Mediator {
- private:
-  Colleague* c1;
-  Colleague* c2;
+class ConcreteMediator implements Mediator {
+    private c1: Colleague;
+    private c2: Colleague;
 
- public:
 
-  void setC1(Colleague* _c1){
-        this->c1 = _c1;
-  }
-  void setC2(Colleague* _c2){
-        this->c2 = _c2;
-  }
+    setC1(c1: Colleague) {
+        this.c1 = c1;
+        return c1;
+    }
+    setC2(c2: Colleague) {
+        this.c2 = c2;
+        return c2
+    }
 
-  virtual void use1() { c1->use(); }
-  virtual void use2() { c2->use(); }
+    use1() { this.c1.use() }
+    use2() { this.c2.use() }
 };
+
 ```
 
-```c++
-int main() {
-  Mediator* m = new ConcreteMediator();
-
-  Colleague* c1 = new ConcreteColleague1(m);
-  m->setC1(c1);
-  Colleague* c2 = new ConcreteColleague2(m);
-  m->setC2(c2);
-  
-  c1->use();
-
-  return 0;
+```typescript
+function main() {
+    const m = new ConcreteMediator();
+    const c1 = m.setC1(new ConcreteColleague1(m));
+    const c2 = m.setC2(new ConcreteColleague2(m));
+    c1.use();
 }
 ```
 
@@ -532,46 +520,36 @@ int main() {
 
 
 
-```c++
+```typescript
 class Memento {
- private:
-  int state;
+    private state: number;
 
- public:
-  int getState() { 
-      return state; 
+    getState(): number {
+        return this.state;
     }
-  void setState(int state) { 
-      this->state = state; 
+    setState(state: number) {
+        this.state = state;
+        return this
     }
 };
 
 class Originator {
- private:
-  int state;
+    private state: number;
 
- public:
-  void setMemento(Memento* m) { 
-      this->state = m->getState(); 
+    public setMemento(m: Memento) {
+        this.state = m.getState();
     }
-  Memento* CreateMemento() {
-    Memento* m = new Memento();
-    m->setState(this->state);
-    return m;
-  }
+    CreateMemento(): Memento {
+        return new Memento().setState(this.state);
+    }
 };
 ```
 
-```c++
-int main(){
-    Originator originator;
-    auto m = originator.CreateMemento();
-
+```typescript
+function main(){
+    const originator = new Originator();
+    const m = originator.CreateMemento();
     originator.setMemento(m);
-
-    delete m;
-
-    return 0;
 }
 ```
 
@@ -764,104 +742,89 @@ for (let i: number = 5; i > 0; i--) {
 
 ### Ⅴ 模式实现
 
-```c++
-class State {
- public:
-  virtual void use() = 0;
-  virtual State* next() = 0;
-  virtual ~State(){}
+```typescript
+interface State {
+    use();
+    next(): State;
 };
 
 class Context {
- private:
-  State* current;
+    private current: State;
 
- public:
-  void setCurrent(State* s) { current = s; }
-  void exec() {
-    if (current == nullptr) return;
-    current->use();
-    current = current->next();
-  };
+    setCurrent(s: State) {
+        this.current = s;
+    }
+    exec() {
+        if (this.current == null) return;
+        this.current.use();
+        this.current = this.current.next();
+    };
 };
 
-class CloseState : public State {
-private:
-  CloseState(){};
-  static CloseState* uniqueInstance;
+class CloseState implements State {
+    private constructor() { }
 
-  public:
-  void use() {
-    printf("close ....\n");
-  }
-  State* next() {
-      return nullptr;
-  }
-  
-  static CloseState* Instance(){
-      if(uniqueInstance == nullptr){
-        uniqueInstance = new CloseState();
-      }
-      return uniqueInstance;
-  }
+    use() {
+        console.log("close ....\n");
+    }
+    next() {
+        return null;
+    }
+
+    private static uniqueInstance: State;
+    static Instance(): State {
+        if (this.uniqueInstance == null) {
+            this.uniqueInstance = new CloseState();
+        }
+        return this.uniqueInstance;
+    }
 };
 
-class SendState : public State {
-private:
-  SendState(){};
-  static SendState* uniqueInstance;
+class SendState implements State {
+    private constructor() { }
+    use() {
+        console.log("send ...\n");
+    }
+    next(): State {
+        return CloseState.Instance();
+    }
 
-  public:
-  void use() {
-    printf("send ...\n");
-  }
-  State* next() {
-      return CloseState::Instance();
-  }
-  
-  static SendState* Instance(){
-      if(uniqueInstance == nullptr){
-        uniqueInstance = new SendState();
-      }
-      return uniqueInstance;
-  }
+    private static uniqueInstance: State;
+    static Instance(): SendState {
+        if (this.uniqueInstance == null) {
+            this.uniqueInstance = new SendState();
+        }
+        return this.uniqueInstance;
+    }
 };
 
-class OpenState : public State {
- private:
-  OpenState(){};
-  static OpenState* uniqueInstance;
+class OpenState implements State {
+    private constructor() { }
 
- public:
-  void use() {
-    printf("open ...\n");
-  }
-  State* next() {
-      return SendState::Instance();
-  }
-  
-  static OpenState* Instance(){
-      if(uniqueInstance == nullptr){
-        uniqueInstance = new OpenState();
-      }
-      return uniqueInstance;
-  }
+    use() {
+        console.log("open ...\n");
+    }
+    next(): State {
+        return SendState.Instance();
+    }
+
+    private static uniqueInstance: State;
+    static Instance(): SendState {
+        if (this.uniqueInstance == null) {
+            this.uniqueInstance = new OpenState();
+        }
+        return this.uniqueInstance;
+    }
 };
-
-OpenState* OpenState::uniqueInstance = nullptr;
-SendState* SendState::uniqueInstance = nullptr;
-CloseState* CloseState::uniqueInstance = nullptr;
 ```
 
-```c++
-int main(){
-    Context context;
-
-    context.setCurrent(OpenState::Instance());
+```typescript
+function main(){
+    const context = new Context();
+    context.setCurrent(OpenState.Instance());
     context.exec();
     context.exec();
     context.exec();
-    return 0;
 }
 ```
 
