@@ -22,18 +22,14 @@ EOF
 echo "add user"
 pacman -S zsh
 useradd -m -g wheel -s /bin/zsh hacker
-pacman -S adobe-source-han-sans-cn-fonts
+pacman -S tty-fira-code adobe-source-han-sans-cn-fonts
 echo "network"
 pacman -S dhcpcd
 systemctl enable dhcpcd
+# pacman -S wpa_supplicant
+# systemctl enable wpa_supplicant
 echo "grub efi"
 pacman -S dosfstools grub efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
-# echo "install gui"
-# pacman -S nvidia nvidia-utils
-# pacman -S gnome
-# echo "安装网络"
-# pacman -S wpa_supplicant
-# systemctl enable wpa_supplicant
-# systemctl enable dhcpcd
+

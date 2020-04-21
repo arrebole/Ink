@@ -9,7 +9,10 @@ function md2(data) {
     // 1. Append Padding Bytes
     // 2. Append Checksum
     // 3. process
-    return messageDigest.appendPaddingBytes().appendChecksum().processMessage();
+    return messageDigest
+        .appendPaddingBytes()
+        .appendChecksum()
+        .processMessage();
 }
 
 
@@ -19,7 +22,7 @@ class MD2 {
     /**
      * @param {Uint8Array} data
      */
-    constructor(data){
+    constructor(data) {
         this.data = data
     }
 
@@ -35,14 +38,14 @@ class MD2 {
         const cap = 16 * (parseInt(this.data.byteLength / 16) + 1);
 
         // 计算填充数据和长度
-        const fillstart = this.data.byteLength 
+        const fillstart = this.data.byteLength
         const fillData = cap - this.data.byteLength;
 
         // 拷贝数据
         this.data = memcpy(this.data, new Uint8Array(cap));
 
         // 填充数据
-        for(let i = fillstart; i < fillstart + fillData; i++){
+        for (let i = fillstart; i < fillstart + fillData; i++) {
             this.data[i] = fillData;
         }
         return this
@@ -70,7 +73,7 @@ class MD2 {
         return this
     }
 
-    
+
     /**
      * Step 3. 计算信息摘要
      * @param {Uint8Array} data
@@ -79,20 +82,20 @@ class MD2 {
     processMessage() {
         const buffer = new Uint8Array(48);
         const PI = createPiTable()
-        for(let i = 0; i <= this.data.byteLength/16 - 1; i++){
+        for (let i = 0; i <= this.data.byteLength / 16 - 1; i++) {
 
-            for(let j = 0; j <= 15; j++){
-                buffer[16+j] = this.data[i*16+j];
-                buffer[32+j] = buffer[16+j] ^ buffer[j];
+            for (let j = 0; j <= 15; j++) {
+                buffer[16 + j] = this.data[i * 16 + j];
+                buffer[32 + j] = buffer[16 + j] ^ buffer[j];
             }
 
             let t = 0;
-            for(let j = 0; j <= 17; j++){
-                for(let k = 0; k <= 47; k++){
+            for (let j = 0; j <= 17; j++) {
+                for (let k = 0; k <= 47; k++) {
                     buffer[k] = buffer[k] ^ PI[t];
                     t = buffer[k];
                 }
-                t = (t+j) % 256
+                t = (t + j) % 256
             }
         }
         return buffer.slice(0, 16)
