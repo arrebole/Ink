@@ -4,7 +4,7 @@
 
 > 平衡 ↔ 混沌（熵增）
 >
-> FontFamily：`Ubuntu Mono`, `Fira Code`, `Menlo`,`Monaco`,`DejaVu Sans Mono`, `Consolas`
+> FontFamily：`Ubuntu Mono`, `Fira Code`, `Menlo`, `Monaco`, `DejaVu Sans Mono`, `Consolas`
 
 
 

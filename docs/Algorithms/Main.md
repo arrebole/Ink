@@ -3,7 +3,7 @@
 
 ## Table of Contents
 
-+ [Algoithms](/docs/Algorithms/Instruct.md) 介绍算法体系  
++ [Algorithm Design](/docs/Algorithms/AlgorithmDesign.md) 算法设计与分析基础 
 + [Sword to Offer]() 《剑指offer》⌛
 + [Programming Pearls]()   《编程珠玑》⌛
 
