@@ -10,22 +10,17 @@
 
 ## Table of Contents
 
-+ **Wander**
-  + [Remember](/docs/Remember/Main.md)
++ **Leisure**
+  + [Manual](/docs/Manual/Main.md)
 
 + **Inner**
   + [Algorithms](/docs/Algorithms/Main.md)
-  + [Network](/docs/Network/Main.md)
-  + [Operating System](/docs/System/Main.md)
   + [Design Pattern](/docs/DesignPattern/Main.md)
   + [Refactoring](/docs/Refactoring/Main.md)
 
 + **Bloom**
   + [Graphics]()
-  + [Blockchain]()
-  + [Protocol]()
-  + [Cryptography](/docs/Cryptography/main.md)
-  + [Machine Learning]()
+  + [Operating System](/docs/System/Main.md)
   + [Compilation Principle]()
 
 + **Burst**
