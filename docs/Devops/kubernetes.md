@@ -205,7 +205,7 @@ sudo apt-get install -y kubelet kubeadm kubectl
 
 ### 3.安装kubernetes主节点
 
-导出配置文件
+导出配置文件，我们使用k8s默认的一套容器。
 
 ```bash
 kubeadm config print init-defaults --kubeconfig ClusterConfiguration > kubeadm.yml
@@ -230,7 +230,7 @@ localAPIEndpoint:
   bindPort: 6443
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
-  name: vultr.guest
+  name: kubernetes-master
   taints:
   - effect: NoSchedule
     key: node-role.kubernetes.io/master
