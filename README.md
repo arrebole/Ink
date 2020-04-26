@@ -12,6 +12,7 @@
 
 + **Leisure**
   + [Manual](/docs/Manual/Main.md)
+  + [Devops](/docs/Devops/Main.md)
 
 + **Inner**
   + [Algorithms](/docs/Algorithms/Main.md)
