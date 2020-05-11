@@ -20,9 +20,9 @@ cat << EOF >> /etc/hosts
 127.0.1.1	universe.localdomain	universe
 EOF
 echo "add user"
-pacman -S zsh
+pacman -S zshf
 useradd -m -g wheel -s /bin/zsh hacker
-pacman -S tty-fira-code adobe-source-han-sans-cn-fonts
+pacman -S ttf-fira-code adobe-source-han-sans-cn-fonts
 echo "network"
 pacman -S dhcpcd
 systemctl enable dhcpcd
