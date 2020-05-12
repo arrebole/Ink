@@ -37,8 +37,10 @@ systemctl enable dhcpcd
 echo "add archlinuxcn"
 cat << EOF >> /etc/pacman.conf
 [archlinuxcn]
-Server = https://repo.archlinuxcn.org/$arch
+SigLevel = Optional TrustAll
+Server = https://repo.archlinuxcn.org/\$arch
 EOF
+pacman -Syu
 
 echo "grub efi"
 pacman -S dosfstools grub efibootmgr
