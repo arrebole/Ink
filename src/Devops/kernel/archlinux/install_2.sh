@@ -24,7 +24,7 @@ cat << EOF >> /etc/hosts
 EOF
 
 echo "add user"
-pacman -S zsh
+pacman -S zsh sudo
 useradd -m -g wheel -s /bin/zsh hacker
 pacman -S ttf-fira-code
 
