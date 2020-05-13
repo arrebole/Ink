@@ -24,7 +24,7 @@ cat << EOF >> /etc/hosts
 EOF
 
 echo "add user"
-pacman -S zshf
+pacman -S zsh sudo
 useradd -m -g wheel -s /bin/zsh hacker
 pacman -S ttf-fira-code
 
@@ -37,8 +37,10 @@ systemctl enable dhcpcd
 echo "add archlinuxcn"
 cat << EOF >> /etc/pacman.conf
 [archlinuxcn]
-Server = https://repo.archlinuxcn.org/$arch
+SigLevel = Optional TrustAll
+Server = https://repo.archlinuxcn.org/\$arch
 EOF
+pacman -Syu
 
 echo "grub efi"
 pacman -S dosfstools grub efibootmgr
