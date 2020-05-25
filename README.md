@@ -10,33 +10,53 @@
 
 ## Table of Contents
 
-+ **Leisure**
-  + [Manual](/docs/Manual/Main.md)
-  + [Devops](/docs/Devops/Main.md)
++ **Practice**
+  + [Track](/docs/Track/Main.md)
 
++ **Toy**
+  
+  + [Manual](/docs/Manual/Main.md)
++ [Devops](/docs/Devops/Main.md)
+  
 + **Inner**
+  
   + [Algorithms](/docs/Algorithms/Main.md)
   + [Design Pattern](/docs/DesignPattern/Main.md)
-  + [Refactoring](/docs/Refactoring/Main.md)
-
++ [Refactoring](/docs/Refactoring/Main.md)
+  
 + **Bloom**
+  
   + [Graphics]()
   + [Operating System](/docs/System/Main.md)
-  + [Compilation Principle]()
-
++ [Compilation Principle]()
+  
 + **Burst**
+  
   + [Hack](/docs/Hack/Main.md)
   + [Architecture](/docs/Architecture/Main.md)
-  + [Literary](/docs/Literary/Main.md)
-
++ [Literary](/docs/Literary/Main.md)
+  
 + **Limit**
+  
   + [Psychology](/docs/Psychology/main.md)
   + [Economics]()
   + [Relativity]()
-  + [Quantum theory]()
-
++ [Quantum theory]()
+  
 + **Beyond the limits**
+  
   + [Math]()
   + [Philosophy]()
   + [Universal theory]()
+  
++ **Zero**
 
+  + [Chaos]()
+
+  + [Cycle]()
+
+  + [Balance]()
+
+  + [None]()
+
+    
