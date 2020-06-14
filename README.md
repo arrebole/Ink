@@ -26,9 +26,9 @@
   + [Compilation Principle]()
   
 + **Burst**
-  + [Hack](/docs/Hack/Main.md)
   + [Architecture](/docs/Architecture/Main.md)
-  + [Literary](/docs/Literary/Main.md)
+  + [Hack](/docs/Hack/Main.md)
+  + [Poetry](/docs/Poetry/Main.md)
   
 + **Limit**
   + [Psychology](/docs/Psychology/main.md)
