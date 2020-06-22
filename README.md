@@ -8,9 +8,6 @@
 
 ## Table of Contents
 
-+ **Practice**
-  + [Track](/docs/Track/Main.md)
-
 + **Toy**
   + [Manual](/docs/Manual/Main.md)
   + [Devops](/docs/Devops/Main.md)

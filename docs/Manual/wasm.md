@@ -29,10 +29,18 @@ wasm 是一个可移植、体积小、加载快并且兼容 Web 的全新格式�
 
 ## 3、如何使用wasm
 > `wasm`已经在三大浏览器内被支持，由于`nodejs`内部使用的是`v8`, `nodejs` 也对其做了支持。
+大部分高级语言都对wasm做了编译支持
++ c/c++ Emscripten(llvm)
++ rust wasm-pack(llvm、wasm-bindgen)
++ go 编译器自带
++ typescript assemblyscript
 
 ### ①编译成wasm
-```rust
-
+```c
+// add.c 代码 -> Emscripten -> add.wasm
+int add(int x, int y) {
+  return x + y;
+}
 ```
 
 ### ②在Browser执行
@@ -42,8 +50,7 @@ fetch('localhost:300/add.wasm')
     .then(bytes => WebAssembly.compile(bytes))
     .then(wasmModule => {
         const instance = new WebAssembly.Instance(wasmModule);
-        const { add } = instance.exports;
-        console.log(add(100, 201));
+        console.log(instance.exports.add(100, 201));
     })
     .catch(err => console.log(err));
 ```
@@ -55,8 +62,7 @@ const bytes = new Uint8Array(fs.readFileSync('./add.wasm'));
 WebAssembly.compile(bytes)
     .then(wasmModule => {
         const instance = new WebAssembly.Instance(wasmModule);
-        const { add } = instance.exports;
-        console.log(add(100, 201));
+        console.log(instance.exports.add(100, 201));
     })
     .catch(err => console.log(err));
 ```
