@@ -7,7 +7,7 @@
 
 ## Table of Contents
 
-+ 伪装
++ 欺骗
 + 注入
     + [Remote execution]()
     + [Buffer overflow]()
@@ -18,8 +18,5 @@
 + 逆向
     + [Dynamic analysis]()
     + [Static analysis]()
-+ 实战
-    + [The art of unlocking]()
-    + [The art of destruction]()
-    + [The art of deception]()
-    + [The art of invasion]()
++ 利用
+    + [Exploit](/docs/Hack/Exploit/Main.md)
