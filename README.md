@@ -9,26 +9,24 @@
 ## Table of Contents
 
 + **Toy**
-  + [Manual](/docs/Manual/Main.md)
-  + [Devops](/docs/Devops/Main.md)
+  + [Manual](/docs/Manual.md)
+  + [Devops](/docs/Devops.md)
   
 + **Inner**
-  + [Algorithms](/docs/Algorithms/Main.md)
-  + [Design Pattern](/docs/DesignPattern/Main.md)
-  + [Refactoring](/docs/Refactoring/Main.md)
+  + [Algorithms](/docs/Algorithms.md)
   
 + **Bloom**
   + [Graphics]()
-  + [Operating System](/docs/System/Main.md)
+  + [Operating System](/docs/System.md)
   + [Compilation Principle]()
   
 + **Burst**
-  + [Architecture](/docs/Architecture/Main.md)
+  + [Architecture](/docs/Architecture.md)
   + [Hack](/docs/Hack/Main.md)
   + [Poetry](/docs/Poetry/Main.md)
   
 + **Limit**
-  + [Psychology](/docs/Psychology/main.md)
+  + [Psychology](/docs/Psychology.md)
   + [Economics]()
   + [Relativity]()
   + [Quantum theory]()
