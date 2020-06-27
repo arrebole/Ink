@@ -22,8 +22,8 @@
   
 + **Burst**
   + [Architecture](/docs/Architecture.md)
-  + [Hack](/docs/Hack/Main.md)
-  + [Poetry](/docs/Poetry/Main.md)
+  + [Hack](/docs/Hack.md)
+  + [Poetry](/docs/Poetry.md)
   
 + **Limit**
   + [Psychology](/docs/Psychology.md)

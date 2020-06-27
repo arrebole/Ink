@@ -18,5 +18,6 @@
 + 逆向
     + [Dynamic analysis]()
     + [Static analysis]()
-+ 利用
-    + [Exploit](/docs/Hack/Exploit/Main.md)
++ Exploit
+    + Nodejs
+        + [CVE-2017-14849](/src/exploit/nodejs/CVE-2017-14849/README.md)
