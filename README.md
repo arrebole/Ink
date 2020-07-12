@@ -8,33 +8,25 @@
 
 ## Table of Contents
 
-+ **Toy**
++ **Bloom**
   + [Manual](/docs/Manual.md)
   + [Devops](/docs/Devops.md)
   
-+ **Inner**
++ **Burst**
   + [Algorithms](/docs/Algorithms.md)
-  
-+ **Bloom**
   + [Graphics]()
   + [Operating System](/docs/System.md)
   + [Compilation Principle]()
-  
-+ **Burst**
-  + [Architecture](/docs/Architecture.md)
-  + [Hack](/docs/Hack.md)
-  + [Poetry](/docs/Poetry.md)
+  + [Psychology](/docs/Psychology.md)
   
 + **Limit**
-  + [Psychology](/docs/Psychology.md)
-  + [Economics]()
-  + [Relativity]()
-  + [Quantum theory]()
+  + [Architecture](/docs/Architecture.md)
+  + [Poetry](/docs/Poetry.md)
   
 + **Beyond the limits**
-  + [Math]()
-  + [Philosophy]()
-  + [Universal theory]()
+  + [Sādhanā]()
+  + [Hack](/docs/Hack.md)
+  + [Art of war]()
   
 + **Zero**
   + [Chaos]()
