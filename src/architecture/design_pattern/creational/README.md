@@ -48,7 +48,7 @@
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Creational.FactoryMethod.png)
+![](/fixtures/images/design_pattern/DesignPattern.Creational.FactoryMethod.png)
 
 > + Creator依赖于它的子类来定义工厂方法，所以它返回一个适当的ConcreteProduct实例
 
@@ -191,7 +191,7 @@ sample(new EarthCreator())
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Creational.AbstractFactory.png)
+![](/fixtures/images/design_pattern/DesignPattern.Creational.AbstractFactory.png)
 
 > + 通常在运行时刻创建一个ConcreteFactory类的实例。这一具体的工厂创建具有特定实现的产品对象。为创建不同的产品对象，客户应使用不同的具体工厂。
 > + AbstractFactory将产品对象的创建延迟到它的ConcreteFactory子类
@@ -322,7 +322,7 @@ sample(new WinFactory())
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Creational.Builder.png)
+![](/fixtures/images/design_pattern/DesignPattern.Creational.Builder.png)
 
 > + 客户创建Director对象，并用它所想要的Builder对象进行配置
 > + 一旦产品部件被生成，导向器就会通知生成器
@@ -486,7 +486,7 @@ function main() {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Creational.Prototype.png)
+![](/fixtures/images/design_pattern/DesignPattern.Creational.Prototype.png)
 
 > + 客户请求一个原型克隆自身。
 
@@ -584,7 +584,7 @@ function main() {
 
   
 
-![](../../../images/DesignPattern/DesignPattern.Creational.Singleton.png)
+![](/fixtures/images/design_pattern/DesignPattern.Creational.Singleton.png)
 
 > + 客户只能通过Singleton的Instance操作访问一个Singleton的实例。
 

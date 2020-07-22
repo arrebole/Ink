@@ -37,7 +37,7 @@
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Structural.Adapter.png)
+![](/fixtures/images/design_pattern/DesignPattern.Structural.Adapter.png)
 
 
 
@@ -124,7 +124,7 @@ function main(){
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Structural.Bridge.png)
+![](/fixtures/images/design_pattern/DesignPattern.Structural.Bridge.png)
 
 > Abstraction将Client的请求转发给它的Implementor对象。
 
@@ -230,7 +230,7 @@ export function NewBridgeWin():Abstraction{
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Structural.Composite.png)
+![](/fixtures/images/design_pattern/DesignPattern.Structural.Composite.png)
 
 > + 用户使用Component类接口与组合结构中的对象进行交互。如果接收者是一个叶节点，则直接处理请求。如果接收者是Composite，它通常将请求发送给它的子部件，在转发请求之前与/或之后可能执行一些辅助操作。
 
@@ -370,7 +370,7 @@ function main() {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Structural.Decorator.png)
+![](/fixtures/images/design_pattern/DesignPattern.Structural.Decorator.png)
 
 > + Decorator 将请求转发给它的Component对象，并有可能在转发请求前后执行一些附加操作。
 
@@ -473,7 +473,7 @@ function main(){
 + `Facade` 知道那些子系统类负责处理请求。将客户的请求代理给适当的子系统对象。
 + `Subsystem Classes` 实现子系统的功能；处理由Facaded对象指派的任务。没有facade的任何相关信息，即没有指向Facade的指针。
 
-![](../../../images/DesignPattern/DesignPattern.Structural.Facade.png)
+![](/fixtures/images/design_pattern/DesignPattern.Structural.Facade.png)
 
 > + 客户程序通过发送请求给Facade的方式与子系统通讯。facade将这些信息转发给适当的子系统对象。尽管是子系统中的有关对象在做实际工作，但Facade模式本身也必须将它的接口转换成子系统的接口。
 
@@ -574,7 +574,7 @@ int main() {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Structural.Flyweight.png)
+![](/fixtures/images/design_pattern/DesignPattern.Structural.Flyweight.png)
 
 
 
@@ -691,7 +691,7 @@ function sample() {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Structural.Proxy.png)
+![](/fixtures/images/design_pattern/DesignPattern.Structural.Proxy.png)
 
 
 

@@ -40,7 +40,7 @@
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Behavioral.ChainOfResponsible Ity.png)
+![](/fixtures/images/design_pattern/DesignPattern.Behavioral.ChainOfResponsible Ity.png)
 
 
 
@@ -160,7 +160,7 @@ function main() {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Behavioral.Command.png)
+![](/fixtures/images/design_pattern/DesignPattern.Behavioral.Command.png)
 
 
 
@@ -279,7 +279,7 @@ function main() {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Behavioral.Interpreter.png)
+![](/fixtures/images/design_pattern/DesignPattern.Behavioral.Interpreter.png)
 
 
 
@@ -338,7 +338,7 @@ function main() {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Behavioral.Iterator.png)
+![](/fixtures/images/design_pattern/DesignPattern.Behavioral.Iterator.png)
 
 > + ConcreteIterator 跟踪聚合中的当前对象，并能够计算出待遍历的后继对象
 
@@ -451,7 +451,7 @@ function main() {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Behavioral.Mediator.png)
+![](/fixtures/images/design_pattern/DesignPattern.Behavioral.Mediator.png)
 
 > + 同事向一个中介者对象发送和接收请求。中介者在各同事间适当地转发请求以实现协作行为。
 
@@ -564,7 +564,7 @@ function main() {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Behavioral.Memento.png)
+![](/fixtures/images/design_pattern/DesignPattern.Behavioral.Memento.png)
 
 > + 管理器向原发器请求一个备忘录，保留一段时间后，将其送回给原发器
 > + 备忘录是被动的
@@ -656,7 +656,7 @@ function main(){
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Behavioral.Observer.png)
+![](/fixtures/images/design_pattern/DesignPattern.Behavioral.Observer.png)
 
 > + 当ConcreteSubject发生任何可能导致其观察者与其本身状态不一致的改变时，它将通知它的各个观察者。
 > + 在得到一个具体的目标的改变通知后，ConcreteObserver对象可向目标对象查询信息。
@@ -786,7 +786,7 @@ for (let i: number = 5; i > 0; i--) {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Behavioral.State.png)
+![](/fixtures/images/design_pattern/DesignPattern.Behavioral.State.png)
 
 
 
@@ -928,7 +928,7 @@ function main(){
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Behavioral.Strategy.png)
+![](/fixtures/images/design_pattern/DesignPattern.Behavioral.Strategy.png)
 
 > + Strategy和Context相互作用以实现选定的算法
 > + Context将它的客户的请求转发给它的Strategy
@@ -1018,7 +1018,7 @@ function main() {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Behavioral.TemplateMethod.png)
+![](/fixtures/images/design_pattern/DesignPattern.Behavioral.TemplateMethod.png)
 
 > ConcreteClass靠AbstractClass来实现算法中不可变的步骤。
 
@@ -1103,7 +1103,7 @@ function main() {
 
 
 
-![](../../../images/DesignPattern/DesignPattern.Behavioral.Visitor.png)
+![](/fixtures/images/design_pattern/DesignPattern.Behavioral.Visitor.png)
 
 
 
