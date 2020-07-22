@@ -26,7 +26,6 @@
 + **Beyond the limits**
   + [Sādhanā]()
   + [Hack](/docs/Hack.md)
-  + [Art of war]()
   
 + **Zero**
   + [Chaos]()
