@@ -18,15 +18,14 @@
   + [Operating System](/docs/System.md)
   + [Compilation Principle]()
   + [Psychology](/docs/Psychology.md)
-  
+
 + **Limit**
   + [Architecture](/docs/Architecture.md)
-  + [Poetry](/docs/Poetry.md)
-  
-+ **Beyond the limits**
-  + [Sādhanā]()
   + [Hack](/docs/Hack.md)
   
++ **Beyond the limits**
+  + [Soul](/docs/Soul.md)
+
 + **Zero**
   + [Chaos]()
   + [Cycle]()
