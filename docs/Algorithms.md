@@ -10,4 +10,4 @@
 
 **反三**
 + [brush questions](/src/algorithms/brush_questions) 刷题合集😐
-+ [High frequency algorithm](/src/algorithms/README.md) 日常高频使用的算法
++ [High frequency algorithm](/src/algorithms/high_frequency/README.md) 日常高频使用的算法
