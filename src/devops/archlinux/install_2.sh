@@ -44,5 +44,5 @@ pacman -Syu
 
 echo "grub efi"
 pacman -S dosfstools grub efibootmgr
-grub-install --target=x86_64-efi --efi-directory=/boot/EFI --bootloader-id=GRUB
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
