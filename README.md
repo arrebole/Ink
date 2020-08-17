@@ -14,9 +14,9 @@
   
 + **Burst**
   + [Algorithms](/docs/Algorithms.md)
-  + [Graphics](/docs/Graphics.md)
-  + [Operating System](/docs/System.md)
   + [Compilation Principle](/docs/Compilation.md)
+  + [Operating System](/docs/System.md)
+  + [Graphics](/docs/Graphics.md)
   + [Psychology](/docs/Psychology.md)
 
 + **Limit**
