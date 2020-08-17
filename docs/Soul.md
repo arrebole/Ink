@@ -4,6 +4,18 @@
 
 ## Table of Contents
 
-Poetry
-  + [Track](/docs/Poetry/Track/track.md)
-  + [极光](/docs/Poetry/YaoJiao/aurora.md)
+**Poetry**
+  + 妖袅
+    + [极光](/src/soul/poetry/yuaoniao/aurora.md)
+
+**Psychology**
+  + [社交与情绪学习](/docs/psychology/社交与情绪学习.md)
+
+**Spirit**
+  + 老子
+    + [《德经》]()
+    + [《道经》]()
+  + 易经
+    + [《连山》]()
+    + [《归藏》]()
+    + [《周易》]()

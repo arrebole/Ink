@@ -17,7 +17,6 @@
   + [Compilation Principle](/docs/Compilation.md)
   + [Operating System](/docs/System.md)
   + [Graphics](/docs/Graphics.md)
-  + [Psychology](/docs/Psychology.md)
 
 + **Limit**
   + [Architecture](/docs/Architecture.md)
