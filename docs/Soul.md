@@ -13,8 +13,9 @@
 
 **Spirit**
   + 老子
-    + [《德经》]()
-    + [《道经》]()
+    + [《道德经》](/src/soul/philosophy/dao-de-jing/dao-de-jing.md)
+  + 庄子
+    + [《南華真經》]()
   + 易经
     + [《连山》]()
     + [《归藏》]()
