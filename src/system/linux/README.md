@@ -1,18 +1,28 @@
-
-
+# Linux
 
 ## Table of contents
 + **UNIX标准**
-    + [StdC](#Std-C)
+    + [Stdc](#Stdc)
     + [POSIX](#POSIX)
     + [UNSUAL](#UNSUAL)
-+ **文件IO**
-    + [open( )]()
-
++ **文件系统**
+    + [open](#open)
+    + [openat](#openat)
+    + [creat](#creat)
+    + [close](#close)
+    + [lseek](#lseek)
+    + [read](#read)
+    + [dup](#dup)
+    + [dup2](#dup2)
+    + [sync](#sync)
+    + [fsync](#fsync)
+    + [fdatasync](#fdatasync)
+    + [fcntl](#fcntl)
+    + [ioctl](#ioctl)
 
 ## UNIX标准
 
-### Std-C
+### Stdc
 > ANSI C、ISO C、Standard C是指美国国家标准协会（ANSI）和国际标准化组织（ISO）对C语言发布的标准。
 
 | 头文件       | 说明 |
@@ -115,13 +125,16 @@
 
 ### UNSUAL
 
-| 头文件           | 说明                                       |
+| 头文件            | 说明                                        |
 | ---------------- | ------------------------------------------ |
-| <sys/syscall.h>  | 系统调用表汇总                             |
-| <asm/unistd.h>   | `NR_` 开头的系统调用函数表                 |
-| <bits/syscall.h> | `SYS_` 开头的系统调用表 (从NR做了名称转换) |
+| <sys/syscall.h>  | 系统调用表汇总                                |
+| <asm/unistd.h>   | `NR_` 开头的系统调用函数表                     |
+| <bits/syscall.h> | `SYS_` 开头的系统调用表 (从NR做了名称转换)       |
 
 
+## 文件系统
 
-## 文件IO
+### open
+> 打开或创建一个文件
+
 
