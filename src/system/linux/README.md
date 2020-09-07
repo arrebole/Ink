@@ -8,6 +8,7 @@
 + **文件系统**
     + [open](#open)
     + [openat](#openat)
+    + [openat2](#openat2)
     + [creat](#creat)
     + [close](#close)
     + [lseek](#lseek)
@@ -135,6 +136,35 @@
 ## 文件系统
 
 ### open
-> 打开或创建一个文件
+> 打开或创建一个文件, 打开的描述符一定是最小的未用描述符数值。
 
+```c
+#include <fcntl.h>
 
+// sampleOpenFile 打开一个文件，返回它的可读可写的描述符。
+void sampleOpenFile() {
+    int fd = open('file', O_RDWR);
+}
+
+// sampleCreateFile 通过 open 创建文件 
+void sampleCreateFile() {
+    int fd = open('file', O_CREAT, 0654);
+}
+```
+### openat
+> （path为相对路径时）打开以fd指向的文件的目录作为为基址,加上path路径的相对路径
+
+```c
+// 使用 openat() 需要定义功能测试宏
+#define _ATFILE_SOURCE 
+#include <fcntl.h>
+
+// openat（path为相对路径时）打开以fd指向的文件的目录作为为基址加上path路径的文件
+// int openat(int dirfd, const char *pathname, int flags, mode_t ...mode?);
+
+// sampleOpenat -> ../../../file2
+void sampleOpenat() {
+    int baseFd = open("../../fs", O_RDONLY);
+    int superFd = openat(baseFd, "../file2", O_CREAT | O_TRUNC | O_RDWR, 0654);
+}
+```
