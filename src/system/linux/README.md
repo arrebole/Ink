@@ -168,3 +168,34 @@ void sampleOpenat() {
     int superFd = openat(baseFd, "../file2", O_CREAT | O_TRUNC | O_RDWR, 0654);
 }
 ```
+
+### openat2
+> openat() 的增强版本，此函数与虚拟化容器等相关。kernel 5.6+
+
+```c
+#define _GNU_SOURCE
+#include <fcntl.h>
+#include <linux/openat2.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+
+// openat2 Glibc目前没有为该系统调用提供包装器，所以需要手动调用
+int openat2(int dirfd, const char *pathname, struct open_how *how, int size) {
+  return (int)syscall(SYS_openat2, dirfd, pathname, how, size);
+}
+
+int sampleOpenat2() {
+  // 打开一个目录文件描述符
+  int dirFd = open("../../fs", O_RDONLY);
+
+  // 为 openat2 设置访问权限
+  struct open_how openHow = {
+    .flags = O_CREAT | O_TRUNC | O_RDWR,
+    .mode = 0655,
+    // 将目录描述符作为root文件夹， 达到类似 chroot 的效果
+    .resolve = RESOLVE_IN_ROOT,
+  };
+  // 即使是绝对路径依然按照 dirFd 为根目录。
+  return openat2(dirFd, "/openat2/file", &openHow, sizeof(openHow));
+}
+```
