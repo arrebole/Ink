@@ -199,3 +199,58 @@ int sampleOpenat2() {
   return openat2(dirFd, "/openat2/file", &openHow, sizeof(openHow));
 }
 ```
+
+### creat
+> 创建一个文件，返回只写方式的文件描述符。
+
+```c
+#include <fcntl.h>
+
+// creat 按只写方式创建一个文件
+// int creat(const char *path, mode_t mode)
+
+void sampleCreat(){
+    int fd = creat("./sample", 0644);
+}
+```
+
+### close
+> 关闭一个打开的文件
+
+```c
+#include <unistd.h>
+#include <fcntl.h>
+
+// close 关闭一个打开的文件
+// int close(int fd);
+
+void sampleClose(){
+    int fd = creat('./sample', 0644);
+    close(fd);
+}
+```
+
+### lseek
+> 设置当前文件偏移量（影响读写的开始位置）
+
+```c
+#include <unistd.h>
+#include <fcntl.h>
+
+// lessk 设置文件偏移量
+// long lessk(int fd, int offset, int whence) 
+
+int sampleLseek() {
+    int fd = creat('sample', 0644);
+
+    // 获取当前偏移量（当前偏移量+0）
+    int offset = lseek(fd, 0 , SEEK_CUR);
+
+    // 设置当前偏移量为 文件最大长度+10byte
+    offset = lseek(fd, 10 , SEEK_END);
+
+    // 设置当前偏移量为10byte
+    offset = lseek(fd, 10 , SEEK_SET);
+
+}
+```
