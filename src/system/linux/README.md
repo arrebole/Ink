@@ -281,3 +281,99 @@ void sampleRead() {
     ssize_t byteRead = read(STDIN_FILENO, buffer, sizeof(buffer));
 }
 ```
+
+### write
+> 从文件描述符中写数据
+```c
+#include <unistd.h>
+#include <sys/types.h>
+
+// write 从文件描述符中写数据
+// ssize_t write(int fd, const void *buf, size_t count);
+
+void sampleWrite() {
+    const char buffer[] = "hello world";
+    write(STDOUT_FILENO, buffer, sizeof(buffer));
+}
+```
+
+### pread
+> 从文件描述符中读取内容, 并设置偏移量.(lseek + read)
+
+```c
+#define _XOPEN_SOURCE 500
+#include <unistd.h>
+#include <fcntl.h>
+
+// 从文件描述符设置偏移量, 并读取数据
+// ssize_t pread(int fd, void *buf, size_t count, off_t offset);
+
+void samplePread() {
+    int fd = open("./pread.c", O_RDONLY);
+
+    // 从 fd 偏移 202byte 开始，读取数据到 buffer 中
+    char buffer[1024];
+    ssize_t nReadByte =  pread(fd, buffer, sizeof(buffer), 202);
+
+    // 显示数据
+    write(STDOUT_FILENO, buffer, nReadByte);
+}
+```
+
+### pwrite
+> 从文件描述符偏移量处开始写数据数据 (lseek + write)
+
+```c
+#define _XOPEN_SOURCE 500
+#include <unistd.h>
+#include <fcntl.h>
+
+// 从文件描述符偏移量处开始写数据数据
+// ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
+
+void samplePwrite() {
+    int fd = open("./pwrite.c", O_RDONLY);
+
+    // 从 fd 偏移 202byte 开始，读取数据到 buffer 中
+    char buffer[1024];
+    ssize_t nReadByte =  read(fd, buffer, sizeof(buffer));
+
+    // 从标准输出偏移 10byte 处开始写数据
+    int outFd = creat("./out", 0644);
+    pwrite(outFd, buffer, nReadByte, 66);
+}
+```
+
+### dup
+> 复制一个现有的文件描述符, 新描述符为可用最小值。(使用同一份表项)
+
+```c
+#include <unistd.h>
+
+// int dup(int fildes);
+
+void sampleDup(){
+    int fd = dup(STDOUT_FILENO);
+    
+    char buffer[] = "hello world";
+    write(fd, buffer, sizeof(buffer));
+}
+
+```
+
+### dup2
+> 复制一个现有的文件描述符，并指定新的描述符编号。(使用同一份表项)
+
+```c
+#include <unistd.h>
+
+// dup2 复制描述符 fildes 为 fildes2，如果 fildes2 已经被打开，则先关闭。
+// int dup2(int fildes, int fildes2);
+
+void sampleDup2(){
+    int fd = dup2(STDOUT_FILENO, 10);
+    
+    char buffer[] = "hello world";
+    write(10, buffer, sizeof(buffer));
+}
+```
