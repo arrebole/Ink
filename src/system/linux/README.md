@@ -13,6 +13,15 @@
     + [close](#close)
     + [lseek](#lseek)
     + [read](#read)
+    + [write](#write)
+    + [pread](#pread)
+    + [pwrite](#pwrite)
+    + [readv](#readv)
+    + [writev](#writev)
+    + [preadv](#preadv)
+    + [pwritev](#pwritev)
+    + [preadv2](#preadv2)
+    + [pwritev2](#pwritev2)
     + [dup](#dup)
     + [dup2](#dup2)
     + [sync](#sync)
@@ -55,74 +64,74 @@
 
 ### POSIX
 
-> **C POSIX library**是C语言的[POSIX](https://zh.wikipedia.org/wiki/POSIX)系统下的标准库。包含了一些在[C语言标准库](https://zh.wikipedia.org/wiki/C标准库)之外的函数。
+> **C POSIX library**是C语言的`POSIX`系统下的标准库。包含了一些在C语言标准库之外的函数。
 
 | 头文件       | 说明 |
 | ---------------- | ------------------------------------------------------------ |
-| <aio.h>          | [异步I/O](https://zh.wikipedia.org/wiki/异步I/O)             |
-| <cpio.h>         | 用于[cpio](https://zh.wikipedia.org/wiki/Cpio)的[文件格式#Magic number](https://zh.wikipedia.org/wiki/文件格式#Magic_number) |
-| <dirent.h>       | 打开与列出[目录](https://zh.wikipedia.org/wiki/目录_(文件系统)). |
-| <dlfcn.h>        | [动态链接](https://zh.wikipedia.org/w/index.php?title=动态链接&action=edit&redlink=1) |
-| <fcntl.h>        | 文件打开、[加锁](https://zh.wikipedia.org/wiki/文件加锁)等操作 |
+| <aio.h>          | 异步`I/O`  |
+| <cpio.h>         | 用于`cpio` |
+| <dirent.h>       | 打开与列出目录 |
+| <dlfcn.h>        | 动态链接 |
+| <fcntl.h>        | 文件打开、加锁等操作 |
 | <fmtmsg.h>       | Message显示结构                                              |
 | <fnmatch.h>      | 文件名匹配                                                   |
 | <ftw.h>          | 文件树遍历                                                   |
-| <glob.h>         | 路径名模式匹配[Glob](https://zh.wikipedia.org/w/index.php?title=Glob&action=edit&redlink=1) |
-| <grp.h>          | 用户[Group identifier (Unix)](https://zh.wikipedia.org/w/index.php?title=Group_identifier_(Unix)&action=edit&redlink=1)信息与控制。 |
-| <iconv.h>        | [字符编码](https://zh.wikipedia.org/wiki/字符编码)转换       |
-| <langinfo.h>     | 语言信息常量。建于[Locale.h](https://zh.wikipedia.org/wiki/Locale.h)之上。 |
+| <glob.h>         | 路径名模式匹配 `Glob` |
+| <grp.h>          | 用户`Group identifier (Unix)`信息与控制。 |
+| <iconv.h>        | 字符编码转换       |
+| <langinfo.h>     | 语言信息常量。建于`Locale.h`之上。 |
 | <libgen.h>       | 路径名操作                                                   |
 | <monetary.h>     | 货币单位的字符串格式化                                       |
-| <mqueue.h>       | [消息队列](https://zh.wikipedia.org/wiki/消息队列)           |
-| <ndbm.h>         | [NDBM](https://zh.wikipedia.org/w/index.php?title=NDBM&action=edit&redlink=1)数据库操作 |
-| <netdb.h>        | 把本地协议与主机名翻译为数值地址。是[Berkeley套接字](https://zh.wikipedia.org/wiki/Berkeley套接字)的一部分 |
+| <mqueue.h>       | 消息队列      |
+| <ndbm.h>         | `NDBM` 数据库操作 |
+| <netdb.h>        | 把本地协议与主机名翻译为数值地址。是Berkeley套接字的一部分 |
 | <nl_types.h>     | 本体化消息分类函数                                           |
-| <poll.h>         | [异步多工文件描述符](https://zh.wikipedia.org/w/index.php?title=异步多工文件描述符&action=edit&redlink=1) |
-| <pthread.h>      | [POSIX线程](https://zh.wikipedia.org/wiki/POSIX线程).        |
-| <pwd.h>          | [passwd](https://zh.wikipedia.org/wiki/Passwd)文件访问与控制 |
-| <regex.h>        | [正则表达式](https://zh.wikipedia.org/wiki/正则表达式)       |
+| <poll.h>         | 异步多工文件描述符 |
+| <pthread.h>      | `POSIX` 线程        |
+| <pwd.h>          | `passwd`文件访问与控制 |
+| <regex.h>        | 正则表达式      |
 | <sched.h>        | 执行调度                                                     |
 | <search.h>       | 搜索表                                                       |
-| <semaphore.h>    | POSIX [信号量](https://zh.wikipedia.org/wiki/信号量)         |
-| <spawn.h>        | [spawning](https://zh.wikipedia.org/w/index.php?title=Spawn_(计算)&action=edit&redlink=1)子进程 |
+| <semaphore.h>    | `POSIX` 信号量       |
+| <spawn.h>        | `spawning` |
 | <strings.h>      | 大小写不敏感字符串比较                                       |
-| <stropts.h>      | 流操作，包括[ioctl](https://zh.wikipedia.org/wiki/Ioctl)     |
-| <syslog.h>       | [syslog](https://zh.wikipedia.org/wiki/Syslog)系统日志       |
-| <tar.h>          | [tar](https://zh.wikipedia.org/wiki/Tar)文件格式的Magic number |
-| <termios.h>      | 允许[串口](https://zh.wikipedia.org/wiki/串口)界面           |
+| <stropts.h>      | 流操作，包括`ioctl`    |
+| <syslog.h>       | `syslog`系统日志       |
+| <tar.h>          | tar文件格式的Magic number |
+| <termios.h>      | 允许串口界面           |
 | <trace.h>        | 运行时行为追踪（过时）                                       |
 | <ulimit.h>       | 资源限制（被<sys/resource.h>代替）                           |
 | <unistd.h>       | 多种必要的POSIX函数与常量                                    |
-| <utime.h>        | [inode](https://zh.wikipedia.org/wiki/Inode)访问与修改时间   |
+| <utime.h>        | `inode` 访问与修改时间   |
 | <utmpx.h>        | 用户账号数据库函数                                           |
-| <wordexp.h>      | 子扩展，类似于[shell](https://zh.wikipedia.org/wiki/Unix_shell)被执行 |
+| <wordexp.h>      | 子扩展，类似于`shell`被执行 |
 
 | 头文件       | 说明 |
 | ---------------- | ------------------------------------------------------------ |
-| <arpa/inet.h>    | 操纵数值[IP地址](https://zh.wikipedia.org/wiki/IP地址)的函数胡 (部分[Berkeley套接字](https://zh.wikipedia.org/wiki/Berkeley套接字)) |
-| <net/if.h>     | 本地[网络接口](https://zh.wikipedia.org/wiki/网络接口)列表   |
-| <netinet/in.h>   | 定义互联网协议与地址族。是[Berkeley套接字](https://zh.wikipedia.org/wiki/Berkeley套接字)的一部分 |
-| <netinet/tcp.h>  | 额外的[TCP](https://zh.wikipedia.org/wiki/Transmission_Control_Protocol)的控制选项。是[Berkeley套接字](https://zh.wikipedia.org/wiki/Berkeley套接字)的一部分 |
+| <arpa/inet.h>    | 操纵数值IP地址的函数 (部分[Berkeley套接字) |
+| <net/if.h>       | 本地网络接口列表   |
+| <netinet/in.h>   | 定义互联网协议与地址族。是`Berkeley`套接字的一部分 |
+| <netinet/tcp.h>  | 额外的`TCP`的控制选项。是`Berkeley`套接字的一部分 |
 
 | 头文件       | 说明 |
 | ---------------- | ------------------------------------------------------------ |
-| <sys/ipc.h>      | [进程间通信](https://zh.wikipedia.org/wiki/进程间通信) (IPC). |
-| <sys/mman.h>     | 内存管理，包括POSIX [共享内存 (进程间通信)](https://zh.wikipedia.org/wiki/共享内存_(进程间通信))与[内存映射文件](https://zh.wikipedia.org/wiki/内存映射文件) |
-| <sys/msg.h>      | POSIX [消息队列](https://zh.wikipedia.org/wiki/消息队列)。   |
+| <sys/ipc.h>      | 进程间通信 (IPC) |
+| <sys/mman.h>     | 内存管理，包括POSIX 进程间通信与内存映射文件 |
+| <sys/msg.h>      | `POSIX` 消息队列   |
 | <sys/resource.h> | 资源使用，优先级与限制。                                     |
-| <sys/select.h>   | [Select (Unix)](https://zh.wikipedia.org/wiki/Select_(Unix)) |
-| <sys/sem.h>      | XSI ([SysV](https://zh.wikipedia.org/w/index.php?title=Unix_System_V&action=edit&redlink=1)风格的) [信号量](https://zh.wikipedia.org/wiki/信号量) |
-| <sys/shm.h>      | XSI ([SysV](https://zh.wikipedia.org/w/index.php?title=Unix_System_V&action=edit&redlink=1)风格的)[共享内存 (进程间通信)](https://zh.wikipedia.org/wiki/共享内存_(进程间通信)) |
-| <sys/socket.h>   | [Berkley套接字](https://zh.wikipedia.org/w/index.php?title=Berkley套接字&action=edit&redlink=1)主要头文件 |
-| <sys/stat.h>     | 文件信息([stat (Unix)](https://zh.wikipedia.org/wiki/Stat_(Unix))等) |
+| <sys/select.h>   | `Select Unix` |
+| <sys/sem.h>      | `XSI SysV`风格的信号量 |
+| <sys/shm.h>      | `XSI` 风格的共享内存 (进程间通信) |
+| <sys/socket.h>   | 套接字主要头文件 |
+| <sys/stat.h>     | 文件信息 |
 | <sys/statvfs.h>  | 文件系统信息                                                 |
 | <sys/time.h>     | 时间与日期函数与结构                                         |
 | <sys/times.h>    | 文件访问与修改时间                                           |
 | <sys/types.h>    | 不同的数据类型                                               |
-| <sys/uio.h>      | [向量I/O](https://zh.wikipedia.org/w/index.php?title=向量I/O&action=edit&redlink=1)操作 |
-| <sys/un.h>       | [Unix域套接字](https://zh.wikipedia.org/wiki/Unix域套接字)   |
-| <sys/utsname.h>  | 操作系统信息，包括[uname](https://zh.wikipedia.org/wiki/Uname) |
-| <sys/wait.h>     | 终止子进程的状态(见[wait (Unix)](https://zh.wikipedia.org/wiki/Wait_(Unix))) |
+| <sys/uio.h>      | 向量`I/O`操作 |
+| <sys/un.h>       | `Unix`域套接字   |
+| <sys/utsname.h>  | 操作系统信息，包括 `uname` |
+| <sys/wait.h>     | 终止子进程的状态 |
 
 ### UNSUAL
 
@@ -252,5 +261,23 @@ int sampleLseek() {
     // 设置当前偏移量为10byte
     offset = lseek(fd, 10 , SEEK_SET);
 
+}
+```
+
+### read
+> 从文件描述符中读取内容
+
+```c
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <sys/types.h>
+
+// read 从文件描述符中读取内容
+// ssize_t read(int fd, void *buf, size_t count)
+
+void sampleRead() {
+    char buffer[1024];
+    // 从标准输入读取数据到用户空间的 buffer 中， 并且限制大小为 1024 byte
+    ssize_t byteRead = read(STDIN_FILENO, buffer, sizeof(buffer));
 }
 ```
