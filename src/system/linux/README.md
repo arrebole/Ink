@@ -30,6 +30,10 @@
     + [fdatasync](#fdatasync)
     + [fcntl](#fcntl)
     + [ioctl](#ioctl)
+    + [stat](#stat)
+    + [lstat](#lstat)
+    + [fstat](#fstat)
+    + [fstatat](#fstatat)
 
 ## UNIX标准
 
@@ -149,6 +153,11 @@
 > 打开或创建一个文件, 打开的描述符一定是最小的未用描述符数值。
 
 ```c
+// open 打开一个文件返回一个文件描述符
+int open(const char *pathname, int flags, mode_t mode);
+```
+
+```c
 #include <fcntl.h>
 
 // sampleOpenFile 打开一个文件，返回它的可读可写的描述符。
@@ -165,12 +174,14 @@ void sampleCreateFile() {
 > （path为相对路径时）打开以fd指向的文件的目录作为为基址,加上path路径的相对路径
 
 ```c
+// openat（path为相对路径时）打开以fd指向的文件的目录作为为基址加上path路径的文件
+int openat(int dirfd, const char *pathname, int flags, mode_t ...mode?);
+```
+
+```c
 // 使用 openat() 需要定义功能测试宏
 #define _ATFILE_SOURCE 
 #include <fcntl.h>
-
-// openat（path为相对路径时）打开以fd指向的文件的目录作为为基址加上path路径的文件
-// int openat(int dirfd, const char *pathname, int flags, mode_t ...mode?);
 
 // sampleOpenat -> ../../../file2
 void sampleOpenat() {
@@ -214,10 +225,12 @@ int sampleOpenat2() {
 > 创建一个文件，返回只写方式的文件描述符。
 
 ```c
-#include <fcntl.h>
-
 // creat 按只写方式创建一个文件
-// int creat(const char *path, mode_t mode)
+int creat(const char *path, mode_t mode)
+```
+
+```c
+#include <fcntl.h>
 
 void sampleCreat(){
     int fd = creat("./sample", 0644);
@@ -228,11 +241,13 @@ void sampleCreat(){
 > 关闭一个打开的文件
 
 ```c
+// close 关闭一个打开的文件
+int close(int fd);
+```
+
+```c
 #include <unistd.h>
 #include <fcntl.h>
-
-// close 关闭一个打开的文件
-// int close(int fd);
 
 void sampleClose(){
     int fd = creat('./sample', 0644);
@@ -244,11 +259,13 @@ void sampleClose(){
 > 设置当前文件偏移量（影响读写的开始位置）
 
 ```c
+// lessk 设置文件偏移量
+long lessk(int fd, int offset, int whence) 
+```
+
+```c
 #include <unistd.h>
 #include <fcntl.h>
-
-// lessk 设置文件偏移量
-// long lessk(int fd, int offset, int whence) 
 
 int sampleLseek() {
     int fd = creat('sample', 0644);
@@ -269,12 +286,14 @@ int sampleLseek() {
 > 从文件描述符中读取内容
 
 ```c
+// read 从文件描述符中读取内容
+ssize_t read(int fd, void *buf, size_t count)
+```
+
+```c
 #define _GNU_SOURCE
 #include <unistd.h>
 #include <sys/types.h>
-
-// read 从文件描述符中读取内容
-// ssize_t read(int fd, void *buf, size_t count)
 
 void sampleRead() {
     char buffer[1024];
@@ -285,12 +304,15 @@ void sampleRead() {
 
 ### write
 > 从文件描述符中写数据
+
+```c
+// write 从文件描述符中写数据
+ssize_t write(int fd, const void *buf, size_t count);
+```
+
 ```c
 #include <unistd.h>
 #include <sys/types.h>
-
-// write 从文件描述符中写数据
-// ssize_t write(int fd, const void *buf, size_t count);
 
 void sampleWrite() {
     const char buffer[] = "hello world";
@@ -302,12 +324,14 @@ void sampleWrite() {
 > 从文件描述符中读取内容, 并设置偏移量.(lseek + read)
 
 ```c
+// 从文件描述符设置偏移量, 并读取数据
+ssize_t pread(int fd, void *buf, size_t count, off_t offset);
+```
+
+```c
 #define _XOPEN_SOURCE 500
 #include <unistd.h>
 #include <fcntl.h>
-
-// 从文件描述符设置偏移量, 并读取数据
-// ssize_t pread(int fd, void *buf, size_t count, off_t offset);
 
 void samplePread() {
     int fd = open("./pread.c", O_RDONLY);
@@ -325,12 +349,14 @@ void samplePread() {
 > 从文件描述符偏移量处开始写数据数据 (lseek + write)
 
 ```c
+// 从文件描述符偏移量处开始写数据数据
+ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
+```
+
+```c
 #define _XOPEN_SOURCE 500
 #include <unistd.h>
 #include <fcntl.h>
-
-// 从文件描述符偏移量处开始写数据数据
-// ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
 
 void samplePwrite() {
     int fd = open("./pwrite.c", O_RDONLY);
@@ -349,9 +375,11 @@ void samplePwrite() {
 > 复制一个现有的文件描述符, 新描述符为可用最小值。(使用同一份表项)
 
 ```c
+// 复制一个现有的文件描述符,
+int dup(int fildes);
+```
+```c
 #include <unistd.h>
-
-// int dup(int fildes);
 
 void sampleDup(){
     int fd = dup(STDOUT_FILENO);
@@ -366,10 +394,12 @@ void sampleDup(){
 > 复制一个现有的文件描述符，并指定新的描述符编号。(使用同一份表项)
 
 ```c
-#include <unistd.h>
-
 // dup2 复制描述符 fildes 为 fildes2，如果 fildes2 已经被打开，则先关闭。
-// int dup2(int fildes, int fildes2);
+int dup2(int fildes, int fildes2);
+```
+
+```c
+#include <unistd.h>
 
 void sampleDup2(){
     int fd = dup2(STDOUT_FILENO, 10);
@@ -383,11 +413,13 @@ void sampleDup2(){
 > 请求操作系统，将所有数据写入磁盘
 
 ```c
+// sync 请求内核将所有的文件同步到硬盘。
+void sync(void);
+```
+
+```c
 #include <unistd.h>
 #include <fcntl.h>
-
-// sync 请求内核将所有的文件同步到硬盘。
-// void sync(void);
 
 void sampleSync(){
     int fd = open("./outfile", O_CREAT | O_WRONLY, 0644);
@@ -404,12 +436,14 @@ void sampleSync(){
 > 请求操作系统, 将与此文件关联的文件系统的所有数据写入磁盘。(仅限Linux)
 
 ```c
+// syncfs 请求内核将指定的文件描述符数据同步到硬盘。
+int syncfs(int fd);
+```
+
+```c
 #define _GNU_SOURCE
 #include <unistd.h>
 #include <fcntl.h>
-
-// syncfs 请求内核将指定的文件描述符数据同步到硬盘。
-// int syncfs(int fd);
 
 void sampleSyncfs(){
     int fd = open("./outfile", O_CREAT | O_WRONLY, 0644);
@@ -426,11 +460,13 @@ void sampleSyncfs(){
 > 将此文件的所有数据和元数据写入磁盘，完成后才返回
 
 ```c
+// fsync 等待内核将指定文件描述符的内容和属性同步到硬盘。
+int fsync(int fd);
+```
+
+```c
 #include <unistd.h>
 #include <fcntl.h>
-
-// fsync 等待内核将指定文件描述符的内容和属性同步到硬盘。
-// int fsync(int fd);
 
 void sampleFsync(){
     int fd = open("./outfile", O_CREAT | O_WRONLY, 0644);
@@ -447,12 +483,14 @@ void sampleFsync(){
 > 将此文件的所有数据(不包括文件属性)写入磁盘，完成后才返回
 
 ```c
+// fdatasync / 等待进程内的文件描述符数据(不等待属性同步)同步到磁盘。
+int fdatasync(int fd);
+```
+
+```c
 #define _GNU_SOURCE
 #include <unistd.h>
 #include <fcntl.h>
-
-// fdatasync / 等待进程内的文件描述符数据(不等待属性同步)同步到磁盘。
-// int fdatasync(int fd);
 
 void sampleSync(){
     int fd = open("./outfile", O_CREAT | O_WRONLY, 0644);
@@ -468,11 +506,13 @@ void sampleSync(){
 > 获取或改变已经打开文件的属性
 
 ```c
+// fcntl 获取或改变已经打开文件的属性
+int fcntl(int __fd, int __cmd, ...)
+```
+
+```c
 #include <fcntl.h>
 #include <unistd.h>
-
-// fcntl 获取或改变已经打开文件的属性
-// int fcntl(int __fd, int __cmd, ...)
 
 void sampleFcntl() {
   // 打开一个文件，并设置文件描述符属性为只写
@@ -505,14 +545,17 @@ void sampleFcntl() {
 > io操作的杂项函数
 
 ```c
+// ioctl io操作的杂项函数
+int ioctl(int fd, unsigned long __request, ...)
+```
+
+```c
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <stdio.h>
 
-// ioctl io操作的杂项函数
-// int ioctl(int fd, unsigned long __request, ...)
-
-void sampleIoctl(){
+// sampleIoctl 利用ioctl获取终端大小
+void sampleIoctl() {
     struct winsize ws;
 
     // 获取终端设备的大小
@@ -521,5 +564,25 @@ void sampleIoctl(){
     char buffer[1024];
     int nSize = sprintf(buffer, "col: %d\nrow: %d\n",ws.ws_col, ws.ws_row); 
     write(STDOUT_FILENO, buffer, nSize);
+}
+```
+
+### stat
+> 获取文件信息
+
+```c
+// stat 获取pathname文件的信息，返回statbuf的结构体指针
+int stat(const char *pathname, struct stat *statbuf);
+```
+
+```c
+void sampleStat() {
+    struct stat statbuff;
+
+    stat("./stat.c", &statbuff);
+
+    printf("file size: %ld\n", statbuff.st_size);
+    printf("last modify: %ld\n", statbuff.st_mtime);
+    printf("last access: %ld\n", statbuff.st_atime);
 }
 ```
