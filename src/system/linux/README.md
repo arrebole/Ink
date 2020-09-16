@@ -586,3 +586,78 @@ void sampleStat() {
     printf("last access: %ld\n", statbuff.st_atime);
 }
 ```
+
+### lstat
+> 获取文件信息 (不会跟随符号链接跳转)
+
+```c
+// lstat 获取 pathname 的文件信息 (不会跟随符号链接跳转)
+int lstat(const char *pathname, struct stat *statbuf);
+```
+
+```c
+void sampleLstat() {
+    struct stat statbuff;
+
+    lstat("./lstat.c", &statbuff);
+
+    printf("file size: %ld\n", statbuff.st_size);
+    printf("last modify: %ld\n", statbuff.st_mtime);
+    printf("last access: %ld\n", statbuff.st_atime);
+}
+```
+
+### fstat
+> 通过文件描述符获取文件信息 (不会跟随符号链接跳转)
+
+```c
+// fstat 获取文件描述符 fd 的文件信息
+int fstat(int fd, struct stat *statbuf);
+```
+
+```c
+#define _XOPEN_SOURCE 500
+
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
+
+void sampleFstat() {
+
+    int fd = open("./fstat.c", O_RDWR);
+
+    struct stat statbuff;
+    fstat(fd, & statbuff);
+
+    printf("file size: %ld\n", statbuff.st_size);
+    printf("last modify: %ld\n", statbuff.st_mtime);
+    printf("last access: %ld\n", statbuff.st_atime);
+}
+```
+
+### fstatat
+> 获取相对于文件描述符所引用的目录的文件的信息
+
+```c
+// fstatat 获取文件信息（指向 dirfd + pathname 寻找到的文件）
+int fstatat(int dirfd, const char *pathname, struct stat *statbuf, int flags);
+```
+
+```c
+#define _ATFILE_SOURCE
+
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
+
+void sampleFstatat() {
+    int dirFd = open("../../fs", O_RDONLY);
+
+    struct stat statbuff;
+    fstatat(dirFd, "./fstatat/fstatat.c", &statbuff, 0);
+
+    printf("file size: %ld\n", statbuff.st_size);
+    printf("last modify: %ld\n", statbuff.st_mtime);
+    printf("last access: %ld\n", statbuff.st_atime);
+}
+```
