@@ -34,6 +34,16 @@
     + [lstat](#lstat)
     + [fstat](#fstat)
     + [fstatat](#fstatat)
+    + [access](#access)
+    + [faccessat](#faccessat)
+    + [umask](#umask)
+    + [chmod](#chmod)
+    + [fchmod](#fchmod)
+    + [fchmodat](#fchmodat)
+    + [chown](#chown)
+    + [fchown](#fchown)
+    + [fchownat](#fchownat)
+    + [lchown](#lchown)
 
 ## UNIX标准
 
@@ -661,3 +671,13 @@ void sampleFstatat() {
     printf("last access: %ld\n", statbuff.st_atime);
 }
 ```
+
+### access
+> 按照实际实际用户ID和组ID进行访问权限测试。
+
+```c
+// 对文件按照 mode 和实际用户（登录的用户）进行权限测试，如果失败则返回-1
+// mode: R_OK | W_OK | X_OK
+int access(const char* pathname, int mode);
+```
+
