@@ -44,6 +44,35 @@
     + [fchown](#fchown)
     + [fchownat](#fchownat)
     + [lchown](#lchown)
+    + [truncate](#truncate)
+    + [ftruncate](#ftruncate)
+    + [link](#link)
+    + [linkat](#linkat)
+    + [unlink](#unlink)
+    + [unlinkat](#unlinkat)
+    + [remove](#remove)
+    + [rename](#rename)
+    + [renameat](#renameat)
+    + [symlink](#symlink)
+    + [symlinkat](#symlinkat)
+    + [readlink](#readlink)
+    + [readlinkat](#readlinkat)
+    + [futimens](#futimes)
+    + [utimes](#utimes)
+    + [utimensat](#utimensat)
+    + [mkdir](#mkdir)
+    + [mkdirat](#mkdirat)
+    + [rmdir](#rmdir)
+    + [opendir](#opendir)
+    + [fdopendir](#fdopendir)
+    + [readdir](#readdir)
+    + [rewinddir](#rewinddir)
+    + [closedir](#closedir)
+    + [telldir](#telldir)
+    + [seekdir](#seekdir)
+    + [chdir](#chdir)
+    + [fchdir](#fchdir)
+    + [getcwd](#getcwd)
 
 ## UNIX标准
 
@@ -673,7 +702,7 @@ void sampleFstatat() {
 ```
 
 ### access
-> 按照实际实际用户ID和组ID进行访问权限测试。
+> 按照实际用户ID和组ID进行访问权限测试。
 
 ```c
 // 对文件按照 mode 和实际用户（登录的用户）进行权限测试，如果失败则返回-1
@@ -697,5 +726,56 @@ void sampleAccess(const char* pathname) {
     if (access(pathname, X_OK) < 0) {
         write(STDERR_FILENO, "exec access fail\n", 18);
     }
+}
+```
+
+### faccessat
+> 按照实际(或有效用户)ID和组ID进行访问权限测试。
+
+```c
+// faccessat 默认有效用户权限测试，flags=AT_EACCESS 用实际用户进行权限测试
+int faccessat(int dirfd, const char *pathname, int mode, int flags);
+```
+
+```c
+#define _POSIX_C_SOURCE 200809L
+#include <fcntl.h>
+#include <unistd.h>
+
+void exampleFaccessat() {
+    int fd = open("../../fs", O_DIRECTORY);
+
+    if (fd < 0) return _exit(-1);
+
+    // 使用实际的用户(登录用户)进行权限测试
+    if (faccessat(fd, "./faccessat/faccessat.c", X_OK, 0) < 0) {
+        write(STDERR_FILENO, "real exec access fail\n", 23);
+    }
+
+    // AT_EACCESS 使用有效的用户（该程序所有者）进行权限测试
+    if (faccessat(fd, "./faccessat/faccessat.c", X_OK, AT_EACCESS) < 0) {
+        write(STDERR_FILENO, "effective exec access fail\n", 28);
+    }
+}
+```
+
+### umask
+> 设置限制新建文件权限的掩码
+
+```c
+mode_t umask(mode_t mask);
+```
+
+```c
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+void exampleUmask() {
+    // 屏蔽新创建的文件，掩码777
+    mode_t mode = umask(S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+
+    // 新创建的文件，inode权限位被被屏蔽为 000
+    int fd =  creat("./example", O_RDWR);
 }
 ```
