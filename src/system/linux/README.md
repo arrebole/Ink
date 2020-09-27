@@ -779,3 +779,61 @@ void exampleUmask() {
     int fd =  creat("./example", O_RDWR);
 }
 ```
+
+### chmod
+> 改变一个文件的权限(基于文件路径名)
+
+```c
+// chmod 将 pathname 的文件权限修改为 mode
+int chmod(const char *pathname, mode_t mode);
+```
+
+```c
+#include <sys/stat.h>
+
+// sampleChmod 将 ./chmod.c 文件权限改为只有所有者能够读写
+int exampleChmod() {
+    return chmod("./chmod.c", S_IRUSR | S_IWUSR);
+}
+```
+
+### fchmod
+> 改变一个文件的权限(基于文件描述符)
+
+```c
+// chmod 将 pathname 的文件权限修改为 mode
+int fchmod(int fd, mode_t mode);
+```
+
+```c
+#define _POSIX_C_SOURCE 199309L
+#include <sys/stat.h>
+#include <fcntl.h>
+
+// exampleFchmod 将 ./fchmod.c 文件权限改为只有所有者能够读写
+int exampleFchmod() {
+    int fd = open("./fchmod.c", O_RDWR);
+    if (fd < 0) {
+        return -1;
+    }
+    return fchmod(fd, S_IRUSR | S_IWUSR);
+}
+```
+
+### fchmodat
+> 改变一个文件的权限(基于文件描述符和基础路径)
+
+```c
+// fchmodat pathname为相对路径时，修改急于 dirfd 路径的 pathname 文件的权限
+int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags);
+```
+
+```c
+int exampleFchmodat() {
+    int dirFd = open("../../fs", O_DIRECTORY);
+    if (dirFd < 0) {
+        return -1;
+    }
+    return fchmodat(dirFd, "./fchmodat/fchmodat.c", S_IRGRP | S_IRUSR | S_IWUSR, 0);
+}
+```
