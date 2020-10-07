@@ -837,3 +837,130 @@ int exampleFchmodat() {
     return fchmodat(dirFd, "./fchmodat/fchmodat.c", S_IRGRP | S_IRUSR | S_IWUSR, 0);
 }
 ```
+
+### chown
+> 改变一个文件的所有者(基于文件路径)
+
+```c
+// chown change ownership of a file
+int chown(const char *pathname, uid_t owner, gid_t group);
+```
+
+```c
+#define  _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+// exampleChown 设置文件的所有者uid、组gid
+void exampleChown(const char *pathname, uid_t owner, gid_t group) {
+    if (chown(pathname, owner, group) == -1) {
+        perror("chown");
+    }
+}
+
+int main(int argc, char *argv[]) {
+    exampleChown(argv[1], atol(argv[2]), atol(argv[3]));
+    return 0;
+}
+```
+
+### fchown
+> 改变一个文件的所有者(基于文件描述符)
+
+```c
+// fchown change ownership of a file
+int fchown(int fd, uid_t owner, gid_t group);
+```
+
+```c
+#define  _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+// exampleFchown 设置文件的所有者uid、组gid
+void exampleFchown(const char *pathname, uid_t owner, gid_t group) {
+    int fd = open(pathname, O_RDWR);
+    if (fd < 0) {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
+    
+    if (fchown(fd, owner, group) == -1) {
+        perror("fchown");
+        exit(EXIT_FAILURE);
+    }
+}
+
+int main(int argc, char *argv[]) {
+    exampleFchown(argv[1], atol(argv[2]), atol(argv[3]));
+    return 0;
+}
+```
+
+### fchownat
+> 改变一个文件的所有者(基于文件描述符和相对路径)
+
+```c
+int fchownat(int dirfd, const char *pathname, uid_t owner, gid_t group, int flags);
+```
+
+```c
+#define  _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+
+// exampleFchown 设置文件的所有者uid、组gid
+void exampleFchownAt(const char *dirname, const char *pathname, uid_t owner, gid_t group) {
+    int dirFd = open(dirname, O_DIRECTORY);
+    if (dirFd < 0) {
+        perror("opendir");
+        exit(EXIT_FAILURE);
+    }
+    // 通过设置 flag 可以选择是否随文件链接跳转
+    if (fchownat(dirFd, pathname, owner, group, 0) == -1) {
+        perror("fchownat");
+        exit(EXIT_FAILURE);
+    }
+}
+
+int main(int argc, char *argv[]) {
+    exampleFchownAt(argv[1], argv[2], atol(argv[3]), atol(argv[4]));
+    return 0;
+}
+```
+
+
+### lchown
+> 改变一个文件的所有者(针对符号链接)
+
+```c
+// lchown change ownership of a file
+int lchown(const char *pathname, uid_t owner, gid_t group);
+```
+```c
+#define  _POSIX_C_SOURCE 200809L
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+// exampleChown 设置文件的所有者uid、组gid
+void exampleLchown(const char *pathname, uid_t owner, gid_t group) {
+    if (lchown(pathname, owner, group) == -1) {
+        perror("lchown");
+    }
+}
+
+int main(int argc, char *argv[]) {
+    exampleLchown(argv[1], atol(argv[2]), atol(argv[3]));
+    return 0;
+}
+```
+
+### truncate
+
+### ftruncate
