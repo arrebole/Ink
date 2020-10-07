@@ -1934,6 +1934,8 @@ function newDPMatrix(row, col) {
 
 ## Prim算法
 
+将加权图生成最小树。
+
 ```python
 # Prim 贪婪技术加权图生成最小树
 def Prim(graph: dict, root: str):
@@ -1973,10 +1975,60 @@ def Prim(graph: dict, root: str):
 
 ## Dijkstra算法
 
+适用单起点最短路径问题(不含负权重的图)。它求出从起点到最近起点的顶点之间的最短路径，然后求出第二近的，以此类推。
+
+```python
+import math, heapq
+
+# Dijkstra 求单起点最短路径
+# in: G=<V,E> 非负权重加权连通图，s 顶点
+def Dijkstra(G: dict, s):
+    # 初始化优先队列, 
+    priorityQueue = []
+
+    # 距离表，前节点表
+    seen, parent, distance = set(), {}, {}
+    for v in G.keys():
+        parent[v] = None
+        distance[v] = math.inf
+
+    # 设置将起点
+    distance[s] = 0
+    heapq.heappush(priorityQueue, (distance[s], s))
+
+    # 求最短距离
+    while len(priorityQueue) > 0:
+        d, v = heapq.heappop(priorityQueue)
+        seen.add(v)
+        for u in G[v].keys():
+            if u in seen:
+                continue
+            if d + G[u][v] < distance[u]:
+                distance[u] = d + G[u][v]
+                parent[u] = v
+                heapq.heappush(priorityQueue, (distance[u], u))
+    return parent, distance
+```
+对`Dijkstra`算法进行测试
+```python
+def testDijkstra():
+    graph = {
+        'a': {'b': 3, 'd': 7},
+        'b': {'a': 3, 'd': 2, 'c': 4},
+        'c': {'b': 4, 'd': 5, 'e': 6},
+        'd': {'a': 7, 'b': 2, 'c': 5, 'e': 4},
+        'e': {'c': 6, 'd': 4 }
+    }
+    parent, distance = Dijkstra(graph, 'a')
+
+    assert distance['a'] == 0
+    assert distance['b'] == 3
+    assert distance['c'] == 7
+    assert distance['d'] == 5
+    assert distance['e'] == 9
+```
+
 ## 哈夫曼树
-
-
-
 
 
 # Ⅷ 迭代改进
