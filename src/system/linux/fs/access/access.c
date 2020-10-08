@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <assert.h>
 
 void sampleAccess(const char* pathname) {
 
@@ -13,4 +14,10 @@ void sampleAccess(const char* pathname) {
     if (access(pathname, X_OK) < 0) {
         write(STDERR_FILENO, "exec access fail\n", 18);
     }
+}
+
+int main(int argc, char* argv[]) {
+    assert(argc == 2);
+    sampleAccess(argv[1]);
+    return 0;
 }

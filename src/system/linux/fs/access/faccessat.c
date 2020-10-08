@@ -17,3 +17,8 @@ void exampleFaccessat() {
         write(STDERR_FILENO, "effective exec access fail\n", 28);
     }
 }
+
+int main(){
+    exampleFaccessat();
+    return 0;
+}

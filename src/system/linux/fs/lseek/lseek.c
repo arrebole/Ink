@@ -2,7 +2,7 @@
 #include <fcntl.h>
 
 // 设置文件偏移量
-// long lessk(int fd, int offset, int whence) 
+// long lseek(int fd, int offset, int whence) 
 
 int sampleLseek(){
     int fd = creat('sample', 0644);

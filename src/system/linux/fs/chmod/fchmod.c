@@ -10,3 +10,8 @@ int exampleFchmod() {
     }
     return fchmod(fd, S_IRUSR | S_IWUSR);
 }
+
+int main(){
+    exampleFchmod();
+    return 0;
+}

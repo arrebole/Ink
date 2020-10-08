@@ -9,3 +9,8 @@ void exampleUmask() {
     // 新创建的文件，inode权限位被被屏蔽为 000
     int fd =  creat("./example", O_RDWR);
 }
+
+int main(){
+    exampleUmask();
+    return 0;
+}

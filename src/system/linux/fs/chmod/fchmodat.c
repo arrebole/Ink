@@ -9,3 +9,8 @@ int exampleFchmodat() {
     }
     return fchmodat(dirFd, "./fchmodat/fchmodat.c", S_IRGRP | S_IRUSR | S_IWUSR, 0);
 }
+
+int main() {
+    exampleFchmodat();
+    return 0;
+}

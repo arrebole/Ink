@@ -4,3 +4,8 @@
 int exampleChmod() {
     return chmod("./chmod.c", S_IRUSR | S_IWUSR);
 }
+
+int main(){
+    exampleChmod();
+    return 0;
+}
