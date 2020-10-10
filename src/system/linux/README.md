@@ -50,7 +50,6 @@
     + [linkat](#linkat)
     + [unlink](#unlink)
     + [unlinkat](#unlinkat)
-    + [remove](#remove)
     + [rename](#rename)
     + [renameat](#renameat)
     + [symlink](#symlink)
@@ -1012,3 +1011,63 @@ int main(int argc, char const *argv[]) {
     return 0; 
 }
 ```
+
+### link
+> 为一个文件创建硬链接，如果指定的新文件名已经存在，会进行覆盖。
+
+```c
+// link 为一个文件创建硬链接
+int link(const char *oldpath, const char *newpath);
+```
+
+```c
+#include <unistd.h>
+#include <stdio.h>
+
+void sampleLink(const char *oldpath, const char *newpath) {
+    if (link(oldpath, newpath) < 0) {
+        perror("link");
+    }
+}
+
+int main(int argc, char const *argv[]){
+    sampleLink(argv[1], argv[2]);
+    return 0;
+}
+```
+
+### linkat
+> 为一个文件创建硬链接，如果指定的新文件名已经存在，会进行覆盖。
+
+```c
+// linkat 为一个文件创建硬链接
+int linkat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath, int flags);
+```
+
+```c
+#define _POSIX_C_SOURCE 200809L
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
+
+void sampleLinkat(const char *oldpath, const char *newpath) {
+    int dirFd = open("./", __O_DIRECTORY);
+    if (dirFd < 0) {
+        perror("open");
+        _exit(-1);
+    }
+
+    if (linkat(dirFd, oldpath, dirFd, newpath, 0) < 0) {
+        perror("link");
+        _exit(-1);
+    }
+}
+
+int main(int argc, char const *argv[]){
+    sampleLinkat(argv[1], argv[2]);
+    return 0;
+}
+```
+
+### unlink
+### unlinkat
