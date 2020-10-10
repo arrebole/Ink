@@ -1070,4 +1070,57 @@ int main(int argc, char const *argv[]){
 ```
 
 ### unlink
+> 删除文件(如果文件没有被引用)
+
+```c
+// unlinkat delete a name and possibly the file it refers to
+int unlinkat(int dirfd, const char *pathname, int flags);
+```
+
+```c
+#include <stdio.h>
+#include <unistd.h>
+
+void exampleUnlink(const char* name) {
+    if (unlink(name) < 0) {
+        perror("unlink");
+        _exit(-1);
+    }
+}
+
+int main(int argc, char const* argv[]) {
+    exampleUnlink(argv[1]);
+    return 0;
+}
+```
+
 ### unlinkat
+> 删除文件(如果文件没有被引用)
+
+```c
+// unlinkat delete a name and possibly the file it refers to
+int unlinkat(int dirfd, const char *pathname, int flags);
+```
+
+```c
+#define _POSIX_C_SOURCE 200809L
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
+
+void exampleUnlinkat(const char* name) {
+    int dirFd = open(".", O_DIRECTORY);
+    // 基于根目录定位文件
+    // flag 设置为 0 效果类似于 unlink
+    // flag 设置为 AT_REMOVEDIR 效果类似于 rmdir, 允许删除目录
+    if (unlinkat(dirFd, name, 0) < 0) {
+        perror("unlinkat");
+        _exit(-1);
+    }
+}
+
+int main(int argc, char const* argv[]) {
+    exampleUnlinkat(argv[1]);
+    return 0;
+}
+```
