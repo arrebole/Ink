@@ -962,5 +962,53 @@ int main(int argc, char *argv[]) {
 ```
 
 ### truncate
+> 裁剪文件, 长度不足会使用空洞填充。
+
+```c
+// truncate 将文件裁剪到指定长度
+int truncate(const char *path, off_t length);
+```
+
+```c
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+int exampleTruncate(const char *path, off_t length) { 
+    return truncate(path, length); 
+}
+
+int main(int argc, char const *argv[]) {
+    exampleTruncate(argv[1], atol(argv[2]));
+    return 0; 
+}
+```
 
 ### ftruncate
+> 裁剪文件，长度不足会使用空洞填充。
+
+```c
+// truncate 将文件裁剪到指定长度
+int ftruncate(int fd, off_t length);
+```
+
+```c
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+int exampleFtruncate(const char *path, off_t length) {
+    int fd = open(path, O_RDWR);
+    if (fd < 0) {
+        perror("open");
+        exit(EXIT_FAILURE);     
+    }
+    return ftruncate(fd, length); 
+}
+
+int main(int argc, char const *argv[]) {
+    exampleFtruncate(argv[1], atol(argv[2]));
+    return 0; 
+}
+```
