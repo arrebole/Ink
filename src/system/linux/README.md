@@ -1124,3 +1124,72 @@ int main(int argc, char const* argv[]) {
     return 0;
 }
 ```
+
+### rename
+> 改变文件的名称或位置
+
+
+```c
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <unistd.h>
+#include <unistdio.h>
+
+// rename change the name or location of a file
+int rename(const char *oldpath, const char *newpath) {
+    return syscall(SYS_rename, oldpath, newpath);
+}
+
+void exampleRename(const char *oldpath, const char *newpath) {
+    if (rename(oldpath, newpath) < 0) {
+        perror("rename");
+    }
+}
+
+int main(int argc, char const *argv[]) {
+    if (argc < 3) {
+        printf("args error\n");
+        _exit(-1);
+    }
+    exampleRename(argv[1], argv[2]);
+    return 0;
+}
+```
+
+### renameat
+> 改变文件的名称或位置
+
+```c
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <unistdio.h>
+
+// renameat change the name or location of a file
+int renameat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath) {
+    return syscall(SYS_renameat, olddirfd, oldpath, newdirfd, newpath);
+}
+
+int exampleRenameat(const char *oldpath, const char *newpath) {
+    int oldDirFd = open(".", O_DIRECTORY);
+    if (oldDirFd < 0) {
+        return -1;
+    }
+    if (rename(oldpath, newpath) < 0) {
+        return -1;
+    }
+    return 0;
+}
+
+int main(int argc, char const *argv[]) {
+    if (argc < 3) {
+        printf("args error\n");
+        _exit(-1);
+    }
+    if (exampleRenameat(argv[1], argv[2]) < 0){
+        perror("errors");
+    }
+    return 0;
+}
+```
