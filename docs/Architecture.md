@@ -10,12 +10,12 @@
     + [UNIX接口设计](/src/architecture/interface_design/README.md)
 
 + Paradigm
-    + [面向过程编程]()
-    + [事件驱动编程]()
-    + [面向对象编程]()
-    + [面向切面编程]()
-    + [函数式编程]()
-    + [面向接口编程]()
+    + [结构化编程](/src/architecture/paradigm/structured.md)
+    + [面向对象编程](/src/architecture/paradigm/object-oriented.md)
+    + [函数式编程](/src/architecture/paradigm/functional.md)
+
++ Design Principles
+
 
 + Distributed
 + Virtualization
