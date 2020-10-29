@@ -70,17 +70,17 @@
     + [getcwd](README_FS.md#getcwd)
 
 + **系统数据**
-    +[uname](#uname)
-    +[sysinfo](#sysinfo)
-    +[openlog](#openlog)
-    +[closelog](#closelog)
-    +[syslog](#syslog)
-    +[vsyslog](#vsyslog)
-    +[setdomainname](#setdomainname)
-    +[sethostname](#sethostname)
-    +[time](#time)
-    +[gettimeofday](#gettimeofday)
-    +[settimeofday](#settimeofday)
+    +[uname](README_SYSDATA.md#uname)
+    +[sysinfo](README_SYSDATA.md#sysinfo)
+    +[openlog](README_SYSDATA.md#openlog)
+    +[closelog](README_SYSDATA.md#closelog)
+    +[syslog](README_SYSDATA.md#syslog)
+    +[vsyslog](README_SYSDATA.md#vsyslog)
+    +[setdomainname](README_SYSDATA.md#setdomainname)
+    +[sethostname](README_SYSDATA.md#sethostname)
+    +[time](README_SYSDATA.md#time)
+    +[gettimeofday](README_SYSDATA.md#gettimeofday)
+    +[settimeofday](README_SYSDATA.md#settimeofday)
 
 + **进程**
     +[getuid](#getuid)
