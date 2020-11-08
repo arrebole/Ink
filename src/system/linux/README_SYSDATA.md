@@ -261,3 +261,57 @@ int main(int argc, const char* argv[]){
     return 0;
 }
 ```
+
+## clock_getres
+> 获取时钟的分辨率(精度)
+
+```c
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <time.h>
+#include <unistd.h>
+#include <unistdio.h>
+
+// colock_getres 获取时钟的分辨率
+int clock_getres(clockid_t clockid, struct timespec *res) {
+    return syscall(SYS_clock_getres, clockid, res);
+}
+
+int main() {
+    struct timespec res;
+    // CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID
+    if (clock_getres(CLOCK_REALTIME, &res) < 0){
+        perror("clock_getres");
+        return 0;
+    }
+    printf("%ld %ld\n", res.tv_sec, res.tv_nsec);
+    return 0;
+}
+```
+
+## clock_gettime
+> 获取时钟的时间
+
+```c
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <time.h>
+#include <unistd.h>
+#include <unistdio.h>
+
+// clock_gettime 获取时钟的时间
+int clock_gettime(clockid_t clockid, struct timespec *tp) {
+    return syscall(SYS_clock_gettime, clockid, tp);
+}
+
+int main(){
+    struct timespec res;
+    // CLOCK_REALTIME, CLOCK_MONOTONIC, CLOCK_PROCESS_CPUTIME_ID, CLOCK_THREAD_CPUTIME_ID
+    if (clock_gettime(CLOCK_REALTIME, &res) < 0) {
+        perror("clock_gettime");
+        return 0;
+    }
+    printf("%ld %ld\n", res.tv_sec, res.tv_nsec);
+    return 0;
+}
+```
