@@ -72,15 +72,12 @@
 + **系统数据**
     +[uname](README_SYSDATA.md#uname)
     +[sysinfo](README_SYSDATA.md#sysinfo)
-    +[openlog](README_SYSDATA.md#openlog)
-    +[closelog](README_SYSDATA.md#closelog)
-    +[syslog](README_SYSDATA.md#syslog)
-    +[vsyslog](README_SYSDATA.md#vsyslog)
-    +[setdomainname](README_SYSDATA.md#setdomainname)
-    +[sethostname](README_SYSDATA.md#sethostname)
     +[time](README_SYSDATA.md#time)
     +[gettimeofday](README_SYSDATA.md#gettimeofday)
     +[settimeofday](README_SYSDATA.md#settimeofday)
+    +[setdomainname](README_SYSDATA.md#setdomainname)
+    +[gethostname](README_SYSDATA.md#gethostname)
+    +[sethostname](README_SYSDATA.md#sethostname)
 
 + **进程**
     +[getuid](#getuid)
@@ -105,6 +102,7 @@
     +[setfsuid](#setfsuid)
     +[setfsgid](#setfsgid)
     +[getsid](#getsid)
+    +[syslog](#syslog)
 
 + **线程**
 + **进程间通信**

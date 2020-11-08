@@ -113,3 +113,151 @@ int main(int argc, const char* argv[]) {
 cat /proc/meminfo
 cat /proc/loadavg
 ```
+
+## time
+> 获取时间来自1970年1月1日00:00:00 +0000（UTC）以来的秒数 [精度秒]
+
+```c
+#define _GNU_SOURCE
+#include <sys/types.h>
+#include <sys/syscall.h>
+
+#include <unistd.h>
+#include <unistdio.h>
+
+// time get time in seconds
+// If tloc is non-NULL, the return value is also stored in the memory pointed to by tloc.
+time_t time(time_t *tloc){
+    return syscall(SYS_time, tloc);
+}
+
+int main() {
+    printf("time: %ld", time(NULL));
+    return 0;
+}
+```
+
+## gettimeofday
+> 获取系统时间（UTC形式）、`timezone`已废弃 [精度微秒、接口已过时]
+
+```c
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <unistdio.h>
+
+struct timeval {
+    time_t tv_sec;       /* seconds */
+    suseconds_t tv_usec; /* microseconds */
+};
+
+struct timezone {
+    int tz_minuteswest; /* minutes west of Greenwich */
+    int tz_dsttime;     /* type of DST correction */
+};
+
+// gettimeofday get time
+// The use of the timezone structure is obsolete; the tz argument should normally be specified as NULL.
+int gettimeofday(struct timeval *tv, struct timezone *tz) {
+    return syscall(SYS_gettimeofday, tv, tz);
+}
+
+int main() {
+    struct timeval tv;
+
+    if (gettimeofday(&tv, NULL) < 0) {
+        perror("gettimeofday");
+        return 0;
+    }
+    printf("gettimeofday: %ld %ld", tv.tv_sec, tv.tv_usec);
+    return 0;
+}
+```
+
+## settimeofday
+> 设置系统的时间, 设置的时间必须大于当前时间 [精度微秒、接口已过时]
+
+```c
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <unistdio.h>
+#include <stdlib.h>
+
+struct timezone {
+    int tz_minuteswest; /* minutes west of Greenwich */
+    int tz_dsttime;     /* type of DST correction */
+};
+
+// settimeofday set system time
+// The use of the timezone structure is obsolete; the tz argument should normally be specified as NULL.
+// can't set the CLOCK_REALTIME time prior to (1970 + system uptime). [commit/e1d7ba8735551ed79c7a0463a042353574b96da3]
+int settimeofday(struct timeval *tv, struct timezone *tz) {
+    return syscall(SYS_settimeofday, tv, tz);
+}
+
+int main(int argc, const char* argv[]) {
+    if (argc < 3) return 0;
+    struct timeval tv = {
+        .tv_sec = atol(argv[1]),
+        .tv_usec = atol(argv[2]),
+    };
+    if (settimeofday(&tv, NULL) < 0) {
+        perror("settimeofday");
+        return 0;
+    }
+    printf("settimeofday: %ld %ld\n", tv.tv_sec, tv.tv_usec);
+    return 0;
+}
+```
+
+## setdomainname
+> 设置NIS域名
+
+```c
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <unistd.h>
+#include <unistdio.h>
+#include <string.h>
+
+int setdomainname(const char *name, size_t len){
+    return syscall(SYS_setdomainname, name, len);
+}
+
+int main(int argc, const char* argv[]){
+    if (argc < 1) return 0;
+    if (setdomainname(argv[1], strlen(argv[1])) < 0){
+        perror("setdomainname");
+    }
+    return 0;
+}
+```
+
+## sethostname
+> 将主机名设置为字符中给定的值，`x64`平台没有`gethostname`
+
+```c
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <unistdio.h>
+#include <string.h>
+
+// sethostname 
+int sethostname(const char *name, size_t len){
+    return syscall(SYS_sethostname, name, len);
+}
+
+int main(int argc, const char* argv[]){
+    if (argc < 1) return 0;
+
+    if (sethostname(argv[1], strlen(argv[1])) < 0){
+        perror("sethostname");
+    }
+    return 0;
+}
+```
