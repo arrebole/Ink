@@ -79,19 +79,13 @@
     + [clock_gettime](README_SYSDATA.md#clock_gettime)
     + [clock_settime](README_SYSDATA.md#clock_settime)
     + [clock_adjtime](README_SYSDATA.md#clock_adjtime)
+    + [adjtimex](README_SYSDATA.md#adjtimex)
     + [setdomainname](README_SYSDATA.md#setdomainname)
     + [gethostname](README_SYSDATA.md#gethostname)
     + [sethostname](README_SYSDATA.md#sethostname)
 
 
 + **进程**
-    + [fork](#fork)
-    + [vfork](#vfork)
-    + [exit](#exit)
-    + [waitid](#waitid)
-    + [wait4](#wait4)
-    + [execve](#execve)
-    + [execveat](#execveat)
     + [getrlimit](#getrlimit)
     + [setrlimit](#setrlimit)
     + [getrusage](#getrusage)
@@ -117,6 +111,14 @@
     + [setfsgid](#setfsgid)
     + [getsid](#getsid)
     + [setsid](#setsid)
+    + [fork](#fork)
+    + [vfork](#vfork)
+    + [exit](#exit)
+    + [waitid](#waitid)
+    + [wait4](#wait4)
+    + [execve](#execve)
+    + [execveat](#execveat)
+    + [sbrk](#sbrk)
     + [syslog](#syslog)
 
 + **线程**

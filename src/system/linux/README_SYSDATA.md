@@ -315,3 +315,94 @@ int main(){
     return 0;
 }
 ```
+
+## adjtimex
+> 调整内核时钟 (速度、频率、节拍...)
+
+```c
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <bits/timex.h>
+#include <unistd.h>
+#include <unistdio.h>
+
+// adjtimex tune kernel clock
+int adjtimex(struct timex *buf){
+    return syscall(SYS_adjtimex, buf);
+}
+
+int main(){
+    struct timex buf = {
+        // int  modes;    
+        // long offset;   
+        // long freq;     
+        // long maxerror; 
+        // long esterror; 
+        // int  status;   
+        // long constant; 
+        // long precision;  
+        // long tolerance;
+        // struct timeval time;
+        // long tick;
+        // long ppsfreq;
+        // long jitter;
+        // int  shift;
+        // long stabil;
+        // long jitcnt;
+        // long calcnt;
+        // long errcnt;
+        // long stbcnt;
+        // int tai;
+    };
+    if (adjtimex(&buf) < 0){
+        perror("adjtimex");
+    }
+    return 0;
+}
+```
+
+## clock_adjtime
+> 调整内核时钟 (速度、频率、节拍...)
+
+```
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <bits/types/clockid_t.h>
+#include <bits/time.h>
+#include <stdio.h>
+#include <unistd.h>
+
+// clock_adjtime tune kernel clock
+int clock_adjtime(clockid_t clk_id, struct timex *buf){
+    return syscall(SYS_clock_adjtime, clk_id, buf);
+}
+
+int main(){
+    struct timex buf = {
+        // int  modes;    
+        // long offset;   
+        // long freq;     
+        // long maxerror; 
+        // long esterror; 
+        // int  status;   
+        // long constant; 
+        // long precision;  
+        // long tolerance;
+        // struct timeval time;
+        // long tick;
+        // long ppsfreq;
+        // long jitter;
+        // int  shift;
+        // long stabil;
+        // long jitcnt;
+        // long calcnt;
+        // long errcnt;
+        // long stbcnt;
+        // int tai;
+    };
+    if (clock_adjtime(CLOCK_REALTIME, &buf) < 0){
+        perror("clock_adjtime");
+    }
+    return 0;
+}
+```
