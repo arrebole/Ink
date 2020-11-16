@@ -75,6 +75,85 @@ int main(int argc, const char* argv[]) {
 }
 ```
 
+## waitid
+> 等待子进程改变状态
+
+```c
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <sys/resource.h>
+#include <bits/types/siginfo_t.h>
+#include <linux/wait.h>
+#include <unistd.h>
+#include <stdio.h>
+
+// waitid wait for process to change stat
+pid_t waitid(int idtype, id_t id, siginfo_t *infop, int options, struct rusage *rusage) {
+    return syscall(SYS_waitid, idtype, id, infop, options, rusage);
+}
+
+int main(int argc, const char* argv[]) {
+    pid_t pid = fork();
+
+    if (pid < 0) perror("fork");
+    if (pid == 0) {
+        sleep(1);
+        printf("I am Child Process\n");
+    }
+    if (pid > 0) {
+        siginfo_t infop;
+        // 等待子进程退出、并收集子进程退出时的状态
+        pid_t w = waitid(P_PID, pid, &infop, WEXITED, NULL);
+        if (w < 0) {
+           perror("waitid");
+           return -1;
+        }
+        printf("errno: %d signo: %d code: %d \n", infop.si_errno, infop.si_signo, infop.si_code);
+    }
+    return 0;
+}
+```
+
+## wait4
+> 等待子进程改变状态 (BSD style)
+
+```c
+#define _GNU_SOURCE
+#include <sys/syscall.h>
+#include <sys/resource.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <stdio.h>
+
+// wait4 wait for process to change stat
+pid_t wait4(pid_t pid, int *wstatus, int options, struct rusage *rusage) {
+    return syscall(SYS_wait4, pid, wstatus, options, rusage);
+}
+
+int main(int argc, const char* argv[]) {
+    pid_t pid = fork();
+
+    if (pid < 0) perror("fork");
+    if (pid == 0) {
+        sleep(1);
+        printf("I am Child Process\n");
+    }
+    if (pid > 0) {
+        int status;
+        struct rusage usage;
+        if (wait4(pid, &status, WEXITED, &usage) < 0) {
+            perror("wait4");
+            return -1;
+        }
+        if (WIFEXITED(status)) {
+            printf("exit status = %d\n", WEXITSTATUS(status));
+        }
+        printf("Child Process CPU time used: %ld %ld\n", usage.ru_utime.tv_sec, usage.ru_utime.tv_usec);;
+    }
+    return 0;
+}
+```
+
 ## getrlimit
 > 查看当前经常资源限制
 
