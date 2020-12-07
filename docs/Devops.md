@@ -13,4 +13,4 @@
 + dababase
   + [postgres]()
   + [redis]()
-  + [tidb]()
+  + [tidb](/src/devops/tidb/README.md)
