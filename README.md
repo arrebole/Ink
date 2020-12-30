@@ -10,7 +10,6 @@
 
 + **Bloom**
   + [Manual](/docs/Manual.md)
-  + [Devops](/docs/Devops.md)
   
 + **Burst**
   + [Algorithms](/docs/Algorithms.md)
@@ -19,6 +18,7 @@
   + [Graphics](/docs/Graphics.md)
 
 + **Limit**
+  + [Arsenal](/docs/Arsenal.md)
   + [Architecture](/docs/Architecture.md)
   + [Hack](/docs/Hack.md)
   
