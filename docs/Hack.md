@@ -7,12 +7,12 @@
 
 ## Table of Contents
 
-人类
-+ ~~[聊天的艺术](/src/hack_soul/the_art_of_chatting.md)~~
+社工
++ ~~[聊天的艺术](/src/hack/social_engineering/the_art_of_chatting.md)~~
 + 被依赖的艺术
 + 人性的漏洞
 
 计算机
-+ Exploit
-    + [Nodejs:CVE-2017-14849](/src/hack/computer/exploit/CVE-2017-14849/README.md)
-    + [Tomcat:CVE-2017-12615](/src/hack/computer/exploit/CVE-2017-12615/README.md)
++ Vulnerability
+    + [Nodejs:CVE-2017-14849](/src/hack/vulnerability/CVE-2017-14849/README.md)
+    + [Tomcat:CVE-2017-12615](/src/hack/vulnerability/CVE-2017-12615/README.md)

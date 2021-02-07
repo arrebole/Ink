@@ -111,7 +111,6 @@
         + [setresuid](README_PROCESS.md#setresuid)
         + [getresgid](README_PROCESS.md#getresgid)
         + [setresgid](README_PROCESS.md#setresgid)
-    + [syslog](README_PROCESS.md#syslog)
 
 + **线程**
 + **进程间通信**
