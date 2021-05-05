@@ -9,8 +9,9 @@
 ## Table of Contents
 
 + **Bloom**
-  + [Manual](/docs/Manual.md)
-  
+  + [RFC](/docs/RFC.md)
+  + [Devops](/docs/Devops.md)
+
 + **Burst**
   + [Algorithms](/docs/Algorithms.md)
   + [Compilation Principle](/docs/Compilation.md)
