@@ -4,21 +4,25 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-pid_t vfork(void) {
+int vfork(void) {
     return syscall(SYS_vfork);
 }
 
 int main(int argc, const char * argv[]) {
-    pid_t pid;
-    int result = 99;
+    int var = 10;
 
-    if ((pid = vfork()) < 0) perror("vfork");
-    else if (pid == 0) {
-        result++;
-        _exit(0);
+    printf("before vfork\n");
+
+    pid_t pid = vfork();
+    if (pid < 0) {
+        perror("vfork");
     }
-    
-    printf("get result from child process %d\n", result);
-    exit(0);
+    if (pid == 0) {
+        var++;
+        _exit(EXIT_SUCCESS);
+    }
+
+    printf("pid = %ld, var = %d\n", getpid(), var);
+    _exit(EXIT_SUCCESS);
     return 0;
 }

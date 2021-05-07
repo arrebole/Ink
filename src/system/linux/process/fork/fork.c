@@ -3,20 +3,18 @@
 #include <stdio.h>
 #include <unistd.h>
 
-pid_t fork(void) {
+int fork(void) {
     return syscall(SYS_fork);
 }
 
 int main(int argc, const char * argv[]) {
+    int var = 88;
 
-    int pid = fork();    
-    if (pid < 0) {
-        perror("fork");
-        return 0;
-    }
-
-    if (pid > 0) printf("i am parent. [fork return pid = %d]\n", pid);
-    if (pid == 0) printf("i am child process. [fork return pid = %d]\n", pid);
+    pid_t pid = fork();    
+    if (pid < 0) perror("fork");
+    if (pid == 0) var++;
+    if (pid > 0) sleep(2);
     
+    printf("[pid = %ld] var = %d\n", getpid(), var);
     return 0;
 }

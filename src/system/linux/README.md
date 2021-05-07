@@ -75,6 +75,7 @@
     + 资源控制
         + [fork](README_PROCESS.md#fork)
         + [vfork](README_PROCESS.md#vfork)
+        + [clone](README_PROCESS.md#clone)
         + [exit](README_PROCESS.md#exit)
         + [waitid](README_PROCESS.md#waitid)
         + [wait4](README_PROCESS.md#wait4)

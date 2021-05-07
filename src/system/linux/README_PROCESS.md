@@ -14,16 +14,14 @@ pid_t fork(void) {
 }
 
 int main(int argc, const char * argv[]) {
+    int var = 88;
 
-    int pid = fork();    
-    if (pid < 0) {
-        perror("fork");
-        return 0;
-    }
-
-    if (pid > 0) printf("i am parent. [fork return pid = %d]\n", pid);
-    if (pid == 0) printf("i am child process. [fork return pid = %d]\n", pid);
+    pid_t pid = fork();    
+    if (pid < 0) perror("fork");
+    if (pid == 0) var++;
+    if (pid > 0) sleep(2);
     
+    printf("[pid = %ld] var = %d\n", getpid(), var);
     return 0;
 }
 ```
@@ -38,23 +36,96 @@ int main(int argc, const char * argv[]) {
 #include <unistd.h>
 #include <stdlib.h>
 
-pid_t vfork(void) {
+int vfork(void) {
     return syscall(SYS_vfork);
 }
 
 int main(int argc, const char * argv[]) {
-    pid_t pid;
-    int result = 99;
+    int var = 10;
 
-    if ((pid = vfork()) < 0) perror("vfork");
-    else if (pid == 0) {
-        result++;
-        _exit(0);
+    printf("before vfork\n");
+
+    pid_t pid = vfork();
+    if (pid < 0) {
+        perror("vfork");
     }
-    
-    printf("get result from child process %d\n", result);
-    exit(0);
+    if (pid == 0) {
+        var++;
+        _exit(EXIT_SUCCESS);
+    }
+
+    printf("pid = %ld, var = %d\n", getpid(), var);
+    _exit(EXIT_SUCCESS);
     return 0;
+}
+```
+
+## clone
+> 创建子进程,一般用于创建轻量级进程(线程), 与`fork`相比，可以更精确地控制在调用进程和子进程之间共享哪些执行上下文。
+
+```c
+#define _GNU_SOURCE
+// #include <sched.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <syscall.h>
+#include <unistd.h>
+#include <sys/mman.h>
+
+#define STACK_SIZE 8192
+#define SIGCHLD 17
+
+// both processes share the same signal handlers
+#define CLONE_SIGHAND 0x00000800
+// both get the same file system information
+#define CLONE_FS 0x00000200
+//  tells the kernel to let the original process and the clone in the same memory space
+#define CLONE_VM 0x00000100
+// share file descriptors
+#define CLONE_FILES 0x00000400
+// this tells the kernel, that both processes would belong to the same thread group (be threads within the same process)
+#define CLONE_THREAD 0x00010000
+
+// 创建一个进程，可以创建轻量级进程(线程)
+// stack 为子进程的栈顶地址, 如果是创建线程则不能置为NULL
+// flags CLONE_FILES、CLONE_FS、CLONE_IO .....
+long clone(unsigned long flags, void *stack, int *parent_tid, int *child_tid, unsigned long tls) {
+  return syscall(SYS_clone, flags, stack, parent_tid, child_tid, tls);
+}
+
+int main(int argc, char *argv[]) {
+  char* stack = mmap(
+    NULL, 
+    STACK_SIZE, 
+    PROT_READ | PROT_WRITE,
+    MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK, 
+    -1, 
+    0
+  );
+  char* stackTop = stack + STACK_SIZE;
+
+  pid_t pid = clone(CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND | CLONE_THREAD, stackTop, NULL, NULL, 0);
+
+  if (pid == -1) {
+    perror("clone");
+    exit(EXIT_FAILURE);
+  };
+
+  if (pid > 0) {
+    for (int i = 0; i < 10; i++) {
+      printf("[%d] main\n", getpid());
+      sleep(1);
+    }
+  }
+
+  if (pid == 0) {
+    for (int i = 0; i < 10; i++) {
+      printf("[%d] func\n", getpid());
+      sleep(1);
+    }
+  }
+
+  return 0;
 }
 ```
 
@@ -153,6 +224,80 @@ int main(int argc, const char* argv[]) {
     return 0;
 }
 ```
+
+## execve
+> 执行新程序, 替换旧进程的数据为新进程
+
+```c
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <syscall.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+// execute program
+int execve(const char *path, char *const *argv, char *const *env){
+    return syscall(SYS_execve, path, argv, env);
+}
+
+int main(){
+    pid_t pid = fork();
+
+    if (pid < 0) perror("fork");
+    if (pid == 0) {
+        char *argv[] = { "/usr/bin/ls", "./", NULL };
+        char *envv[] = { NULL };
+        if (execve(argv[0], argv, envv) < 0) {
+            perror("execve");
+        }
+    }
+    waitid(P_ALL, 0, NULL, WEXITED);
+    return 0;
+}
+```
+
+## execveat
+> 执行新程序, 替换旧进程的数据为新进程 (相对dirfd)
+
+```c
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <syscall.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+// execute program
+//  flag: 
+//    - AT_EMPTY_PATH 如果路径名是空字符串，请对该文件进行操作由dirfd引用（可能已使用的开放（2） O_PATH标志）。
+//    - AT_SYMLINK_NOFOLLOW 如果由dirfd标识的文件和非空路径名是符号链接，则调用失败，错误为ELOOP
+int execveat(int dirfd, const char *path, char *const *argv, char *const *env, int flag) {
+    return syscall(SYS_execveat, dirfd, path, argv, env, flag);
+}
+
+int main(){
+    pid_t pid = fork();
+
+    if (pid < 0) perror("fork");
+    if (pid == 0) {
+        int dirfd = open("/usr/bin", O_PATH);
+        if (dirfd < 0) {
+            perror("open");
+            return 0;
+        }
+
+        char *argv[] = { "ls", "./", NULL };
+        char *envv[] = { NULL };
+        if (execveat(dirfd, argv[0], argv, envv, 0) < 0) {
+            perror("execve");
+        }
+    }
+    waitid(P_ALL, 0, NULL, WEXITED);
+    return 0;
+}
+```
+
 
 ## getrlimit
 > 查看当前经常资源限制
