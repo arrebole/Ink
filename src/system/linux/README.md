@@ -7,7 +7,7 @@
     + [UNSUAL](README_HEADER.md#UNSUAL)
 
 + **文件系统**
-    + 资源控制
+    + 执行控制
         + [open](README_FS.md#open)
         + [openat](README_FS.md#openat)
         + [openat2](README_FS.md#openat2)
@@ -72,7 +72,7 @@
         + [lchown](README_FS.md#lchown)
 
 + **进程**
-    + 资源控制
+    + 执行控制
         + [fork](README_PROCESS.md#fork)
         + [vfork](README_PROCESS.md#vfork)
         + [clone](README_PROCESS.md#clone)
@@ -81,9 +81,14 @@
         + [wait4](README_PROCESS.md#wait4)
         + [execve](README_PROCESS.md#execve)
         + [execveat](README_PROCESS.md#execveat)
-        + [sbrk](README_PROCESS.md#sbrk)
-        + [getrlimit](README_PROCESS.md#getrlimit)
+    + 资源控制
+        + [brk](README_PROCESS.md#brk)
+        + [mmap](README_PROCESS.md#mmap)
+        + [munmap](README_PROCESS.md#munmap)
+        + [mremap](README_PROCESS.md#mremap)
+        + [msync](README_PROCESS.md#msync)
         + [setrlimit](README_PROCESS.md#setrlimit)
+        + [getrlimit](README_PROCESS.md#getrlimit)
         + [getrusage](README_PROCESS.md#getrusage)
     + 权限控制
         + [getuid](README_PROCESS.md#getuid)
