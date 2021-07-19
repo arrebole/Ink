@@ -99,8 +99,6 @@
         + [setgid](README_PROCESS.md#setgid)
         + [getegid](README_PROCESS.md#getegid)
         + [setregid](README_PROCESS.md#setregid)
-        + [getsid](README_PROCESS.md#getsid)
-        + [setsid](README_PROCESS.md#setsid)
         + [getresuid](README_PROCESS.md#getresuid)
         + [setresuid](README_PROCESS.md#setresuid)
         + [getresgid](README_PROCESS.md#getresgid)
@@ -116,6 +114,8 @@
         + [setpgrp](README_PROCESS.md#setpgrp)
         + [getgroups](README_PROCESS.md#getgroups)
         + [setgroups](README_PROCESS.md#setgroups)
+        + [getsid](README_PROCESS.md#getsid)
+        + [setsid](README_PROCESS.md#setsid)
 
 + **线程**
 + **进程间通信**
