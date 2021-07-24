@@ -22,14 +22,9 @@
   + [Arsenal](/docs/Arsenal.md)
   + [Architecture](/docs/Architecture.md)
   + [Hack](/docs/Hack.md)
-  
+
 + **Beyond the limits**
   + [Soul](/docs/Soul.md)
 
 + **Zero**
-  + [Chaos]()
-  + [Cycle]()
-  + [Balance]()
-  + [None]()
-
-    
+  + [universe](/docs/Universe.md)
