@@ -3,6 +3,6 @@
 
 ## Table of Contents
 
-+ [周易](/src/universe/周易.md)
-+ [老子](/src/universe/老子.md)
-+ [庄子](/src/universe/庄子.md)
++ [周易](/src/universe/xuan/周易.md)
++ [老子](/src/universe/xuan/老子.md)
++ [庄子](/src/universe/xuan/庄子.md)
