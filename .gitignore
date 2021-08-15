@@ -5,6 +5,7 @@
 *.so
 *.class
 *.pdb
+*.obj
 
 **/__pycache__/*
 **/bin/*
