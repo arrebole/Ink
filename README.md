@@ -11,6 +11,7 @@
 + **Bloom**
   + [RFC](/docs/RFC.md)
   + [Devops](/docs/Devops.md)
+  + [Manual](/docs/Manual.md)
 
 + **Burst**
   + [Algorithms](/docs/Algorithms.md)
@@ -21,10 +22,9 @@
 + **Limit**
   + [Arsenal](/docs/Arsenal.md)
   + [Architecture](/docs/Architecture.md)
+  + [Gamblers](/docs/Gamblers.md)
   + [Hack](/docs/Hack.md)
 
 + **Beyond the limits**
   + [Soul](/docs/Soul.md)
-
-+ **Zero**
   + [universe](/docs/Universe.md)
