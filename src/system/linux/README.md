@@ -109,7 +109,7 @@
         + [getpid](README_PROCESS.md#getpid)
         + [getppid](README_PROCESS.md#getppid)
         + [getpgid](README_PROCESS.md#getpgid)
-        + [setpgid](README_PROCESS.md#getpgid)
+        + [setpgid](README_PROCESS.md#setpgid)
         + [getpgrp](README_PROCESS.md#getpgrp)
         + [setpgrp](README_PROCESS.md#setpgrp)
         + [getgroups](README_PROCESS.md#getgroups)
