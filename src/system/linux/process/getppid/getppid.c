@@ -10,5 +10,5 @@ int getppid() {
 }
 
 int main() {
-    printf("getpid [%d]\n", getppid());
+    printf("getppid [%d]\n", getppid());
 }
