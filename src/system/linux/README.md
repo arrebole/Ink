@@ -70,6 +70,8 @@
         + [fchown](README_FS.md#fchown)
         + [fchownat](README_FS.md#fchownat)
         + [lchown](README_FS.md#lchown)
+        + [getgroups](README_PROCESS.md#getgroups) ❌
+        + [setgroups](README_PROCESS.md#setgroups) ❌
 
 + **进程**
     + 执行控制
@@ -111,9 +113,6 @@
         + [getpgid](README_PROCESS.md#getpgid)
         + [setpgid](README_PROCESS.md#setpgid)
         + [getpgrp](README_PROCESS.md#getpgrp)
-        + [setpgrp](README_PROCESS.md#setpgrp)
-        + [getgroups](README_PROCESS.md#getgroups)
-        + [setgroups](README_PROCESS.md#setgroups)
         + [getsid](README_PROCESS.md#getsid)
         + [setsid](README_PROCESS.md#setsid)
 
