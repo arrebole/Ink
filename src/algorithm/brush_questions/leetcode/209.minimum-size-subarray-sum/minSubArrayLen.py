@@ -2,19 +2,16 @@ from typing import List
 
 class Solution:
     def minSubArrayLen(self, s: int, nums: List[int]) -> int:
-        result = 0
-        if len(nums) == 0:
-            return result
-        
-        sum = 0
-        nums = nums.sort(reverse=True)
-        for i in nums:
-            if sum > s:
-                return result - 1
-            elif sum == s:
-                return result
-            sum+=i
-            result+=1
+        result, sum, left = 0, 0, 0
+        for right in range(len(nums)):
+            sum += nums[right]
+            while sum >= s:
+                if result == 0:
+                    result = right - left + 1
+                else:
+                    result = min(result, right - left + 1)
+                sum -= nums[left]
+                left += 1
         return result
 
-Solution().minSubArrayLen(4, [1,4,4])
+print(Solution().minSubArrayLen(4, [1,4, 4]))
