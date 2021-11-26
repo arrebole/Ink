@@ -119,15 +119,22 @@
     + 进程调度
         + [getpriority](README_PROCESS.md#getpriority)
         + [setpriority](README_PROCESS.md#setpriority)
+        + [sched_get_priority_max](README_PROCESS.md#sched_get_priority_max)
+        + [sched_get_priority_min](README_PROCESS.md#sched_get_priority_min)
         + [sched_setparam](README_PROCESS.md#sched_setparam)
         + [sched_getparam](README_PROCESS.md#sched_getparam)
         + [sched_setscheduler](README_PROCESS.md#sched_setscheduler)
         + [sched_getscheduler](README_PROCESS.md#sched_getscheduler)
-        + [sched_get_priority_max](README_PROCESS.md#sched_get_priority_max)
-        + [sched_get_priority_min](README_PROCESS.md#sched_get_priority_min)
-        + [sched_rr_get_interval](README_PROCESS.md#sched_rr_get_interval)
 + **进程间通信**
 + **网络**
++ **虚拟化**
+    + namespace
+        + [chroot]()
+        + [pivot_root]()
+    + cgroups
+        + [clone]()
+        + [setns]()
+        + [unshare]()
 
 + **系统数据**
     + [uname](README_SYSDATA.md#uname)
