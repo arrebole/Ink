@@ -14,12 +14,12 @@ fn plus_recursive(a: i64, b: i64) -> i64 {
 fn plus(mut a: i64, mut b: i64)-> i64 {
     while b != 0 {
         let xor = a ^ b;
-        b = (a & b) << 1;
+        let carry = (a & b) << 1;
         a = xor;
+        b = carry;
     };
     return a;
 }
-
 
 fn main(){
     println!("{}", plus(1, 2));
