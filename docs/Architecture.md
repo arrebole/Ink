@@ -15,3 +15,6 @@
     + [面向对象编程(OOP)](/src/architecture/paradigm/object-oriented.md)
     + [面向切面编程(AOP)](/src/architecture/paradigm/aspect-oriented.md)
     + [领域驱动设计(DDD)](/src/architecture/paradigm/domain-driven.md)
+
++ 扩展
+    + [高级命名词汇](/src/architecture/graceful-named/names.md)
