@@ -4,9 +4,5 @@
 
 ## Table of Contents
 
-**Poetry**
-  + 妖袅
-    + [极光](/src/soul/poetry/yuaoniao/aurora.md)
-
-**Psychology**
-  + [社交与情绪学习](/docs/psychology/社交与情绪学习.md)
++ [情绪价值](/src/soul/psychology/情绪价值.md)
++ [注意力缺失症](/docs/psychology/ADHD)
