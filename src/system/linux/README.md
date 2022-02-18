@@ -70,8 +70,8 @@
         + [fchown](README_FS.md#fchown)
         + [fchownat](README_FS.md#fchownat)
         + [lchown](README_FS.md#lchown)
-        + [getgroups](README_PROCESS.md#getgroups) 💀
-        + [setgroups](README_PROCESS.md#setgroups) 💀
+        + [getgroups](README_PROCESS.md#getgroups) ⏰
+        + [setgroups](README_PROCESS.md#setgroups) ⏰
 
 + **进程**
     + 执行控制
@@ -92,7 +92,7 @@
         + [setrlimit](README_PROCESS.md#setrlimit)
         + [getrlimit](README_PROCESS.md#getrlimit)
         + [getrusage](README_PROCESS.md#getrusage)
-        + [acct](README_PROCESS.md#acct) 💀
+        + [acct](README_PROCESS.md#acct) ⏰
     + 权限控制
         + [getuid](README_PROCESS.md#getuid)
         + [setuid](README_PROCESS.md#setuid)
@@ -119,12 +119,12 @@
     + 进程调度
         + [getpriority](README_PROCESS.md#getpriority)
         + [setpriority](README_PROCESS.md#setpriority)
-        + [sched_get_priority_max](README_PROCESS.md#sched_get_priority_max)
-        + [sched_get_priority_min](README_PROCESS.md#sched_get_priority_min)
-        + [sched_setparam](README_PROCESS.md#sched_setparam)
-        + [sched_getparam](README_PROCESS.md#sched_getparam)
-        + [sched_setscheduler](README_PROCESS.md#sched_setscheduler)
-        + [sched_getscheduler](README_PROCESS.md#sched_getscheduler)
+        + [sched_get_priority_max](README_PROCESS.md#sched_get_priority_max) ⏰
+        + [sched_get_priority_min](README_PROCESS.md#sched_get_priority_min) ⏰
+        + [sched_setparam](README_PROCESS.md#sched_setparam) ⏰
+        + [sched_getparam](README_PROCESS.md#sched_getparam) ⏰
+        + [sched_setscheduler](README_PROCESS.md#sched_setscheduler) ⏰
+        + [sched_getscheduler](README_PROCESS.md#sched_getscheduler) ⏰
 + **进程间通信**
 + **网络**
 + **虚拟化**
