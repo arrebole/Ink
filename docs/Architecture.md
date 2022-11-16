@@ -18,3 +18,6 @@
 
 + 扩展
     + [高级命名词汇](/src/architecture/graceful-named/names.md)
+
++ 解决方案
+    + [异构数据库同步](/src/architecture/solutions/异构数据库同步.md)
